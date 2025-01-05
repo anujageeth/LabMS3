@@ -1,0 +1,64 @@
+.userDetails {
+    display: flex;
+    height: 10vh;
+    padding-right: 20px;
+}
+
+.blankUserDetails {
+    flex: 10;
+}
+
+.userNameEmail {
+    flex: 3;
+}
+
+.userPic {
+    flex: 1;
+    height: 7vh;
+    border: 25px transparent;
+    border-radius: 25px;
+    box-shadow: 0px 0px 0px #00d9ff;
+    transition: box-shadow 0.1s ease;
+}
+
+.userPic:hover {
+    border-color: #00d9ff;
+    box-shadow: 0px 0px 10px #00d9ff;
+}
+
+.userPicDiv {
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdownMenu {
+    position: absolute;
+    padding: 5px;
+    top: 50px;
+    /* Adjust this to position it below the profile picture */
+    right: 0;
+    background-color: white;
+    box-shadow: -5px 10px 20px #585858;
+    border-radius: 15px 0px 15px 15px;
+    width: 150px;
+    z-index: 10;
+}
+
+.dropdownMenu div {
+    padding: 10px;
+    cursor: pointer;
+    color: #333;
+}
+
+.dropdownMenu div:hover {
+    background-color: #d6d6d6;
+    border-radius: 15px;
+}
+
+.userClickDropdown {
+    height: min-content;
+}
+
+#dropdownLogout {
+    color: red;
+}

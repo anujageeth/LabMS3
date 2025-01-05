@@ -1,0 +1,78 @@
+.tableModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  width: 70%;
+  max-width: 90%;
+  animation: fadeIn 0.3s ease-in-out;
+  z-index: 400;
+}
+
+.tableModalH3 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.tableModalInput {
+  width: 95%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.tableModalInput:focus {
+  outline: none;
+  border-color: #007bff;
+  /* Change to your primary color */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.tableModalBtn {
+  background-color: #007bff;
+  /* Button background color */
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.tableModalBtn:hover {
+  background-color: #0056b3;
+  /* Darker shade on hover */
+}
+
+.tableModalBtn.cancel {
+  background-color: #dc3545;
+  /* Cancel button color */
+}
+
+.tableModalBtn.cancel:hover {
+  background-color: #c82333;
+  /* Darker shade on hover */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(12, 12, 12, 0.5, 0.5);
+  z-index: 300;
+}
+
+/* Animation */

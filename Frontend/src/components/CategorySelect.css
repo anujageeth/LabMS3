@@ -1,0 +1,52 @@
+.catModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e0e0e0;
+    border-radius: 25px;
+    box-shadow: 0 0px 20px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    width: 300px;
+    max-width: 90%;
+    animation: fadeIn 0.3s ease-in-out;
+    z-index: 400;
+
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.catModalContent {
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#catDescription {
+    height: 60px;
+    max-width: 250px;
+    min-width: 250px;
+    max-height: 200px;
+    border-radius: 15px;
+}
+
+.AddCatTitle {
+    color: #005766;
+    font-size: 24px;
+}
+
+#saveCatBtn {
+    background-color: #005766;
+    color: #ffffff;
+    height: 32px;
+    font-size: 16px;
+}
+
+#cancelCatBtn {
+    height: 32px;
+    font-size: 16px;
+}
+
+#catSelectCategory {
+    width: 325px;
+}

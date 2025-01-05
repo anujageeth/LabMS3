@@ -1,0 +1,9 @@
+#deleteModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 400px;
+    animation: fadeIn 0.3s ease-in-out;
+    z-index: 1000;
+}

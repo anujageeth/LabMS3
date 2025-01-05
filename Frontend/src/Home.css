@@ -1,0 +1,110 @@
+body {
+    margin: 0;
+    overflow-y: scroll;
+}
+
+.homePageFullBox {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.homeBackImage {
+    background-image: url("https: //firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/HomeBack.jpeg?alt=media&token=59cd54b1-b56d-4231-b911-0c5bede09122");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 400px;
+}
+
+.homeHeader {
+    height: 50vh;
+    margin: 50px;
+    padding: 20px;
+    border-radius: 25px;
+    background-color: #005766;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.homeHeader:hover {
+    background-color: #003e49;
+    box-shadow: 0 0 10px #00c0e2;
+    transform: scale(1.05);
+}
+
+.homeWelcome {
+    color: #ffffff;
+    height: 24px;
+}
+
+.homeLabMStitleBox {
+    height: 72px;
+    color: #ffffff;
+}
+
+.homeLabMStitle {
+    font-size: 72px;
+}
+
+.homeLoginBtn {
+    width: 260px;
+    height: 40px;
+    margin: 10px;
+    border: 0px;
+    border-radius: 30px;
+    font-size: 20px;
+    z-index: 4;
+    box-shadow:
+        0px 2px 7px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.5s ease;
+}
+
+.homeLoginBtn:hover {
+    background: linear-gradient(to bottom, #00c0e2, #00c0e2, #00c0e2);
+    color: black;
+    box-shadow:
+        0px 2px 10px #000000;
+    transform: scale(1.05);
+}
+
+.homeTopics {
+    color: #005766;
+}
+
+.section {
+    margin: 50px;
+}
+
+.features {
+    display: flex;
+}
+
+.feature-card {
+    flex: 1;
+    margin: 10px;
+    padding: 10px;
+    border: 5px transparent;
+    border-radius: 25px;
+    background-color: #005766;
+    color: #ffffff;
+    box-shadow: 0 0 0px #005766;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    background-color: #003e49;
+    box-shadow: 0 0 10px #00c0e2;
+    transform: scale(1.05);
+}
+
+.footer {
+    padding: 10px;
+    margin-top: auto;
+    background-color: #005766;
+    color: #ffffff;
+}

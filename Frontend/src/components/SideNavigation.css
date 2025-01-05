@@ -1,0 +1,78 @@
+.navBar {
+    flex: 1;
+    height: 100vh;
+    width: 25vw;
+    background: linear-gradient(#00788d, #005766);
+    border: none;
+    z-index: 5;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.uniLogoDiv {
+    height: 150px;
+    padding: 10 px;
+}
+
+.uniLogoImage {
+    height: 150px;
+}
+
+.navTitleDiv {
+    height: 60px;
+    z-index: 4;
+}
+
+.navTitle {
+    font-size: 60px;
+    color: white;
+    z-index: 4;
+}
+
+.navSubTitle {
+    font-size: 12px;
+    color: white;
+    z-index: 4;
+}
+
+.navBtn {
+    width: 20vw;
+    height: 30px;
+    border: none;
+    color: #ffffff;
+    background-color: #00788d;
+    transition: background-color 0.2s ease;
+}
+
+.navBtn:hover {
+    background-color: #00d9ff;
+    color: #005766;
+}
+
+#top {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+#bottom {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.navBtn.activeBtn {
+    background-color: #005d6d;
+    color: white;
+}
+
+.logOutBtn {
+    width: 20vw;
+    height: 30px;
+    border: none;
+    border-radius: 20px;
+    color: #00788d;
+}
+
+.logOutBtn:hover {
+    background-color: rgb(0, 216, 231);
+}

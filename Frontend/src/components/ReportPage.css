@@ -1,0 +1,63 @@
+#fullReportGap {
+    margin-bottom: 5px;
+}
+
+.reportButton {
+    width: 9.75vw;
+    height: 32px;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    background: linear-gradient(#00d9ff, #009eb9);
+    transition: linear-gradient 0.5s ease, box-shadow 0.3s ease;
+}
+
+#previewFullBtn:hover {
+    background: linear-gradient(#00cad8, #00a5c2, #007185);
+    border: 5px;
+    border-color: rgb(0, 255, 221);
+    box-shadow: 0px 0px 5px rgb(0, 255, 242);
+}
+
+#printFullBtn:hover {
+    background: linear-gradient(#00cad8, #00a5c2, #007185);
+    border: 5px;
+    border-color: rgb(0, 255, 221);
+    box-shadow: 0px 0px 5px rgb(0, 255, 242);
+}
+
+.FullReport {
+    border-radius: 20px 0px 0px 20px;
+    border: none;
+    height: 32px;
+    width: 9.75vw;
+    color: #ffffff;
+    background-color: #005766;
+}
+
+#printFullBtn {
+    border-radius: 0px 20px 20px 0px;
+}
+
+.CategoryReportBtn {
+    width: 10vw;
+    height: 32px;
+    border: none;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 16px;
+    background: linear-gradient(#00d9ff, #009eb9);
+    transition: linear-gradient 0.5s ease, box-shadow 0.3s ease;
+}
+
+.CategoryReportBtn:hover {
+    background: linear-gradient(#00cad8, #00a5c2, #007185);
+    border: 5px;
+    border-color: rgb(0, 255, 221);
+    box-shadow: 0px 0px 5px rgb(0, 255, 242);
+}
+
+#previewCategoryBtn {
+    margin-right: 5px;
+    margin-left: 5px;
+}

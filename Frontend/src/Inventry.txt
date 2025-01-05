@@ -1,0 +1,448 @@
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import './Inventory.css'
+import uniLogo from 'E:/Engineering/Semester 5/Software Project/Project/Login1/LoginNhome1/public/uniLogo.png'
+import tempUser from 'E:/Engineering/Semester 5/Software Project/Project/Login1/LoginNhome1/public/tempUser.jpg'
+
+function Inventory() {
+  const navigate = useNavigate();
+
+  const handleDashClick = () => {
+    navigate('/dashboard');
+  };
+
+  const handleAddItemClick = () => {
+    navigate('/additem');
+  };
+
+  const handleLogoutClick = () => {
+    navigate('/login');
+  };
+
+  return (
+    <div className='dashPage'>
+        <div className='gridBox'>
+            <div className='navBar'><br/>
+                <img src={uniLogo} className='uniLogo'/>
+                <div className='navTitleDiv'>
+                    <h2 className="navTitle">LabMS</h2>
+                </div>
+                <p className='navSubTitle'>
+                    Laboratory Management System
+                </p><br/>
+
+                <button className="navBtn" id="top" onClick={handleDashClick}>
+                    <b>Dashboard</b>
+                </button><br/>
+
+                <button className="navBtn" id='activeBtn'>
+                    <b>Inventory Management</b>
+                </button><br/>
+
+                <button className="navBtn">
+                    <b>Equipment Management</b>
+                </button><br/>
+
+                <button className="navBtn">
+                    <b>Booking & Reservations</b>
+                </button><br/>
+
+                <button className="navBtn">
+                    <b>Reports</b>
+                </button><br/>
+
+                <button className="navBtn">
+                    <b>User Management</b>
+                </button><br/>
+
+                <button className="navBtn" id="bottom">
+                    <b>Feedback</b>
+                </button>
+
+                <br/><br/>
+                <button className="logOutBtn" onClick={handleLogoutClick}>
+                    <b>Log out</b>
+                </button>
+            </div>
+            <div className='rightPanel'>
+                <div className='userDetails'>
+                    <div className='blankUserDetails'></div>
+                    <div className='userNameEmail'>
+                        <div className='userNameDiv'>
+                            <b>Jenny Jenny</b>
+                        </div>
+                        <div className='userNameDiv'>
+                            jennyjenny@gmail.com
+                        </div>
+                    </div>
+                    <div className='userPicDiv'>
+                        <img src={tempUser} className='userPic'/>
+                    </div>
+                </div>
+
+                <div className='dashBoxer'>
+                    <div className='dashBox'>
+                        <div className='dashName'>
+                            <h1 className='pageTitle'>
+                                Inventory Management
+                            </h1>
+                        </div>
+
+                        <div className='addNsearch'>
+                            <div className='addItem'>
+                                <button className="addItemBtn" onClick={handleAddItemClick}>
+                                    <b>Add item</b>
+                                </button>
+                            </div>
+
+                            <div className='search'>
+                                <div className="searchContainer">
+                                    <input
+                                        type="search"
+                                        placeholder=" Search..."
+                                        className="searchInput"
+                                    />
+                                </div>
+                                <button className='searchBtn'>
+                                    <b>Search</b>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div className="tableContainer">
+                        <table className="dataTable">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Supplier</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>12</td>
+                                <td>Digital Oscilloscope</td>
+                                <td>Oscilloscope</td>
+                                <td>ABC</td>
+                                <td>_</td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>100 Ohms Resistor</td>
+                                <td>Resistor</td>
+                                <td>DEF</td>
+                                <td>_</td>
+                            </tr>
+
+                            <tr>
+                                <td>32</td>
+                                <td>Digital Multimeter</td>
+                                <td>Multimeter</td>
+                                <td>ABC</td>
+                                <td>_</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  )
+}
+
+export default Inventory;
+
+-----------------------------------------------------------
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.dashPage {
+    z-index: 2;
+    min-height: 100vh;
+}
+
+.gridBox {
+    display: flex;
+    gap: 0px;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.navBar {
+    flex: 1;
+    height: 100vh;
+    width: 25vw;
+    background: linear-gradient(#00788d, #005766);
+    border: none;
+    z-index: 5;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.uniLogo {
+    height: 150px;
+    padding: 10 px;
+}
+
+.navTitleDiv {
+    height: 60px;
+    z-index: 4;
+}
+
+.navTitle {
+    font-size: 60px;
+    color: white;
+    z-index: 4;
+}
+
+.navSubTitle {
+    font-size: 12px;
+    color: white;
+    z-index: 4;
+}
+
+.navBtn {
+    width: 20vw;
+    height: 30px;
+    border: none;
+    color: #ffffff;
+    background-color: #00788d;
+    transition: background-color 0.2s ease;
+}
+
+.navBtn:hover {
+    background-color: #00d9ff;
+    color: #005766;
+}
+
+#top {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+#bottom {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#activeBtn {
+    background-color: #005d6d;
+    color: white;
+}
+
+.logOutBtn {
+    width: 20vw;
+    height: 30px;
+    border: none;
+    border-radius: 20px;
+    color: #00788d;
+}
+
+.logOutBtn:hover {
+    background-color: rgb(0, 216, 231);
+}
+
+.rightPanel {
+    flex: 3;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: none;
+    z-index: 5;
+}
+
+.userDetails {
+    display: flex;
+    height: 10vh;
+    padding-right: 20px;
+}
+
+.blankUserDetails {
+    flex: 10;
+}
+
+.userNameEmail {
+    flex: 3;
+}
+
+.userPic {
+    flex: 1;
+    height: 7vh;
+    border-radius: 25px;
+}
+
+.dashBoxer {
+    background-color: rgb(255, 255, 255);
+    height: 80vh;
+    width: 73vw;
+    border-radius: 30px;
+    padding-top: 10px;
+    font-size: 20px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+}
+
+.dashBox {
+    display: flex;
+    height: 20vh;
+    width: 73vw;
+    border-radius: 30px;
+    padding-top: 10px;
+    font-size: 20px;
+}
+
+.dashName {
+    flex: 3;
+    height: 80px;
+    padding-left: 20px;
+    color: #005766;
+}
+
+.addNsearch {
+    flex: 2;
+    padding: 10px;
+}
+
+.addItemBtn {
+    width: 30vw;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 24px;
+    background: linear-gradient(#00d9ff, #009eb9);
+    transition: linear-gradient 0.5s ease,
+            box-shadow 0.3s ease;
+}
+
+.addItemBtn:hover {
+    background: linear-gradient(#00cad8, #00a5c2, #007185);
+     border: 5px;
+    border-color: rgb(0, 255, 221);
+    box-shadow: 0px 0px 5px rgb(0, 255, 242);
+}
+
+.search {
+    display: flex;
+    padding-top: 5px;
+    gap: 5px;
+}
+
+.searchInput {
+    flex: 2;
+    height: 30px;
+    width: 20vw;
+    border: none;
+    border-radius: 20px;
+    background-color: #e7e7e7;
+    font-size: 20px;
+    color: #777777;
+    padding: 5px;
+}
+
+.searchContainer {
+    color: #777777;
+}
+
+.searchBtn {
+    width: 9.5vw;
+    height: 30px;
+    border: none;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 20px;
+    background: linear-gradient(#009bb6, #006172);
+}
+
+.searchBtn:hover {
+    background: linear-gradient(#00cad8, #00a5c2, #007185);
+    border: 5px;
+    border-color: rgb(0, 255, 221);
+    box-shadow: 0px 0px 5px rgb(0, 255, 242);
+}
+
+.menuBoxes {
+    display: flex;
+    gap: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+}
+
+.menuBox {
+    flex: 1;
+    height: 25vh;
+    width: 20vw;
+    border: 0px;
+    border-radius: 30px;
+    padding: 10px;
+    background: linear-gradient(#00d9ff, #009eb9);
+    text-align: center;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0px 0px 0px rgb(0, 255, 242);
+
+    transition: linear-gradient 0.5s ease,
+        box-shadow 0.3s ease;
+}
+
+.menuBox:hover {
+    background: linear-gradient(#00cad8, #00fff2, #00a5c2, #007185);
+    border: 5px;
+    border-color: rgb(0, 255, 221);
+    box-shadow: 0px 0px 10px rgb(0, 255, 242);
+}
+
+.menuBoxImageDiv {
+    height: 20vh;
+    padding-top: 5px;
+}
+
+.menuBoxLogo {
+    height: 15vh;
+}
+
+.tableContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: #f8f8f8;
+}
+
+.dataTable th,
+.dataTable td {
+    padding: 1px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.dataTable th {
+    background-color: #00909b;
+    color: white;
+}
+
+.dataTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.dataTable tr:hover {
+    background-color: #ddd;
+}
