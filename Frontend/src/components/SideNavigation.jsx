@@ -31,6 +31,10 @@ function SideNavigation() {
     navigate("/checkinouthistory");
   };
 
+  const handleBookingClick = () => {
+    navigate("/booking");
+  };
+
   const handleLogoutClick = () => {
     navigate("/");
   };
@@ -84,7 +88,9 @@ function SideNavigation() {
       </button>
       <br />
 
-      <button className={`navBtn ${getActiveClass("/booking")}`}>
+      <button className={`navBtn ${getActiveClass("/booking")}`
+    }
+    onClick={handleBookingClick}>
         <b>Booking & Reservations</b>
       </button>
       <br />
