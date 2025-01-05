@@ -46,6 +46,7 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
     
     const [records, setRecords] = useState([]);
+    const [selectedRecords, setSelectedRecords] = useState([]);
     const [equipmentList, setEquipmentList] = useState([]);
     const [form, setForm] = useState({
         equipmentId: "",
@@ -53,6 +54,8 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
         quantity: 1,
         action: "checkout",
     });
+
+    
 
     useEffect(() => {
         fetchRecords();
@@ -69,34 +72,32 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
     setEquipmentList(data);
     };
 
-    const handleSubmit = async (e) => {
-    e.preventDefault();
-    await addCheckinCheckoutRecord(form);
-    fetchRecords();
-    };
-
     const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     };
 
     useEffect(() => {
-        let filtered = equipment;
+        let filtered = records;
     
         // Apply category filter
         if (selectedCategory) {
-          filtered = filtered.filter(item => item.Category._id === selectedCategory);
+            filtered = filtered.filter(
+                (item) => item.action === selectedCategory
+            );
         }
     
         // Apply search term filter
         if (searchTerm) {
           filtered = filtered.filter(item =>
-            item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
+            item.equipment.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.equipment.Category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.action.toLowerCase().includes(searchTerm.toLowerCase())
           );
         }
     
         setFilteredEquipment(filtered);
-      }, [selectedCategory, searchTerm, equipment]);
+      }, [selectedCategory, searchTerm, records]);
     
     const handleCategoryFilter = (categoryId) => {
     setSelectedCategory(categoryId);
@@ -236,12 +237,9 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
                     value={selectedCategory}
                     onChange={(e) => handleCategoryFilter(e.target.value)}
                   >
-                    <option value="">All Categories</option>
-                    {categories.map((category) => (
-                      <option key={category._id} value={category._id}>
-                        {category.name}
-                      </option>
-                    ))}
+                    <option value="">All Check in / out</option>
+                    <option value="checkin">Check in</option>
+                    <option value="checkout">Check out</option>
                   </select>
                 </div>
               </div>
@@ -280,7 +278,7 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
                           </TableRow>
                           </TableHead>
                           <TableBody>
-                          {records
+                          {filteredEquipment
                               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                               .map((record) => {
                               const isItemSelected = isSelected(record._id);
@@ -316,13 +314,13 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
                       </Table>
                       </TableContainer>
                       <TablePagination
-                      rowsPerPageOptions={[6]}
-                      component="div"
-                      count={filteredEquipment.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
+                        rowsPerPageOptions={[6]}
+                        component="div"
+                        count={filteredEquipment.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
                       />
                   </Paper>
 
