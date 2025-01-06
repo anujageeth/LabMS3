@@ -54,16 +54,17 @@ const HomePage = () => {
         </div>
         <div class="features">
           <div class="feature-card">
-            <h3>Equipment Management</h3>
-            <p>Easily add, update, and monitor equipment with real-time data.</p>
+            <h3>Real-Time Inventory Monitoring</h3>
+            <p>Keep track of all laboratory items with real-time updates, ensuring accurate data for better decision-making.</p>
           </div>
           <div class="feature-card">
-            <h3>User Role Management</h3>
-            <p>Assign roles and control access for department heads, technical officers, and students.</p>
+            <h3>Maintenance Scheduling</h3>
+            <p>Automatically schedule and receive alerts for equipment maintenance, ensuring all tools are in optimal condition.
+            </p>
           </div>
           <div class="feature-card">
-            <h3>Reporting & Analytics</h3>
-            <p>Generate detailed reports and insights for informed decision-making.</p>
+            <h3>Usage Analytics</h3>
+            <p>Generate detailed reports on equipment usage, helping department heads make informed decisions on resource allocation and future procurement.</p>
           </div>
         </div>
       </div>
