@@ -22,7 +22,7 @@ function Dashboard(user) {
   };
 
   const handleUserManage1Click = () => {
-    navigate("/usermanage1");
+    navigate("/usermanage2");
   };
 
   const handleLogoutClick = () => {
@@ -31,6 +31,10 @@ function Dashboard(user) {
 
   const handleAddUsrClick = () => {
     navigate("/adduser");
+  };
+
+  const handleCheckInOutClick = () => {
+    navigate("/checkinoutform");
   };
 
   return (
@@ -58,12 +62,17 @@ function Dashboard(user) {
           <br />
           <br />
 
+          <button className="logOutBtn" onClick={handleCheckInOutClick}>
+            <b>Check IN / OUT</b>
+          </button>
+
+          <br /><br />
+
           <button className="logOutBtn" onClick={handleAddUsrClick}>
             <b>Add new user</b>
           </button>
 
-          <br />
-          <br />
+          <br /><br /><br />
 
           <button className="logOutBtn" onClick={handleLogoutClick}>
             <b>Log out</b>

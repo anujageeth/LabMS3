@@ -11,6 +11,7 @@ import ReportPage1 from "./components/ReportPage1";
 import AddItemTemp from "./AddItemTemp";
 import EquipmentPage1 from "./EquipmentPage1";
 import UserManagePage1 from "./UserManagePage1";
+import UserManagePage2 from "./UserManagePage2";
 import CheckinCheckoutPage from "./equipmentManagement";
 import EquipmentTable from "./components/EquipmentTable";
 import EquipmentTable2 from "./components/EquipmentTable2";
@@ -90,9 +91,9 @@ function App() {
           }
         />
         <Route
-          path="/usermanage1"
+          path="/usermanage2"
           element={
-            <UserManagePage1 refresh={refresh} onRefresh={handleRefresh} />
+            <UserManagePage2 refresh={refresh} onRefresh={handleRefresh} />
           }
         />
         <Route

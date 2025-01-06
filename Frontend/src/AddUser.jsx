@@ -70,17 +70,22 @@ function AddItem() {
                 className="typeBoxControl"
               />
             </div>
-            <div className="typeBox">
-              <input
-                type="text"
-                placeholder=" Mr/Mrs/Dr"
-                autoComplete="off"
-                name="text"
+            <label>
+              <select
+                className="typeBoxControl"
+                id="addAvailabilityBtn"
+                name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="typeBoxControl"
-              />
-            </div>
+              >
+                <option value="" disabled>
+                  Select Title
+                </option>
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Dr">Dr</option>
+              </select>
+            </label>
             <div className="typeBox">
               <input
                 type="text"
@@ -115,17 +120,24 @@ function AddItem() {
                 className="typeBoxControl"
               />
             </div>
-            <div className="typeBox">
-              <input
-                type="text"
-                placeholder=" role"
-                autoComplete="off"
-                name="text"
+            <label>
+              <select
+                className="typeBoxControl"
+                id="addAvailabilityBtn"
+                name="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="typeBoxControl"
-              />
-            </div>
+              >
+                <option value="" disabled>
+                  Select Role
+                </option>
+                <option value="lecturer">Lecturer</option>
+                <option value="instructor">Instructor</option>
+                <option value="hod">Head of Department</option>
+                <option value="technical officer">Technical Officer</option>
+              </select>
+            </label>
+
             {/* <div className="typeBox">
               <input
                 type="text"

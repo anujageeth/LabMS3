@@ -24,7 +24,7 @@ function SideNavigation() {
   };
 
   const handleUserManage1Click = () => {
-    navigate("/usermanage1");
+    navigate("/usermanage2");
   };
 
   const handleEquipment1Click = () => {
@@ -104,7 +104,7 @@ function SideNavigation() {
       <br />
 
       <button
-        className={`navBtn ${getActiveClass("/usermanage1")}`}
+        className={`navBtn ${getActiveClass("/usermanage2")}`}
         onClick={handleUserManage1Click}
       >
         <b>User Management</b>
