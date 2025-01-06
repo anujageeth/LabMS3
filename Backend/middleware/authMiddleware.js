@@ -13,13 +13,35 @@ function authenticateToken(req, res, next) {
 }
 
 // Middleware to authorize based on role
-function authorizeRoles(...roles) {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).send("Access denied. You do not have permission.");
+const authorizeRoles = (...roles) => {
+  return async (req, res, next) => {
+    try {
+      // Ensure req.user is set by authenticateToken
+      if (!req.user || !req.user.userId) {
+        return res.status(401).send("Access denied. User not authenticated.");
+      }
+
+      // Fetch user from database
+      const user = await User.findById(req.user.userId);
+      if (!user) {
+        return res.status(404).send("User not found.");
+      }
+
+      console.log("User Role:", user.Role); // Debug log
+
+      // Check if user's role is allowed
+      if (!roles.includes(user.Role)) {
+        return res
+          .status(408)
+          .send("Access denied. You do not have permission.");
+      }
+
+      next(); // User is authorized
+    } catch (error) {
+      console.error("Authorization Error:", error);
+      res.status(500).send("Server error during authorization.");
     }
-    next();
   };
-}
+};
 
 module.exports = { authenticateToken, authorizeRoles };
