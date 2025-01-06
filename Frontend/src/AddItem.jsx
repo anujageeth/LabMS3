@@ -98,6 +98,9 @@ function AddItem(onRefresh) {
         alert("Your session has expired. Please log in again.");
         localStorage.removeItem("token");
         navigate("/login");
+      } else if (error.response?.status === 408) {
+        console.log("You have no access");
+        alert("Anministrators only");
       } else {
         console.error(error);
       }
