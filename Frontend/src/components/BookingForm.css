@@ -1,37 +1,37 @@
-/* BookingForm.css */
-
 .booking-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #04414f; /* Similar to the teal background in the image */
     z-index: 1000;
 }
 
 .booking-form {
-    background: #ffffff;
-    border-radius: 8px;
+    background-color: #d9d9d9; /* Light gray background for the form */
     padding: 30px;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Shadow for depth */
     width: 400px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    font-family: "Arial", sans-serif;
+    text-align: center; /* Center align the text */
 }
 
 .booking-form h2 {
+    font-size: 24px;
+    color: #04414f; /* Teal-like color for the title */
     margin-bottom: 20px;
-    color: #4a90e2;
+    font-weight: bold;
 }
 
 .booking-form label {
     display: block;
     text-align: left;
-    margin-bottom: 8px;
+    margin: 10px 0 5px;
+    font-size: 14px;
     font-weight: bold;
     color: #333;
 }
@@ -40,79 +40,44 @@
 .booking-form select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Rounded input fields */
     font-size: 14px;
-    outline: none;
 }
 
-.booking-form input:focus,
-.booking-form select:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 4px #4a90e2;
-}
-
-.disabled-input {
-    background-color: #f9f9f9;
-    color: #888;
+.booking-form input[type="text"]:disabled {
+    background-color: #f2f2f2;
+    color: #666;
+    cursor: not-allowed;
 }
 
 .form-actions {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
 }
 
-.submit-btn {
-    background-color: #4a90e2;
-    color: #ffffff;
-    border: none;
+.form-actions button {
     padding: 10px 20px;
-    border-radius: 4px;
     font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.submit-btn:hover {
-    background-color: #357abd;
-}
-
-.cancel-btn {
-    background-color: #ff6b6b;
-    color: #ffffff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 15px; /* Rounded buttons */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #04414f; /* Teal-like color for the buttons */
+    color: white;
+    transition: 0.3s ease;
 }
 
-.cancel-btn:hover {
-    background-color: #d9534f;
+.form-actions button:hover {
+    background-color: #03363d; /* Darker teal on hover */
 }
 
-@media (max-width: 500px) {
-    .booking-form {
-        width: 90%;
-        padding: 20px;
-    }
+.form-actions button[type="button"] {
+    background-color: #c4c4c4; /* Light gray for the cancel button */
+    color: #333;
+}
 
-    .form-actions {
-        flex-direction: column;
-    }
-
-    .form-actions button {
-        margin-bottom: 10px;
-        width: 100%;
-    }
-
-    .error-message {
-        color: red;
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-    }
-    
-    
-}  
+.form-actions button[type="button"]:hover {
+    background-color: #b0b0b0; /* Slightly darker gray on hover */
+}

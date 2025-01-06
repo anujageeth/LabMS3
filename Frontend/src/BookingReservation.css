@@ -191,33 +191,33 @@ table button:hover {
 }
 
 /* Styling for the calendar popup */
+/* Updated styles for the calendar popup */
 .calendar-popup {
-    position: absolute;
-    /* Keep it absolute for positioning */
-    top: 120px;
-    /* Adjust this value to move the calendar down */
-    right: 0;
-    /* Align it to the left of the calendar icon */
-    z-index: 1000;
-    /* Ensure it's above other elements */
-    background-color: white;
-    /* Background color */
-    border: 1px solid #ccc;
-    /* Border for the popup */
-    border-radius: 5px;
-    /* Rounded corners */
-    padding: 10px;
-    /* Padding inside the popup */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Shadow for better visibility */
+    position: absolute; /* Keep it absolute for positioning */
+    top: 120px; /* Adjust this value to move the calendar down */
+    right: 0; /* Align it relative to the icon or container */
+    z-index: 1000; /* Ensure it's above other elements like the table */
+    background-color: white; /* Solid background to prevent transparency */
+    border: 1px solid #ccc; /* Add a subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px; /* Padding inside the popup */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for better visibility */
 }
 
+/* Styles for the react-calendar component */
 .react-calendar {
-    border: none;
-    /* Adjust calendar border if needed */
+    border: none; /* Remove default border */
+    background-color: white; /* Solid background to avoid transparency */
+    z-index: 1000; /* Ensure it's layered above other elements */
+    border-radius: 8px; /* Rounded corners for better aesthetics */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Add shadow for better visibility */
 }
 
+/* Calendar active tile */
 .react-calendar__tile--active {
-    background: #137870;
-    color: white;
+    background: #137870; /* Primary color for active tiles */
+    color: white; /* Text color for active tiles */
 }
+
+/* Optional: Ensure the calendar container is isolated */
+
