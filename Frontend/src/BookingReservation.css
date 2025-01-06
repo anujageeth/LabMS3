@@ -1,0 +1,223 @@
+/* General container styles */
+.booking-container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f6f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.booking-container h1 {
+    color: #333;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+/* Top Section */
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.book-btn {
+    padding: 10px 20px;
+    background-color: #137870;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.book-btn:hover {
+    background-color: #105c57;
+}
+
+.search-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-filter input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px;
+}
+
+.filter-btn {
+    padding: 10px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-btn:hover {
+    background-color: #e67e22;
+}
+
+/* Calendar */
+.calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-dates span {
+    padding: 10px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Table Section */
+.table-section {
+    margin-top: 20px;
+}
+
+.table-section h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+table th {
+    background-color: #137870;
+    color: white;
+    text-transform: uppercase;
+}
+
+table td {
+    color: #555;
+}
+
+table tr:hover {
+    background-color: #f5f5f5;
+}
+
+table button {
+    padding: 8px 12px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+table button:hover {
+    background-color: #c0392b;
+}
+
+/* Calendar section */
+.calendar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+}
+
+.calendar-section h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.react-calendar {
+    border: none;
+    /* Adjust as needed */
+}
+
+.react-calendar__tile--active {
+    background: #137870;
+    color: white;
+}
+
+.calendar-icon {
+    cursor: pointer;
+    margin-left: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.calendar-icon:hover {
+    background-color: #f0f0f0;
+}
+
+/* Styling for the calendar popup */
+.calendar-popup {
+    position: absolute;
+    /* Keep it absolute for positioning */
+    top: 120px;
+    /* Adjust this value to move the calendar down */
+    right: 0;
+    /* Align it to the left of the calendar icon */
+    z-index: 1000;
+    /* Ensure it's above other elements */
+    background-color: white;
+    /* Background color */
+    border: 1px solid #ccc;
+    /* Border for the popup */
+    border-radius: 5px;
+    /* Rounded corners */
+    padding: 10px;
+    /* Padding inside the popup */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Shadow for better visibility */
+}
+
+.react-calendar {
+    border: none;
+    /* Adjust calendar border if needed */
+}
+
+.react-calendar__tile--active {
+    background: #137870;
+    color: white;
+}

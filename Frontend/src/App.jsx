@@ -19,6 +19,11 @@ import EquipmentList2 from "./components/EquipmentList2";
 import ProtectedRoute from "./services/ProtectedRoute";
 import CheckInOutHistory from "./CheckInOutHistory";
 import CheckInOutForm from "./CheckInOutForm";
+import BookingPage from "./BookingPage";
+
+
+
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -108,6 +113,14 @@ function App() {
             <CheckInOutForm refresh={refresh} onRefresh={handleRefresh} />
           }
         />
+
+<Route
+          path="/booking"
+          element={
+            <BookingPage refresh={refresh} onRefresh={handleRefresh} />
+          }
+        />
+      
       </Routes>
     </BrowserRouter>
   );
