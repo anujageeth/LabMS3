@@ -1,12 +1,10 @@
-
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FaBoxOpen, FaClipboardList, FaCogs, FaUsers, FaFileAlt, FaRegCommentDots } from 'react-icons/fa';  // Importing icons
 import "./Dashboard.css";
-
 import UserDetails from "./components/UserDetails";
 
-function Dashboard(user) {
+function Dashboard() {
   const navigate = useNavigate();
 
   const handleInventoryClick = () => {
@@ -42,6 +40,7 @@ function Dashboard(user) {
             <img
               className="uniLogoImage"
               src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/uniLogo.png?alt=media&token=b367591e-1baa-45f6-a460-a1088c3e2e2c"
+              alt="University Logo"
             />
           </div>
           <div className="navTitleDiv">
@@ -71,69 +70,55 @@ function Dashboard(user) {
         </div>
         <div className="rightPanel">
           <UserDetails />
-
           <div className="dashBoxer">
             <div className="dashName">
               <h1 className="pageTitle">Dashboard</h1>
             </div>
-            <div className="menuBoxes">
-              <div className="menuBox" onClick={handleInventoryClick}>
-                <div className="menuBoxImageDiv">
-                  <img
-                    className="menuBoxLogo"
-                    src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/Dashboard%20icons%2Finventory.png?alt=media&token=a0e4e24f-7bc7-4172-b6c5-504e8f307704"
-                  />
+            <div className="boooo">
+              <div className="menuBoxes">
+                <div className="menuBox" onClick={handleInventoryClick}>
+                  <div className="menuBoxImageDiv">
+                    <FaBoxOpen size={64} />  {/* Inventory Management Icon */}
+                  </div>
+                  <div className="menuBoxText">Inventory Management</div>
                 </div>
-                <div className="menuBoxText">Inventory Management</div>
-              </div>
-              <div className="menuBox" onClick={handleEquipment1Click}>
-                <div className="menuBoxImageDiv">
-                  <img
-                    className="menuBoxLogo"
-                    src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/Dashboard%20icons%2Fequipment.png?alt=media&token=8e6adace-bc80-415f-9872-5de8a4e1ef83"
-                  />
+                <div className="menuBox" onClick={handleEquipment1Click}>
+                  <div className="menuBoxImageDiv">
+                    <FaClipboardList size={64} />  {/* Equipment Management Icon */}
+                  </div>
+                  <div className="menuBoxText">Equipment Management</div>
                 </div>
-                <div className="menuBoxText">Equipment Management</div>
-              </div>
-              <div className="menuBox">
-                <div className="menuBoxImageDiv">
-                  <img
-                    className="menuBoxLogo"
-                    src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/Dashboard%20icons%2Fbooking.png?alt=media&token=5981511e-d530-44dc-8e18-c999a2d7b591"
-                  />
+                <div className="menuBox">
+                  <div className="menuBoxImageDiv">
+                    <FaCogs size={64} />  {/* Bookings & Reservations Icon */}
+                  </div>
+                  <div className="menuBoxText">Bookings & Reservations</div>
                 </div>
-                <div className="menuBoxText">Bookings & Reservations</div>
               </div>
-            </div>
 
-            <div className="menuBoxes">
-              <div className="menuBox" onClick={handleReport1Click}>
-                <div className="menuBoxImageDiv">
-                  <img
-                    className="menuBoxLogo"
-                    src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/Dashboard%20icons%2Freports.png?alt=media&token=f16cfde4-3c23-4eb8-946e-3c33da9f025d"
-                  />
+              <div className="menuBoxes">
+                <div className="menuBox" onClick={handleReport1Click}>
+                  <div className="menuBoxImageDiv">
+                    <FaFileAlt size={64} />  {/* Reports Icon */}
+                  </div>
+                  <div className="menuBoxText">Reports</div>
                 </div>
-                <div className="menuBoxText">Reports</div>
-              </div>
-              <div className="menuBox" onClick={handleUserManage1Click}>
-                <div className="menuBoxImageDiv">
-                  <img
-                    className="menuBoxLogo"
-                    src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/Dashboard%20icons%2Fuser.png?alt=media&token=d0cd5cc7-eb8c-41f8-b8b0-5434ee74147b"
-                  />
+                <div className="menuBox" onClick={handleUserManage1Click}>
+                  <div className="menuBoxImageDiv">
+                    <FaUsers size={64} />  {/* User Management Icon */}
+                  </div>
+                  <div className="menuBoxText">User Management</div>
                 </div>
-                <div className="menuBoxText">User Management</div>
-              </div>
-              <div className="menuBox">
-                <div className="menuBoxImageDiv">
-                  <img
-                    className="menuBoxLogo"
-                    src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/Dashboard%20icons%2Ffeedback.png?alt=media&token=357b83a0-ccc7-4cd5-9388-b4de1c9c9ab2"
-                  />
+                <div className="menuBox">
+                  <div className="menuBoxImageDiv">
+                    <FaRegCommentDots size={64} />  {/* Feedback Icon */}
+                  </div>
+                  <div className="menuBoxText">Feedback</div>
                 </div>
-                <div className="menuBoxText">Feedback</div>
               </div>
+
+            
+
             </div>
           </div>
         </div>

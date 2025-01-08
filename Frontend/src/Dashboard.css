@@ -7,6 +7,7 @@ body {
 .dashPage {
     z-index: 2;
     min-height: 100vh;
+    
 }
 
 .gridBox {
@@ -14,6 +15,16 @@ body {
     gap: 0px;
     height: 100vh;
     overflow: hidden;
+    
+}
+
+.leftPanel {  
+    flex: 1;   
+    height: 100vh;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: none;
+    z-index: 5;
 }
 
 .rightPanel {
@@ -33,6 +44,7 @@ body {
     padding-top: 10px;
     font-size: 20px;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+    
 }
 
 .dashBox {
@@ -42,6 +54,7 @@ body {
     border-radius: 30px;
     padding-top: 10px;
     font-size: 20px;
+    display: flex;
 }
 
 .dashName {
@@ -51,46 +64,84 @@ body {
     color: #005766;
 }
 
+.boooo {
+    display: flex;
+    justify-content: center; /* Centers the content horizontally */
+    align-items: center; /* Aligns the content vertically (if necessary) */
+    flex-wrap: wrap; /* Ensures boxes wrap to the next row if needed */
+    gap: 20px; /* Adds consistent spacing between the boxes */
+  }
+
+ 
+
 .menuBoxes {
     display: flex;
-    gap: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    justify-content: center; /* Ensures equal spacing between boxes */
+    align-items: center;  /* Centers the items vertically */
+    flex-wrap: wrap;  /* Allows boxes to wrap to the next line if needed */
+    gap: 20px;  /* Sets a consistent gap between the boxes */
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 10px;
+    width: 100%; /* Ensures the container spans the full width */
 }
 
 .menuBox {
-    flex: 1;
-    height: 25vh;
-    width: 20vw;
-    border: 0px;
-    border-radius: 30px;
-    padding: 10px;
-    background: linear-gradient(#00d9ff, #009eb9);
-    text-align: center;
+    width: 300px; /* Fixed width for uniformity */
+    height: 150px; /* Fixed height for uniformity */
+    border-radius: 20px;
+    background: #005766; /* Background color for the boxes */
     color: white;
-    justify-content: center;
-    align-items: center;
+    display: flex;
+    flex-direction: column; /* Allows text and image stacking */
+    justify-content: center; /* Centers content vertically */
+    align-items: center; /* Centers content horizontally */
     text-align: center;
-    box-shadow: 0px 0px 0px rgb(0, 255, 242);
-
-    transition: linear-gradient 0.5s ease,
-        box-shadow 0.3s ease;
-}
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
 
 .menuBox:hover {
-    background: linear-gradient(#00cad8, #00fff2, #00a5c2, #007185);
-    border: 5px;
-    border-color: rgb(0, 255, 221);
-    box-shadow: 0px 0px 10px rgb(0, 255, 242);
+    background: #007185;  /* Slightly lighter shade on hover */
+    border: 5px solid #009eb9;  /* Added border on hover */
+    box-shadow: 0px 0px 10px #009eb9;
 }
 
 .menuBoxImageDiv {
-    height: 20vh;
+    height: 14vh;   /* Adjusted the height of the image container */
     padding-top: 5px;
 }
 
 .menuBoxLogo {
-    height: 15vh;
+    height: 12vh;   /* Adjusted the logo height */
 }
 
+.boooo1 {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .noticeBox {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    width: 30%;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .noticeTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .noticeContent {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+  }
+  
