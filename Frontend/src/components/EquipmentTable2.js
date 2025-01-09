@@ -68,25 +68,69 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     fetchCategories();
   }, [refresh]);
 
+  // useEffect(() => {
+  //   let filtered = equipment;
+
+  //   // Apply category filter
+  //   if (selectedCategory) {
+  //     filtered = filtered.filter(
+  //       (item) => item.Category._id === selectedCategory
+  //     );
+  //   }
+
+  //   // Apply search term filter
+  //   if (searchTerm) {
+  //     filtered = filtered.filter(
+  //       (item) =>
+  //         item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //         item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //   }
+
+  //   setFilteredEquipment(filtered);
+  // }, [selectedCategory, searchTerm, equipment]);
+
   useEffect(() => {
-    let filtered = equipment;
+    console.log(
+      "Filtering with category:",
+      selectedCategory,
+      "and search:",
+      searchTerm
+    );
 
-    // Apply category filter
-    if (selectedCategory) {
-      filtered = filtered.filter(
-        (item) => item.Category._id === selectedCategory
+    // Find the category name corresponding to the selectedCategory
+    const categoryName = selectedCategory
+      ? categories.find((cat) => String(cat._id) === String(selectedCategory))
+          ?.name
+      : "";
+    console.log("Category Name for ID:", selectedCategory, "is", categoryName);
+
+    let filtered = equipment.filter((item) => {
+      // Ensure safe checks for undefined or null values
+      const matchesCategory = selectedCategory
+        ? item.Category === categoryName
+        : true; // If no selectedCategory, allow all items
+
+      const matchesSearch = searchTerm
+        ? item.Name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.Lab?.toLowerCase().includes(searchTerm.toLowerCase())
+        : true; // If no search term, allow all items
+
+      console.log(
+        "Item:",
+        item.Name,
+        "Category:",
+        item.Category,
+        "Category Match:",
+        matchesCategory,
+        "Search Match:",
+        matchesSearch
       );
-    }
 
-    // Apply search term filter
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (item) =>
-          item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+      return matchesCategory && matchesSearch;
+    });
 
+    console.log("Filtered Equipment:", filtered);
     setFilteredEquipment(filtered);
   }, [selectedCategory, searchTerm, equipment]);
 
