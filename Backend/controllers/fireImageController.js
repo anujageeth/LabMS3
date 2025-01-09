@@ -23,7 +23,7 @@ const addEquipment = async (req, res) => {
 
     // Default image URL from Google Drive
     const defaultImageUrl =
-      "https://drive.google.com/uc?export=view&id=1xkBArWMctBxc9egFTkom01E29cuDqMgP";
+      "default";
 
     let imageUrl;
 

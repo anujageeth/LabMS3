@@ -299,7 +299,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                       {new Date(item.updatedAt).toLocaleDateString()}
                     </p>{" "}
                     {/* Display updated date */}
-                    <img src={item.imageUrl} alt={item.Name} />
+                    <img src={item.imageUrl === "default"? "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/noImageAvailable.png?alt=media&token=ae25d497-543a-4ad6-bbfb-89e970c117f6": item.imageUrl} alt={item.Name} />
                     <br />
                     <button
                       className="listViewBtn2"
