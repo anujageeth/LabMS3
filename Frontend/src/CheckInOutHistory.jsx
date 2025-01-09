@@ -55,7 +55,20 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
         action: "checkout",
     });
 
-    
+    useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await axios.get(
+            "http://localhost:3001/api/categories"
+          );
+          setCategories(response.data); // Set the fetched categories
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
 
     useEffect(() => {
         fetchRecords();
@@ -302,7 +315,12 @@ const CheckInOutHistory = ({ onRefresh, refresh }) => {
                                     />
                                   </TableCell>
                                   <TableCell>{record.equipment?.Name}</TableCell>
-                                  <TableCell>{record.equipment?.Category}</TableCell>
+                                  <TableCell>{record.equipment.Category? categories.find(
+                                        (cat) =>
+                                          String(cat._id) ===
+                                          String(record.equipment.Category)
+                                      )?.name
+                                    : " "}</TableCell>
                                   <TableCell>{record.quantity}</TableCell>
                                   <TableCell>{record.action}</TableCell>
                                   <TableCell>{new Date(record.date).toLocaleDateString()}</TableCell>

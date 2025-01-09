@@ -37,6 +37,11 @@ function Dashboard(user) {
     navigate("/checkinoutform");
   };
 
+  const handleBookingClick = () => {
+    navigate("/booking");
+  };
+
+
   return (
     <div className="dashPage">
       <div className="gridBox">
@@ -104,7 +109,7 @@ function Dashboard(user) {
                 </div>
                 <div className="menuBoxText">Equipment Management</div>
               </div>
-              <div className="menuBox">
+              <div className="menuBox" onClick={handleBookingClick}>
                 <div className="menuBoxImageDiv">
                   <img
                     className="menuBoxLogo"
