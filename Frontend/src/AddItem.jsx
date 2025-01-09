@@ -153,17 +153,23 @@ function AddItem(onRefresh) {
                 className="typeBoxControl"
               />
             </div>
-            <div className="typeBox">
-              <input
-                type="text"
+            <label>
+              <select
+                className="typeBoxControl"
+                id="addAvailabilityBtn"
                 name="Lab"
-                placeholder=" Lab"
-                autoComplete="on"
                 value={formData.Lab}
                 onChange={handleChange}
-                className="typeBoxControl"
-              />
-            </div>
+              >
+                <option value="" disabled>
+                  Select Lab
+                </option>
+                <option value="Electrical machines Lab">Electrical Machines Lab</option>
+                <option value="Communication Lab">Communication Lab</option>
+                <option value="Measurements Lab">Measurements Lab</option>
+                <option value="High Voltage Lab">High Voltage Lab</option>
+              </select>
+            </label>
 
             <div className="typeBox">
               {/* Category Select */}

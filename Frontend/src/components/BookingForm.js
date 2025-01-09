@@ -63,19 +63,24 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
                         required
                     />
 
-                    <label>Lab Place</label>
-                    <select
-                        value={labPlace}
-                        onChange={(e) => setLabPlace(e.target.value)}
-                        required
-                    >
-                        <option value="">Select Lab Place</option>
-                        {labPlaceOptions.map((place) => (
-                            <option key={place} value={place}>
-                                {place}
+                    <label>
+                        <select
+                            
+                            name="LabPlace"
+                            value={labPlace}
+                            onChange={(e) => setLabPlace(e.target.value)}
+                            required
+                        >
+                            <option value="" disabled>
+                            Select Lab Place
                             </option>
-                        ))}
-                    </select>
+                            <option value="Electrical machines Lab">Electrical Machines Lab</option>
+                            <option value="Communication Lab">Communication Lab</option>
+                            <option value="Measurements Lab">Measurements Lab</option>
+                            <option value="High Voltage Lab">High Voltage Lab</option>
+                        </select>
+                    </label>
+
 
                     <label>Date</label>
                     <input type="text" value={selectedDate.toDateString()} disabled />

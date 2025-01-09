@@ -370,17 +370,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
                           setSelectedCategory={setSelectedCategory}
                         />*/}
 
-                        <Tooltip title="Delete">
-                            <IconButton
-                              onClick={handleDelete}
-                              disabled={selected.length === 0}
-                              className={
-                                selected.length > 0 ? "icon-button-enabled" : "icon-button-disabled"
-                              }>
-                                <DeleteIcon className="iconButtonLogo"/>
-                                {/*<button className="tableRowEdit">Delete</button>*/}
-                            </IconButton>
-                        </Tooltip>
+                        
                     </Box>
                       <TableContainer>
                       <Table size={dense ? "small" : "medium"}>
