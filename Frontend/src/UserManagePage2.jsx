@@ -321,7 +321,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                           setSelectedCategory={setSelectedCategory}
                         />*/}
 
-                        <Tooltip title="Edit">
+                        {/*<Tooltip title="Edit">
                           <IconButton
                             onClick={handleEdit}
                             disabled={selected.length !== 1}
@@ -333,7 +333,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                           >
                             <EditIcon className="iconButtonLogo" />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip>*/}
                         <Tooltip title="Delete">
                           <IconButton
                             onClick={handleDelete}

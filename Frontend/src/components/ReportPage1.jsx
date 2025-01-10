@@ -339,18 +339,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
                       onChange={handleSearch} // Handle search input
                     />
                   </div>
-                  <select
-                    id="categoryFilter"
-                    value={selectedCategory}
-                    onChange={(e) => handleCategoryFilter(e.target.value)}
-                  >
-                    <option value="">All Categories</option>
-                    {categories.map((category) => (
-                      <option key={category._id} value={category._id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+                  
                 </div>
               </div>
             </div>
