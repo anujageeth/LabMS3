@@ -42,6 +42,33 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
   const [categoryId, setCategoryId] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
 
+  const navigate = useNavigate(); 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login"); // Redirect if no token is found
+          return;
+        }
+        const response = await axios.get("http://localhost:3001/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data);
+        //console.log(user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("token"); // Clear token if unauthorized
+          navigate("/login"); // Redirect to login
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   useEffect(() => {
     const fetchLabReports = async () => {
@@ -196,7 +223,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
     setDense(event.target.checked);
   };
 
-  const navigate = useNavigate();
+  
 
   const handleListViewClick = () => {
     navigate("/list2");

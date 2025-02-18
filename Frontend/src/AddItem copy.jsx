@@ -1,31 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./AddItem.css";
 import axios from "axios";
+import "./AddItem.css";
 
-function AddItem(onRefresh) {
+function AddItem({ onRefresh }) {
   const navigate = useNavigate();
-
-  const handleCancelClick = () => {
-    navigate("/inventory");
-  };
-
+  const [equipment, setEquipment] = useState([]);
   const [formData, setFormData] = useState({
     Name: "",
     Lab: "",
     Category: "",
     Brand: "",
+    Serial: "",
     Availability: true,
-    Quantity: 1,
     image: null,
   });
 
+  // Fetch existing equipment for dropdown selections
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/api/equipmentImage");
+        setEquipment(response.data);
+      } catch (error) {
+        console.error("Error fetching equipment:", error);
+      }
+    };
+    fetchEquipment();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
@@ -37,6 +43,12 @@ function AddItem(onRefresh) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!formData.Serial) {
+      alert("Serial number is required.");
+      return;
+    }
+
     const formDataToSend = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
@@ -45,9 +57,10 @@ function AddItem(onRefresh) {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login"); // Redirect if no token is found
+        navigate("/login"); // Redirect if no token found
         return;
       }
+
       await axios.post(
         "http://localhost:3001/api/equipmentImage",
         formDataToSend,
@@ -58,96 +71,126 @@ function AddItem(onRefresh) {
           },
         }
       );
+
+      //handleCancelClick();
       onRefresh();
       setFormData({
-        Name: "",
-        Lab: "",
-        Category: "",
-        Brand: "",
+        
+        Serial: "",
         Availability: true,
-        Quantity: 1,
         image: null,
       });
     } catch (error) {
-      console.error(error);
+      if (error.response?.status === 403) {
+        alert("Session expired. Please log in again.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        console.error("Error adding equipment:", error);
+      }
     }
   };
 
+  const handleCancelClick = () => {
+    navigate("/table2");
+  };
+
   return (
-    <div className="addItemPage">
+    <div className="loginPage">
       <div className="fullBox">
         <div className="overlay"></div>
-        <div className="loginBox">
-          <h2 className="loginTitle">Add item</h2>
+        <div className="loginBox" id="addUserBox">
+          <h2 className="loginTitle">Add Equipment</h2>
           <form onSubmit={handleSubmit}>
+            
+            {/* Name Selection */}
+            <select name="Name" value={formData.Name} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
+              <option value="">Select Existing Name or Enter New</option>
+              {[...new Set(equipment.map((item) => item.Name))].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Or Enter New Name"
+              name="Name"
+              value={formData.Name}
+              onChange={handleChange}
+              className="typeBoxControl"
+            />
+
+            {/* Category Selection */}
+            <select name="Category" value={formData.Category} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
+              <option value="">Select Existing Category or Enter New</option>
+              {[...new Set(equipment.map((item) => item.Category))].map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Or Enter New Category"
+              name="Category"
+              value={formData.Category}
+              onChange={handleChange}
+              className="typeBoxControl"
+            />
+
+            {/* Brand Selection */}
+            <select name="Brand" value={formData.Brand} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
+              <option value="">Select Existing Brand or Enter New</option>
+              {[...new Set(equipment.map((item) => item.Brand))].map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Or Enter New Brand"
+              name="Brand"
+              value={formData.Brand}
+              onChange={handleChange}
+              className="typeBoxControl"
+            />
+
+            {/* Serial Number */}
             <div className="typeBox">
               <input
                 type="text"
-                name="Name"
-                placeholder=" Equipment name"
-                autoComplete="on"
-                value={formData.Name}
+                placeholder="Serial Code"
+                name="Serial"
+                value={formData.Serial}
                 onChange={handleChange}
+                required
                 className="typeBoxControl"
               />
             </div>
-            <div className="typeBox">
-              <input
-                type="text"
-                name="Lab"
-                placeholder=" Lab"
-                autoComplete="on"
-                value={formData.Lab}
-                onChange={handleChange}
-                className="typeBoxControl"
-              />
-            </div>
-            <div className="typeBox">
-              <input
-                type="text"
-                placeholder=" Equipment category"
-                value={formData.Category}
-                onChange={handleChange}
-                autoComplete="on"
-                name="Category"
-                className="typeBoxControl"
-              />
-            </div>
-            <div className="typeBox">
-              <input
-                type="text"
-                placeholder="Brand"
-                value={formData.Brand}
-                onChange={handleChange}
-                autoComplete="on"
-                name="Brand"
-                className="typeBoxControl"
-              />
-            </div>
-            <div className="typeBox">
-              <input
-                type="number"
-                placeholder=" Quantity"
-                autoComplete="on"
-                name="Quantity"
-                value={formData.Quantity}
-                onChange={handleChange}
-                className="typeBoxControl"
-              />
-            </div>
+
+            {/* Lab Selection */}
             <label>
-              Availability:
-              <select
-                name="Availability"
-                value={formData.Availability}
-                onChange={handleChange}
-              >
-                <option value="true">Available</option>
-                <option value="false">Not Available</option>
+              <select className="typeBoxControl" id="addAvailabilityBtn" name="Lab" value={formData.Lab} onChange={handleChange}>
+                <option value="" disabled>Select Lab</option>
+                <option value="Electrical Machines Lab">Electrical Machines Lab</option>
+                <option value="Communication Lab">Communication Lab</option>
+                <option value="Measurements Lab">Measurements Lab</option>
+                <option value="High Voltage Lab">High Voltage Lab</option>
               </select>
             </label>
-            <div className="typeBox">
+
+            <br/>
+
+            {/* Availability Checkbox */}
+            <label>
               <input
+                type="checkbox"
+                name="Availability"
+                checked={formData.Availability}
+                onChange={() => setFormData((prev) => ({ ...prev, Availability: !prev.Availability }))}
+              /> Available
+            </label>
+
+            {/* Image Upload */}
+            <div className="addItemImageBox">
+              <input
+                className="addImageBtn"
                 type="file"
                 name="image"
                 onChange={handleFileChange}
@@ -155,18 +198,12 @@ function AddItem(onRefresh) {
               />
             </div>
 
-            <button type="submit" className="loginBtn">
-              <b>SAVE</b>
-            </button>
+            {/* Submit Button */}
+            <button type="submit" className="loginBtn"><b>SAVE</b></button>
           </form>
 
-          <button
-            type="submit"
-            className="loginBtn"
-            onClick={handleCancelClick}
-          >
-            <b>Cancel</b>
-          </button>
+          {/* Cancel Button */}
+          <button type="button" className="loginBtn" onClick={handleCancelClick}><b>Cancel</b></button>
         </div>
       </div>
     </div>

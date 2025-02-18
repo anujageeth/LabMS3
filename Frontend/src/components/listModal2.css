@@ -113,6 +113,8 @@
 
 .listViewModalInput2 {
     width: 90%;
+    min-width: 90%;
+    max-width: 90%;
     /* Full width input fields */
     padding: 10px;
     margin: 10px 0;
@@ -189,4 +191,8 @@
 
 #categoryFilter:hover {
     background-color: #000000;
+}
+
+#searchList {
+    width: 435px;
 }

@@ -4,19 +4,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Inventory from "./Inventory";
-import AddItem from "./AddItem";
+import AddItem from "./AddItem copy";
 import AddUser from "./AddUser";
 import Home from "./Home";
-import ReportPage1 from "./components/ReportPage1";
-import AddItemTemp from "./AddItemTemp";
+import ReportPage1 from "./components/ReportNew";
 import EquipmentPage1 from "./EquipmentPage1";
-import UserManagePage1 from "./UserManagePage1";
 import UserManagePage2 from "./UserManagePage2";
 import CheckinCheckoutPage from "./equipmentManagement";
 import EquipmentTable from "./components/EquipmentTable";
 import EquipmentTable2 from "./components/EquipmentTable2";
 //import EquipmentList from "./components/EquipmentList";
-import EquipmentList2 from "./components/EquipmentList2";
+import EquipmentList2 from "./components/EquipmentList";
 import ProtectedRoute from "./services/ProtectedRoute";
 import CheckInOutHistory from "./CheckInOutHistory";
 import CheckInOutForm from "./CheckInOutForm";
@@ -51,10 +49,7 @@ function App() {
           path="/additem"
           element={<AddItem onRefresh={handleRefresh} />}
         ></Route>
-        <Route
-          path="/additemtemp"
-          element={<AddItemTemp onRefresh={handleRefresh} />}
-        ></Route>
+        
         <Route path="/adduser" element={<AddUser />}></Route>
         <Route
           path="/table"

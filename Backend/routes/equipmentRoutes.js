@@ -7,7 +7,7 @@ const {
   deleteEquipment,
   getEquipmentById,
   upload,
-} = require("../controllers/fireImageController");
+} = require("../controllers/newEquipmentController");
 const {
   authenticateToken,
   authorizeRoles,

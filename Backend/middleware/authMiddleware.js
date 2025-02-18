@@ -5,9 +5,9 @@ function authenticateToken(req, res, next) {
   const token = req.header("Authorization")?.split(" ")[1]; // Bearer Token
   if (!token) return res.status(401).send("Access denied. No token provided.");
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, jwtPayload) => {
     if (err) return res.status(403).send("Invalid token.");
-    req.user = user;
+    req.user = jwtPayload;
     next();
   });
 }
