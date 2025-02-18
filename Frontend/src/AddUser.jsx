@@ -19,6 +19,10 @@ function AddItem() {
     navigate("/usermanage2");
   };
 
+  const handleBulkUploadClick = () => {
+    navigate("/addbulkuser");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -154,6 +158,10 @@ function AddItem() {
               <b>SAVE</b>
             </button>
           </form>
+
+          <button type="submit" className="loginBtn" onClick={handleBulkUploadClick}>
+            <b>Upload a bulk</b>
+          </button>
 
           <button type="submit" className="loginBtn" onClick={handleCanclClick}>
             <b>Cancel</b>

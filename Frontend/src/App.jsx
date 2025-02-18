@@ -19,7 +19,7 @@ import ProtectedRoute from "./services/ProtectedRoute";
 import CheckInOutHistory from "./CheckInOutHistory";
 import CheckInOutForm from "./CheckInOutForm";
 import BookingPage from "./BookingPage";
-
+import AddBulkUser from "./AddBulkUser";
 
 
 
@@ -110,10 +110,17 @@ function App() {
           }
         />
 
-<Route
+        <Route
           path="/booking"
           element={
             <BookingPage refresh={refresh} onRefresh={handleRefresh} />
+          }
+        />
+
+        <Route
+          path="/addbulkuser"
+          element={
+            <AddBulkUser refresh={refresh} onRefresh={handleRefresh} />
           }
         />
       

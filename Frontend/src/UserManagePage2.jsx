@@ -151,8 +151,8 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     navigate("/adduser");
   };
 
-  const handleInventoryClick = () => {
-    navigate("/table2");
+  const handleBulkUploadClick = () => {
+    navigate("/addbulkuser");
   };
 
   // Open edit modal
@@ -275,9 +275,9 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                   <button
                     className="addItemBtn"
                     id="listBtn1"
-                    onClick={handleInventoryClick}
+                    onClick={handleBulkUploadClick}
                   >
-                    <b>Equipment list</b>
+                    <b>Upload a bulk</b>
                   </button>
                 </div>
 
@@ -472,6 +472,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                         <button className="tableModalBtn" onClick={handleUpdate}>
                           Save
                         </button>
+                        
                         <button
                           className="tableModalBtn"
                           id="editCancelBtn"
