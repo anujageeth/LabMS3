@@ -85,4 +85,87 @@ const getOneUser = async (req, res) => {
   }
 };
 
+const router = require("express").Router();
+const multer = require("multer");
+const csv = require("csv-parser");
+//const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const stream = require("stream");
+const { authenticateToken, authorizeRoles } = require("../middleware/authMiddleware");
+
+// Configure email transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Bulk import endpoint
+router.post("/bulk-import",
+  authenticateToken,
+  authorizeRoles("technical officer", "hod"),
+  multer().single("csv"),
+  async (req, res) => {
+    const results = [];
+    const errors = [];
+    const bufferStream = new stream.PassThrough();
+    bufferStream.end(req.file.buffer);
+
+    bufferStream
+      .pipe(csv())
+      .on("data", async (row) => {
+        try {
+          // Generate default password
+          const username = row.Email.split("@")[0];
+          const tempPassword = `${username}@${Math.random().toString(36).slice(-4)}`;
+          const hashedPassword = await bcrypt.hash(tempPassword, 10);
+
+          // Create user object
+          const userData = {
+            FirstName: row.FirstName,
+            LastName: row.LastName,
+            Title: row.Title,
+            Email: row.Email,
+            Role: row.Role,
+            Password: hashedPassword,
+            temporaryPassword: true
+          };
+
+          // Add student-specific fields
+          if (row.Role === "student") {
+            userData.studentId = row.StudentID;
+          }
+
+          // Save user
+          const user = new User(userData);
+          await user.save();
+
+          // Send email
+          await transporter.sendMail({
+            to: row.Email,
+            subject: "Your Lab System Credentials",
+            html: `<p>Welcome to the Lab Management System!</p>
+                  <p>Username: ${row.Email}</p>
+                  <p>Temporary Password: ${tempPassword}</p>
+                  <p>Please change your password after first login.</p>`
+          });
+
+          results.push({ success: true, email: row.Email });
+        } catch (error) {
+          errors.push({ error: error.message, row });
+        }
+      })
+      .on("end", () => {
+        res.status(207).json({
+          successCount: results.length,
+          errorCount: errors.length,
+          results,
+          errors
+        });
+      });
+  }
+);
+
 module.exports = { addUser, getAllUsers, updateUser, deleteUser, getOneUser };
