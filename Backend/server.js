@@ -7,7 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 //const fireImageRoutes = require("./controllers/fireImageController");
 const categoryRoutes = require("./controllers/categoryController");
-const reportRoutes = require("./controllers/structuredReport");
+const reportRoutes = require("./controllers/reportGenerateController");
 const checkinCheckoutRoutes = require("./controllers/inOutActionController");
 const bcrypt = require("bcryptjs");
 const User = require("./models/user");
@@ -50,26 +50,26 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
- //async function insertHodUser() {
-  //try {
-     //const hashedPassword = await bcrypt.hash("ruhuna", 10); // Hash the password
+//  async function insertHodUser() {
+//   try {
+//      const hashedPassword = await bcrypt.hash("ruhuna", 10); // Hash the password
 
-     //const hodUser = new User({
-     // FirstName: "John",
-       //LastName: "Doe",
-       //Title: "Dr.",
-     // Email: "johndoe@example.com",
-       //Role: "hod",
-       //Password: hashedPassword, // Store the hashed password
-       //StudentID: null, // HOD doesn't need StudentID, can set to null
-    // });
+//      const hodUser = new User({
+//      FirstName: "John",
+//        LastName: "Doe",
+//        Title: "Dr.",
+//      Email: "johndoe@example.com",
+//        Role: "hod",
+//        Password: hashedPassword, // Store the hashed password
+//        StudentID: null, // HOD doesn't need StudentID, can set to null
+//     });
 
-    //const savedUser = await hodUser.save();
-    // console.log("HOD user inserted:", savedUser);
-   //} catch (error) {
-   // console.error("Error inserting HOD user:", error.message);
-   //}
-//}
+//     const savedUser = await hodUser.save();
+//     console.log("HOD user inserted:", savedUser);
+//    } catch (error) {
+//    console.error("Error inserting HOD user:", error.message);
+//    }
+// }
 
 // //Call the function to insert the HOD
-//insertHodUser();
+// insertHodUser();

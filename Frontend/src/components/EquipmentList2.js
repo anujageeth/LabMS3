@@ -303,7 +303,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                     <br />
                     <button
                       className="listViewBtn2"
-                      onClick={() => handleSelect(item)}
+                      onClick={() => {handleSelect(item);  console.log("Selected", item);}}
                     >
                       Select
                     </button>
