@@ -16,7 +16,7 @@ function AddItem() {
   //const [studentID, setStudentID] = useState("");
 
   const handleCanclClick = () => {
-    navigate("/dashboard");
+    navigate("/usermanage2");
   };
 
   const handleSubmit = async (e) => {
