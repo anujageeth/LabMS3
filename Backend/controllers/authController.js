@@ -4,7 +4,7 @@ const User = require("../models/user");
 
 const registerUser = async (req, res) => {
   try {
-    const { FirstName, LastName, Title, Email, Role, Password } = req.body;
+    const { FirstName, LastName, Title, Email, Role, Password, studentId } = req.body;
     const hashedPassword = await bcrypt.hash(Password, 10);
     console.log(req.body);
 
@@ -15,6 +15,7 @@ const registerUser = async (req, res) => {
       Email,
       Password: hashedPassword,
       Role,
+      studentId
       // Add StudentID for students
     });
 

@@ -9,7 +9,8 @@ export const register = async (
   Title,
   Email,
   Password,
-  Role
+  Role,
+  studentId
 ) => {
   try {
     const response = await axios.post(`${API_URL}/register`, {
@@ -19,6 +20,7 @@ export const register = async (
       Email,
       Password,
       Role,
+      studentId,
     });
     return response.data; // Return the actual data from the response
   } catch (error) {

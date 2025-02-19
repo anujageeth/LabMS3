@@ -12,8 +12,9 @@ function AddItem() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [title, setTitle] = useState("");
-  //const [studentID, setStudentID] = useState("");
+  const [studentStatus, setStudentStatus] = useState('student');
 
   const handleCanclClick = () => {
     navigate("/usermanage2");
@@ -30,7 +31,7 @@ function AddItem() {
     }
 
     try {
-      await register(firstName, lastName, title, email, password, role);
+      await register(firstName, lastName, title, email, password, role, studentId);
       alert("Registration successful");
       setFirstName("");
       setLastName("");
@@ -39,6 +40,7 @@ function AddItem() {
       setPassword("");
       setConfirmPassword("");
       setRole("");
+      setStudentId("");
     } catch (error) {
       alert("Registration failed");
       console.log(error.message);
@@ -139,8 +141,24 @@ function AddItem() {
                 <option value="instructor">Instructor</option>
                 <option value="hod">Head of Department</option>
                 <option value="technical officer">Technical Officer</option>
+                <option value="student">Student</option>
               </select>
             </label>
+
+            {role === 'student' && (
+              <div className="typeBox">
+              <input
+                type="text"
+                placeholder=" Registration Number"
+                autoComplete="off"
+                name="text"
+                value={studentId}
+                onChange={(e) => setStudentId(e.target.value)}
+                className="typeBoxControl"
+              />
+            </div>
+            )}
+            
 
             {/* <div className="typeBox">
               <input
@@ -159,11 +177,11 @@ function AddItem() {
             </button>
           </form>
 
-          <button type="submit" className="loginBtn" onClick={handleBulkUploadClick}>
+          <button className="loginBtn" onClick={handleBulkUploadClick}>
             <b>Upload a bulk</b>
           </button>
 
-          <button type="submit" className="loginBtn" onClick={handleCanclClick}>
+          <button className="loginBtn" onClick={handleCanclClick}>
             <b>Cancel</b>
           </button>
         </div>
