@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 // Add a new user (HOD and Technical Officer)
 const addUser = async (req, res) => {
   try {
-    const { FirstName, LastName, Title, Email, Role, Password } = req.body;
+    const { FirstName, LastName, Title, Email, Role, Password, studentId } = req.body;
     const hashedPassword = await bcrypt.hash(Password, 10);
 
     const newUser = new User({
@@ -14,6 +14,7 @@ const addUser = async (req, res) => {
       Email,
       Role,
       Password: hashedPassword,
+      studentId,
       // StudentID: Role === "student" ? StudentID : undefined,
     });
 
@@ -130,7 +131,7 @@ router.post("/bulk-import",
             Email: row.Email,
             Role: row.Role,
             Password: hashedPassword,
-            temporaryPassword: true
+            temporaryPassword: true,
           };
 
           // Add student-specific fields
