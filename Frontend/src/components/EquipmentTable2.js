@@ -323,8 +323,8 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   <button className="addItemBtn" id="addBtn" onClick={() => navigate("/additem")}>
                     <b>Add Item</b>
                   </button>
-                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/table2")}>
-                    <b>Table View</b>
+                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/list2")}>
+                    <b>List View</b>
                   </button>
                 </div>
                 
