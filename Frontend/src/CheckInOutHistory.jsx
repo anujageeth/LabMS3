@@ -414,7 +414,7 @@ const [dense, setDense] = useState(true);
     };
 
     fetchRecords();
-  }, []);
+  }, [isModalOpen]);
 
   const navigate = useNavigate();
 
@@ -530,13 +530,13 @@ const [dense, setDense] = useState(true);
                             }
                           />
                         </TableCell>
-                        <TableCell><b>User</b></TableCell>
-                        <TableCell><b>Equipment</b></TableCell>
-                        <TableCell><b>Category</b></TableCell>
                         <TableCell><b>Serial</b></TableCell>
+                        <TableCell><b>Equipment</b></TableCell>
                         <TableCell><b>Action</b></TableCell>
-                        <TableCell><b>Date</b></TableCell>
-                        <TableCell><b>Damage</b></TableCell>
+                        <TableCell><b>Handled</b></TableCell>
+                        <TableCell><b>User</b></TableCell>
+                        <TableCell><b>Date & Time</b></TableCell>
+                        <TableCell><b>Damages</b></TableCell>
                         <TableCell><b>Notes</b></TableCell>
                       </TableRow>
                     </TableHead>
@@ -564,11 +564,12 @@ const [dense, setDense] = useState(true);
                                   }}
                                 />
                               </TableCell>
-                              <TableCell>{`${record.user?.FirstName} ${record.user?.LastName}`}</TableCell>
-                              <TableCell>{`${record.equipment?.Name} (${record.equipment?.Brand})`}</TableCell>
-                              <TableCell>{record.equipment?.Category}</TableCell>
                               <TableCell>{record.equipment?.Serial}</TableCell>
+                              
+                              <TableCell>{record.equipment?.Name}</TableCell>
                               <TableCell>{record.action}</TableCell>
+                              <TableCell>{`${record.user?.FirstName} ${record.user?.LastName}`}</TableCell>
+                              <TableCell>{`${record.selectedUser?.FirstName} ${record.selectedUser?.LastName} (${record.selectedUser?.Role})`}</TableCell>
                               <TableCell>{new Date(record.date).toLocaleString()}</TableCell>
                               <TableCell>{record.damageDescription || '-'}</TableCell>
                               <TableCell>{record.notes || '-'}</TableCell>
@@ -579,7 +580,7 @@ const [dense, setDense] = useState(true);
                   </Table>
                 </TableContainer>
                 <TablePagination
-                  rowsPerPageOptions={[6]}
+                  rowsPerPageOptions={[5]}
                   component="div"
                   count={records.length}
                   rowsPerPage={rowsPerPage}

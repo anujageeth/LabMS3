@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import "./BookingForm.css";
+import SidePopup from "./SidePopup"
 
 const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
     const [labName, setLabName] = useState("");
@@ -8,6 +9,11 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
     const [bookedBy, setBookedBy] = useState("");
     const [time, setTime] = useState("");
     const [duration, setDuration] = useState(1);
+
+    const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+    const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+    const [isAlreadyPopupOpen, setIsAlreadyPopupOpen] = useState(false);
+    
 
     const labPlaceOptions = ["Lab 1", "Lab 2", "Lab 3", "Lab 4"];
 
@@ -33,20 +39,26 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
             });
 
             if (response.ok) {
-                alert("Booking successful!");
+                setIsSuccessPopupOpen(true);
+                // alert("Booking successful!");
                 onBookingAdded(); // Refresh bookings list
-                closeForm(); // Close the form
+                setTimeout(() => {
+                    closeForm(); // Close the form after the popup is shown
+                }, 2000); // Adjust the delay (2000ms = 2 seconds)
             } else {
                 const result = await response.json();
                 if (result.error === "Lab is already booked at that time.") {
-                    alert("The selected lab is already booked for this time. Please choose a different time.");
+                    setIsAlreadyPopupOpen(true)
+                    // alert("The selected lab is already booked for this time. Please choose a different time.");
                 } else {
-                    alert(result.error || "Failed to book the lab.");
+                    setIsErrorPopupOpen(false)
+                    // alert(result.error || "Failed to book the lab.");
                 }
             }
         } catch (error) {
             console.error("Error submitting the form:", error.message);
-            alert("An error occurred while trying to book the lab. Please try again later.");
+            setIsErrorPopupOpen(false)
+            // alert("An error occurred while trying to book the lab. Please try again later.");
         }
     };
 
@@ -111,6 +123,33 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
                     </div>
                 </form>
             </div>
+
+            <SidePopup
+                type="success"
+                title="Successful"
+                message="Lab booking successful!"
+                isOpen={isSuccessPopupOpen}
+                onClose={() => setIsSuccessPopupOpen(false)}
+                duration={3000} // Optional: customize duration in milliseconds
+            />
+
+            <SidePopup
+                type="error"
+                title="Error"
+                message="Couldn't book the lab!"
+                isOpen={isErrorPopupOpen}
+                onClose={() => setIsErrorPopupOpen(false)}
+                duration={3000} // Optional: customize duration in milliseconds
+            />
+
+            <SidePopup
+                type="error"
+                title="Error"
+                message="Already booked the lab!"
+                isOpen={isAlreadyPopupOpen}
+                onClose={() => setIsAlreadyPopupOpen(false)}
+                duration={3000} // Optional: customize duration in milliseconds
+            />
         </div>
     );
 };

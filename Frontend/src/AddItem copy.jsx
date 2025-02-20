@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AddItem.css";
+import SidePopup from "./components/SidePopup"
 
 function AddItem({ onRefresh }) {
   const navigate = useNavigate();
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+
   const [equipment, setEquipment] = useState([]);
   const [formData, setFormData] = useState({
     Name: "",
@@ -15,6 +19,8 @@ function AddItem({ onRefresh }) {
     Availability: true,
     image: null,
   });
+
+  
 
   // Fetch existing equipment for dropdown selections
   useEffect(() => {
@@ -54,6 +60,8 @@ function AddItem({ onRefresh }) {
       formDataToSend.append(key, value);
     });
 
+    setIsSuccessPopupOpen(true);
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -86,6 +94,7 @@ function AddItem({ onRefresh }) {
         localStorage.removeItem("token");
         navigate("/login");
       } else {
+        setIsErrorPopupOpen(true);
         console.error("Error adding equipment:", error);
       }
     }
@@ -94,6 +103,8 @@ function AddItem({ onRefresh }) {
   const handleCancelClick = () => {
     navigate("/table2");
   };
+
+  
 
   return (
     <div className="loginPage">
@@ -206,6 +217,35 @@ function AddItem({ onRefresh }) {
           <button type="button" className="loginBtn" onClick={handleCancelClick}><b>Cancel</b></button>
         </div>
       </div>
+
+      {/*isSuccessPopupOpen && (
+        <div className="popupBox">
+          <div className="popupHeader">
+            Successful
+          </div>
+          <div className="PopupContent">
+            Added new equipment
+          </div>
+        </div>
+      )*/}
+
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Added new equipment"
+        isOpen={isSuccessPopupOpen}
+        onClose={() => setIsSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="Error"
+        message="Couldn't add new equipment"
+        isOpen={isErrorPopupOpen}
+        onClose={() => setIsErrorPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
     </div>
   );
 }

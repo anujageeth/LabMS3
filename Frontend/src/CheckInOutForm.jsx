@@ -143,9 +143,10 @@
 
 // export default CheckInOutForm;
 // components/EquipmentTransaction.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import SidePopup from "./components/SidePopup"
 
 function CheckInOutForm() {
   const [action, setAction] = useState('checkout');
@@ -157,12 +158,32 @@ function CheckInOutForm() {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
+
   const api = axios.create({
     baseURL: 'http://localhost:3001/api',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`
     }
   });
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const { data } = await api.get('/users');
+        setUsers(data);
+      } catch (err) {
+        setError('Failed to fetch users');
+        setTimeout(() => setError(''), 5000);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -175,18 +196,22 @@ function CheckInOutForm() {
       
       const { data } = await api.post('/checkinout/bulk', {
         action,
+        selectedUser,
         serials: serialList,
         damageDescription: action === 'checkin' ? damage : undefined,
         notes
       });
 
+      setIsSuccessPopupOpen(true);
       setSuccess('Operation completed successfully!');
       setSerials('');
       setDamage('');
       setNotes('');
+      setSelectedUser('');
       setTimeout(() => setSuccess(''), 3000);
 
     } catch (err) {
+      setIsErrorPopupOpen(true);
       setError(err.response?.data?.message || 'Something went wrong');
       setTimeout(() => setError(''), 5000);
     } finally {
@@ -207,6 +232,23 @@ function CheckInOutForm() {
       >
         <option value="checkout">Check Out</option>
         <option value="checkin">Check In</option>
+      </select>
+
+      <select
+        className="listViewModalInput2"
+        value={selectedUser}
+        onChange={(e) => setSelectedUser(e.target.value)}
+        disabled={loading}
+        required
+      >
+        <option value="">Select User</option>
+        {users
+          .filter(user => user.Role !== "student")
+          .map((user) => (
+            <option key={user._id} value={user._id}>
+              {`${user.Title} ${user.FirstName} ${user.LastName} (${user.Role})`}
+            </option>
+        ))}
       </select>
 
       <textarea
@@ -241,6 +283,24 @@ function CheckInOutForm() {
       <button className="listViewBtn3" type="submit" disabled={loading}>
         {loading ? 'Processing...' : 'Submit'}
       </button>
+
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Checked in / out successfully"
+        isOpen={isSuccessPopupOpen}
+        onClose={() => setIsSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="Error"
+        message="Couldn't check in/out"
+        isOpen={isErrorPopupOpen}
+        onClose={() => setIsErrorPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
     </form>
   );
 }
