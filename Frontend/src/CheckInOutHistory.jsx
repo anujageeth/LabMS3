@@ -627,7 +627,7 @@ const [dense, setDense] = useState(true);
     </div>
 
     {isModalOpen && (
-      <div className="listViewModal2" onClick={closeModal}>
+      <div className="listViewModal2">
         <div className="listViewModal-content2">
           <CheckInOutForm />
           <button

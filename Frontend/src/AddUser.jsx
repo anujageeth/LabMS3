@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddItem.css";
+import SidePopup from "./components/SidePopup"
 
 import { register } from "./services/authService";
 
@@ -15,6 +16,9 @@ function AddItem() {
   const [studentId, setStudentId] = useState("");
   const [title, setTitle] = useState("");
   const [studentStatus, setStudentStatus] = useState('student');
+
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
 
   const handleCanclClick = () => {
     navigate("/usermanage2");
@@ -32,7 +36,7 @@ function AddItem() {
 
     try {
       await register(firstName, lastName, title, email, password, role, studentId);
-      alert("Registration successful");
+      setIsSuccessPopupOpen(true);
       setFirstName("");
       setLastName("");
       setTitle("");
@@ -42,7 +46,7 @@ function AddItem() {
       setRole("");
       setStudentId("");
     } catch (error) {
-      alert("Registration failed");
+      setIsErrorPopupOpen(true);
       console.log(error.message);
     }
   };
@@ -186,6 +190,24 @@ function AddItem() {
           </button>
         </div>
       </div>
+
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Added new user"
+        isOpen={isSuccessPopupOpen}
+        onClose={() => setIsSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="Error"
+        message="Couldn't add new user"
+        isOpen={isErrorPopupOpen}
+        onClose={() => setIsErrorPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
     </div>
   );
 }

@@ -52,6 +52,8 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     const [records, setRecords] = useState([]);
     const [selectedRecords, setSelectedRecords] = useState([]);
     const [usersList, setUsersList] = useState([]);
+    const [users, setUsers] = useState([]); // Store all users
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [form, setForm] = useState({
         equipmentId: "",
         username: "",
@@ -100,6 +102,10 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     
     const handleUserFilter = (categoryId) => {
     setSelectedUser(categoryId);
+
+    const selectedRoles = categoryId.split(",");
+    const filtered = users.filter(user => selectedRoles.includes(user.role));
+    setFilteredUsers(filtered);
     };
 
     // Search handler
@@ -297,10 +303,12 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                     onChange={(e) => handleUserFilter(e.target.value)}
                   >
                     <option value="">All user roles</option>
+                    {/*<option value="lecturer,instructor">Academic</option>*/}
                     <option value="lecturer">Lecturers</option>
                     <option value="instructor">Instructors</option>
                     <option value="hod">HOD</option>
                     <option value="technical officer">TO</option>
+                    <option value="student">Student</option>
                   </select>
                 </div>
               </div>
