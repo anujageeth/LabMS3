@@ -143,7 +143,7 @@
 
 // export default CheckInOutForm;
 // components/EquipmentTransaction.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -157,12 +157,29 @@ function CheckInOutForm() {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
+
   const api = axios.create({
     baseURL: 'http://localhost:3001/api',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`
     }
   });
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const { data } = await api.get('/users');
+        setUsers(data);
+      } catch (err) {
+        setError('Failed to fetch users');
+        setTimeout(() => setError(''), 5000);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -175,6 +192,7 @@ function CheckInOutForm() {
       
       const { data } = await api.post('/checkinout/bulk', {
         action,
+        selectedUser,
         serials: serialList,
         damageDescription: action === 'checkin' ? damage : undefined,
         notes
@@ -184,6 +202,7 @@ function CheckInOutForm() {
       setSerials('');
       setDamage('');
       setNotes('');
+      setSelectedUser('');
       setTimeout(() => setSuccess(''), 3000);
 
     } catch (err) {
@@ -207,6 +226,23 @@ function CheckInOutForm() {
       >
         <option value="checkout">Check Out</option>
         <option value="checkin">Check In</option>
+      </select>
+
+      <select
+        className="listViewModalInput2"
+        value={selectedUser}
+        onChange={(e) => setSelectedUser(e.target.value)}
+        disabled={loading}
+        required
+      >
+        <option value="">Select User</option>
+        {users
+          .filter(user => user.Role !== "student")
+          .map((user) => (
+            <option key={user._id} value={user._id}>
+              {`${user.Title} ${user.FirstName} ${user.LastName} (${user.Role})`}
+            </option>
+        ))}
       </select>
 
       <textarea
