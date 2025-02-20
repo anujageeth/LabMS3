@@ -146,6 +146,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import SidePopup from "./components/SidePopup"
 
 function CheckInOutForm() {
   const [action, setAction] = useState('checkout');
@@ -156,6 +157,9 @@ function CheckInOutForm() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
 
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
@@ -198,6 +202,7 @@ function CheckInOutForm() {
         notes
       });
 
+      setIsSuccessPopupOpen(true);
       setSuccess('Operation completed successfully!');
       setSerials('');
       setDamage('');
@@ -206,6 +211,7 @@ function CheckInOutForm() {
       setTimeout(() => setSuccess(''), 3000);
 
     } catch (err) {
+      setIsErrorPopupOpen(true);
       setError(err.response?.data?.message || 'Something went wrong');
       setTimeout(() => setError(''), 5000);
     } finally {
@@ -277,6 +283,24 @@ function CheckInOutForm() {
       <button className="listViewBtn3" type="submit" disabled={loading}>
         {loading ? 'Processing...' : 'Submit'}
       </button>
+
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Checked in / out successfully"
+        isOpen={isSuccessPopupOpen}
+        onClose={() => setIsSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="Error"
+        message="Couldn't check in/out"
+        isOpen={isErrorPopupOpen}
+        onClose={() => setIsErrorPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
     </form>
   );
 }
