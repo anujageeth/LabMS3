@@ -59,7 +59,10 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  }
+  },
+  tls: {
+      rejectUnauthorized: false, // Ignore self-signed certificate error
+  },
 });
 
 // Bulk import endpoint
@@ -191,14 +194,14 @@ router.post("/users/bulk-import",
               const user = new User(userData);
               await user.save();
                             // Send email
-              // await transporter.sendMail({
-              //   to: row.Email,
-              //   subject: "Your Lab System Credentials",
-              //   html: `<p>Welcome to the Lab Management System!</p>
-              //         <p>Username: ${row.Email}</p>
-              //         <p>Temporary Password: ${username}</p>
-              //         <p>Please change your password after first login.</p>`
-              // });
+              await transporter.sendMail({
+                to: row.Email,
+                subject: "Your Lab System Credentials",
+                html: `<p>Welcome to the Lab Management System!</p>
+                      <p>Username: ${row.Email}</p>
+                      <p>Temporary Password: ${username}</p>
+                      <p>Please change your password after first login.</p>`
+              });
               results.push({ success: true, email: row.Email });
               callback();
             } catch (error) {
