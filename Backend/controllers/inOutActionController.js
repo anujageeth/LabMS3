@@ -58,13 +58,14 @@ const express = require("express");
 const router = express.Router();
 const { authenticateToken } = require("../middleware/authMiddleware");
 const Equipment = require("../models/equipment");
+const selectedUser = require("../models/user")
 const CheckInOut = require("../models/checkinCheckout");
 
 
 // Bulk check-in/check-out
 router.post("/checkinout/bulk", authenticateToken, async (req, res) => {
   try {
-    const { action, serials, damageDescription, notes } = req.body;
+    const { action, selectedUser, serials, damageDescription, notes } = req.body;
     const results = [];
     
     for (const serial of serials) {
@@ -88,6 +89,7 @@ router.post("/checkinout/bulk", authenticateToken, async (req, res) => {
       const record = new CheckInOut({
         user: req.user.userId,
         equipment: equipment._id,
+        selectedUser,
         action,
         damageDescription,
         notes
@@ -116,7 +118,8 @@ router.get("/checkinout", authenticateToken, async (req, res) => {
   try {
     const records = await CheckInOut.find()
       .populate("user", "FirstName LastName Email")
-      .populate("equipment", "Name Category Serial Brand");
+      .populate("equipment", "Name Category Serial Brand")
+      .populate("selectedUser", "FirstName LastName Email Role");
     res.json(records);
   } catch (error) {
     res.status(500).json({ message: error.message });
