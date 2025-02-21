@@ -35,6 +35,15 @@
     background-color: #005766;
 }
 
+#categoryDrop {
+    border-radius: 0;
+    width: 5vw;
+}
+
+#nameDrop {
+    width: 5vw;
+}
+
 #printFullBtn {
     border-radius: 0px 20px 20px 0px;
 }
