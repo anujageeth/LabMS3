@@ -17,6 +17,8 @@ import {
   InputLabel
 } from "@mui/material";
 import "./ReportPage.css";
+import SideNavigation from "./SideNavigation";
+import UserDetails from "./UserDetails";
 import { useNavigate } from "react-router-dom";
 
 const ReportPage = () => {
@@ -28,6 +30,8 @@ const ReportPage = () => {
   const [categories, setCategories] = useState([]);
   const [names, setNames] = useState([]);
   const [user, setUser] = useState(null);
+
+  const [dense, setDense] = useState(true);
 
   // Fetch categories and names on component mount
   useEffect(() => {
@@ -134,16 +138,200 @@ const ReportPage = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  
 
   return (
-    <div className="reportPage">
+
+    <div className="dashPage">
+      <div className="gridBox">
+        <SideNavigation />
+        <div className="rightPanel">
+          <UserDetails />
+
+          <div className="dashBoxer">
+            <div className="dashBox">
+              <div className="dashName">
+                <h1 className="pageTitle">Reports</h1>
+              </div>
+
+              <div className="addNsearch">
+                <div className="addItem" id="fullReportGap">
+                  <button
+                    className="FullReport"
+                  >
+                    <b>Full report:</b>
+                  </button>
+                  <button
+                    className="reportButton"
+                    id="previewFullBtn"
+                    onClick={() => handleReport("full", "preview")}
+                  >
+                    <b>Preview</b>
+                  </button>
+                  <button
+                    className="reportButton"
+                    id="printFullBtn"
+                    onClick={() => handleReport("full", "download")}
+                  >
+                    <b>Download</b>
+                  </button>
+                </div>
+
+                
+
+                <div className="addItem">
+
+                  <select
+                    className="FullReport"
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                  >
+                    <option value="">Category</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    className="reportButton"
+                    id="previewFullBtn"
+                    onClick={() => handleReport("filtered", "preview")}
+                  >
+                    <b>Preview</b>
+                  </button>
+                  <button
+                    className="reportButton"
+                    id="printFullBtn"
+                    onClick={() => handleReport("filtered", "download")}
+                  >
+                    <b>Download</b>
+                  </button>
+                </div>
+
+                <div className="addItem">
+                  <select
+                    className="FullReport"
+                    value={nameFilter}
+                    onChange={(e) => setNameFilter(e.target.value)}
+                  >
+                    <option value="">Name</option>
+                    {names.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    className="reportButton"
+                    id="previewFullBtn"
+                    onClick={() => handleReport("filtered", "preview")}
+                  >
+                    <b>Preview</b>
+                  </button>
+                  <button
+                    className="reportButton"
+                    id="printFullBtn"
+                    onClick={() => handleReport("filtered", "download")}
+                  >
+                    <b>Download</b>
+                  </button>
+                </div>
+
+                {/*<div className="search">
+                  <div className="searchContainer">
+                    <input
+                      type="search"
+                      placeholder=" Search..."
+                      className="searchInput"
+                      value={searchTerm}
+                      onChange={handleSearch} // Handle search input
+                    />
+                  </div>
+                  
+                </div>*/}
+              </div>
+            </div>
+            <div className="dataTableBox">
+              <Box sx={{ width: "100%" }}>
+                  <Paper sx={{ width: "100%", mb: 2 }}>
+
+                      {/* Show Edit and Delete Buttons based on selection */}
+                      <Box
+                        sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}
+                      >
+                        
+                        {/* Category Filter 
+                        <CategoryFilter
+                          className="categoryFilter"
+                          selectedCategory={selectedCategory}
+                          setSelectedCategory={setSelectedCategory}
+                        />*/}
+
+                        
+                    </Box>
+                      <TableContainer>
+                      <Table size={dense ? "small" : "medium"}>
+                          <TableHead>
+                          <TableRow>
+                            <TableCell><b>Date</b></TableCell>
+                            <TableCell><b>Time</b></TableCell>
+                            <TableCell><b>Username</b></TableCell>
+                            <TableCell><b>Report Type</b></TableCell>
+                            <TableCell><b>Filters Applied</b></TableCell>
+                            <TableCell><b>Action</b></TableCell>
+                          </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {reportHistory
+                              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                              .map((report, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{report.date}</TableCell>
+                                  <TableCell>{report.time}</TableCell>
+                                  <TableCell>{user.FirstName}</TableCell>
+                                  <TableCell>{report.type}</TableCell>
+                                  <TableCell>{report.filters}</TableCell>
+                                  <TableCell>{report.action}</TableCell>
+                                </TableRow>
+                            ))}
+                          </TableBody>
+                      </Table>
+                      </TableContainer>
+                      <TablePagination
+                      rowsPerPageOptions={[6]}
+                      component="div"
+                      count={reportHistory.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                  </Paper>
+
+                  
+              </Box>
+            </div>
+            
+
+          </div>
+        </div>
+      </div>
+    
+
+    {/*<div className="reportPage">
       <Box sx={{ width: "100%", padding: 2 }}>
-        <h1>Equipment Reports</h1>
+        <h1>Equipment Reports</h1>*/}
         
         {/* Report Generation Section */}
+        {/*
         <Paper sx={{ p: 2, mb: 2 }}>
           <div className="reportControls">
+            */}
             {/* Full Report Controls */}
+            {/*
             <div className="fullReportControls" style={{ marginBottom: '20px' }}>
               <Button
                 variant="contained"
@@ -161,8 +349,10 @@ const ReportPage = () => {
                 Download Full Report
               </Button>
             </div>
+            */}
 
             {/* Filtered Report Controls */}
+            {/*
             <div className="filterControls">
               <FormControl sx={{ mr: 2, minWidth: 200 }}>
                 <InputLabel>Name</InputLabel>
@@ -218,8 +408,10 @@ const ReportPage = () => {
             </div>
           </div>
         </Paper>
+        */}
 
         {/* Report History Table */}
+        {/*
         <Paper sx={{ width: "100%", mb: 2 }}>
           <TableContainer>
             <Table>
@@ -260,6 +452,8 @@ const ReportPage = () => {
           />
         </Paper>
       </Box>
+    </div>*/}
+
     </div>
   );
 };
