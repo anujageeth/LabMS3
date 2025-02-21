@@ -20,7 +20,7 @@ exports.createBooking = async (req, res) => {
         // Calculate start and end times for the booking
         const startTime = new Date(`${date}T${time}`);
         const endTime = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
-
+        console.log(date);
         // Check for conflicting bookings
         const conflictingBooking = await Booking.findOne({
             labPlace, // Same lab

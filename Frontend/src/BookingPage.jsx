@@ -54,9 +54,18 @@ const BookingReservation = () => {
   };
 
   const onDateChange = (newDate) => {
-    setDate(newDate);
+    // Extract year, month, and day from the selected date
+    const year = newDate.getFullYear();
+    const month = newDate.getMonth(); // Months are 0-based
+    const day = newDate.getDate();
+  
+    // Create a new date in local time (without UTC conversion)
+    const localDate = new Date(year, month, day, 12, 0, 0); // Set time to noon to prevent any timezone shifts
+  
+    setDate(localDate);
     setIsCalendarVisible(false);
   };
+  
 
   const toggleCalendar = () => setIsCalendarVisible(!isCalendarVisible);
 
