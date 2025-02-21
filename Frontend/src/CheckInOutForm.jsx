@@ -185,6 +185,7 @@ function CheckInOutForm() {
     fetchUsers();
   }, []);
 
+  /*
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -201,14 +202,19 @@ function CheckInOutForm() {
         damageDescription: action === 'checkin' ? damage : undefined,
         notes
       });
-
-      setIsSuccessPopupOpen(true);
+      if(data.status === "Equipment not found"){
+        alert("Equipment not found");
+      }else{
+        setIsSuccessPopupOpen(true);
       setSuccess('Operation completed successfully!');
       setSerials('');
       setDamage('');
       setNotes('');
       setSelectedUser('');
       setTimeout(() => setSuccess(''), 3000);
+      }
+
+      
 
     } catch (err) {
       setIsErrorPopupOpen(true);
@@ -217,7 +223,72 @@ function CheckInOutForm() {
     } finally {
       setLoading(false);
     }
-  };
+  };*/
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+        const serialList = serials.split('\n').map(s => s.trim()).filter(s => s);
+        
+        const { data } = await api.post('/checkinout/bulk', {
+            action,
+            selectedUser,
+            serials: serialList,
+            damageDescription: action === 'checkin' ? damage : undefined,
+            notes
+        });
+
+        // Categorizing errors
+        const notFoundItems = data.filter(item => item.status === "Equipment not found");
+        const alreadyCheckedOutItems = data.filter(item => item.status === "Already checked out");
+        const alreadyCheckedInItems = data.filter(item => item.status === "Already checked in");
+        const successItems = data.filter(item => item.status === "Success");
+
+        let errorMessage = "";
+
+        if (notFoundItems.length > 0) {
+            errorMessage += `🔴 Equipment not found:\n${notFoundItems.map(i => i.serial).join(", ")}\n\n`;
+        }
+        if (alreadyCheckedOutItems.length > 0) {
+            errorMessage += `⚠️ Already checked out:\n${alreadyCheckedOutItems.map(i => i.serial).join(", ")}\n\n`;
+        }
+        if (alreadyCheckedInItems.length > 0) {
+            errorMessage += `⚠️ Already checked in:\n${alreadyCheckedInItems.map(i => i.serial).join(", ")}\n\n`;
+        }
+
+        if (errorMessage) {
+            setIsErrorPopupOpen(true);
+            setError(errorMessage.trim());
+        }
+
+        if (successItems.length > 0) {
+            setIsSuccessPopupOpen(true);
+            setSuccess('Operation completed successfully!');
+        }
+
+        setSerials('');
+        setDamage('');
+        setNotes('');
+        setSelectedUser('');
+
+        setTimeout(() => {
+            setError('');
+            setSuccess('');
+        }, 3000);
+
+    } catch (err) {
+        setIsErrorPopupOpen(true);
+        setError(err.response?.data?.message || 'Something went wrong');
+        setTimeout(() => setError(''), 5000);
+    } finally {
+        setLoading(false);
+    }
+};
+
 
   return (
     <form onSubmit={handleSubmit}>
