@@ -46,6 +46,21 @@ const ReportPage = () => {
     };
     fetchOptions();
   }, []);
+
+  useEffect(() => {
+    const fetchReportHistory = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:3001/api/report-history", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setReportHistory(response.data);
+      } catch (error) {
+        console.error("Error fetching history:", error);
+      }
+    };
+    fetchReportHistory();
+  }, []);
  
   const navigate = useNavigate();
   useEffect(() => {
@@ -80,6 +95,7 @@ const ReportPage = () => {
     try {
       let endpoint = "http://localhost:3001/api/reports/";
       let queryParams = "";
+      const token = localStorage.getItem("token");
       
       if (type === "full") {
         endpoint += "full/pdf";
@@ -94,7 +110,9 @@ const ReportPage = () => {
       }
 
       const response = await axios.get(endpoint + queryParams, { 
-        responseType: action === "preview" ? "blob" : "blob"
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: action === "preview" ? "blob" : "blob",
+        
       });
       
       const blob = new Blob([response.data], { type: "application/pdf" });
@@ -114,15 +132,21 @@ const ReportPage = () => {
       }
 
       // Add to report history
-      const newHistory = {
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString(),
-        username: "Current User", // Replace with actual user info
-        type: type,
-        filters: type === "filtered" ? `Name: ${nameFilter}, Category: ${categoryFilter}` : "None",
-        action: action
-      };
-      setReportHistory([newHistory, ...reportHistory]);
+      // const newHistory = {
+      //   date: new Date().toLocaleDateString(),
+      //   time: new Date().toLocaleTimeString(),
+      //   username: "Current User", // Replace with actual user info
+      //   type: type,
+      //   filters: type === "filtered" ? `Name: ${nameFilter}, Category: ${categoryFilter}` : "None",
+      //   action: action
+      // };
+      // setReportHistory([newHistory, ...reportHistory]);
+      
+      // Refresh history after successful report
+      const historyResponse = await axios.get("http://localhost:3001/api/report-history", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setReportHistory(historyResponse.data);
 
     } catch (error) {
       console.error("Error with report:", error);
@@ -288,11 +312,11 @@ const ReportPage = () => {
                             {reportHistory
                               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                               .map((report, index) => (
-                                <TableRow key={index}>
-                                  <TableCell>{report.date}</TableCell>
-                                  <TableCell>{report.time}</TableCell>
-                                  <TableCell>{user.FirstName}</TableCell>
-                                  <TableCell>{report.type}</TableCell>
+                                <TableRow key={report._id}>
+                                  <TableCell>{new Date(report.createdAt).toLocaleDateString()}</TableCell>
+                                  <TableCell>{new Date(report.createdAt).toLocaleTimeString()}</TableCell>
+                                  <TableCell>{report.user?.FirstName || 'Unknown'}</TableCell>
+                                  <TableCell>{report.reportType}</TableCell>
                                   <TableCell>{report.filters}</TableCell>
                                   <TableCell>{report.action}</TableCell>
                                 </TableRow>
@@ -321,138 +345,7 @@ const ReportPage = () => {
       </div>
     
 
-    {/*<div className="reportPage">
-      <Box sx={{ width: "100%", padding: 2 }}>
-        <h1>Equipment Reports</h1>*/}
-        
-        {/* Report Generation Section */}
-        {/*
-        <Paper sx={{ p: 2, mb: 2 }}>
-          <div className="reportControls">
-            */}
-            {/* Full Report Controls */}
-            {/*
-            <div className="fullReportControls" style={{ marginBottom: '20px' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleReport("full", "preview")}
-                sx={{ mr: 2 }}
-              >
-                Preview Full Report
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleReport("full", "download")}
-              >
-                Download Full Report
-              </Button>
-            </div>
-            */}
-
-            {/* Filtered Report Controls */}
-            {/*
-            <div className="filterControls">
-              <FormControl sx={{ mr: 2, minWidth: 200 }}>
-                <InputLabel>Name</InputLabel>
-                <Select
-                  value={nameFilter}
-                  onChange={(e) => setNameFilter(e.target.value)}
-                  label="Name"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {names.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl sx={{ mr: 2, minWidth: 200 }}>
-                <InputLabel>Category</InputLabel>
-                <Select
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  label="Category"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {categories.map((category) => (
-                    <MenuItem key={category} value={category}>
-                      {category}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleReport("filtered", "preview")}
-                sx={{ mr: 2 }}
-              >
-                Preview Filtered Report
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleReport("filtered", "download")}
-              >
-                Download Filtered Report
-              </Button>
-            </div>
-          </div>
-        </Paper>
-        */}
-
-        {/* Report History Table */}
-        {/*
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell><b>Date</b></TableCell>
-                  <TableCell><b>Time</b></TableCell>
-                  <TableCell><b>Username</b></TableCell>
-                  <TableCell><b>Report Type</b></TableCell>
-                  <TableCell><b>Filters Applied</b></TableCell>
-                  <TableCell><b>Action</b></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {reportHistory
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((report, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{report.date}</TableCell>
-                      <TableCell>{report.time}</TableCell>
-                      <TableCell>{user.FirstName}</TableCell>
-                      <TableCell>{report.type}</TableCell>
-                      <TableCell>{report.filters}</TableCell>
-                      <TableCell>{report.action}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={reportHistory.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </Box>
-    </div>*/}
+   
 
     </div>
   );
