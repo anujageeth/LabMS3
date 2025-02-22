@@ -24,7 +24,7 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
             labName,
             labPlace,
             date: selectedDate.toISOString().split("T")[0],
-            bookedBy,
+            // bookedBy,
             time,
             duration,
         };
@@ -34,6 +34,7 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(bookingData),
             });
@@ -109,6 +110,7 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
                         required
                     />
 
+                    {/*
                     <label>Booked By</label>
                     <input
                         type="text"
@@ -116,6 +118,7 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded }) => {
                         onChange={(e) => setBookedBy(e.target.value)}
                         required
                     />
+                    */}
 
                     <div className="form-actions">
                         <button type="submit">Confirm Booking</button>

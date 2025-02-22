@@ -160,6 +160,9 @@ function CheckInOutForm() {
 
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+  const [isEquipmentPopupOpen, setIsEquipmentPopupOpen] = useState(false);
+  const [isCheckedInPopupOpen, setIsCheckedInPopupOpen] = useState(false);
+  const [isCheckedOutPopupOpen, setIsCheckedOutPopupOpen] = useState(false);
 
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
@@ -251,23 +254,26 @@ function CheckInOutForm() {
         let errorMessage = "";
 
         if (notFoundItems.length > 0) {
-            errorMessage += `🔴 Equipment not found:\n${notFoundItems.map(i => i.serial).join(", ")}\n\n`;
+            setIsEquipmentPopupOpen(true);
+            // errorMessage += `🔴 Equipment not found:\n${notFoundItems.map(i => i.serial).join(", ")}\n\n`;
         }
         if (alreadyCheckedOutItems.length > 0) {
-            errorMessage += `⚠️ Already checked out:\n${alreadyCheckedOutItems.map(i => i.serial).join(", ")}\n\n`;
+            setIsCheckedOutPopupOpen(true);
+            // errorMessage += `⚠️ Already checked out:\n${alreadyCheckedOutItems.map(i => i.serial).join(", ")}\n\n`;
         }
         if (alreadyCheckedInItems.length > 0) {
-            errorMessage += `⚠️ Already checked in:\n${alreadyCheckedInItems.map(i => i.serial).join(", ")}\n\n`;
+            setIsCheckedInPopupOpen(true);
+            // errorMessage += `⚠️ Already checked in:\n${alreadyCheckedInItems.map(i => i.serial).join(", ")}\n\n`;
         }
 
         if (errorMessage) {
             setIsErrorPopupOpen(true);
-            setError(errorMessage.trim());
+            // setError(errorMessage.trim());
         }
 
         if (successItems.length > 0) {
             setIsSuccessPopupOpen(true);
-            setSuccess('Operation completed successfully!');
+            // setSuccess('Operation completed successfully!');
         }
 
         setSerials('');
@@ -357,7 +363,7 @@ function CheckInOutForm() {
 
       <SidePopup
         type="success"
-        title="Successful"
+        title="🟢 Successful"
         message="Checked in / out successfully"
         isOpen={isSuccessPopupOpen}
         onClose={() => setIsSuccessPopupOpen(false)}
@@ -366,10 +372,37 @@ function CheckInOutForm() {
 
       <SidePopup
         type="error"
-        title="Error"
+        title="🔴 Error"
         message="Couldn't check in/out"
         isOpen={isErrorPopupOpen}
         onClose={() => setIsErrorPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="🔴 Error"
+        message="Equipment is not found"
+        isOpen={isEquipmentPopupOpen}
+        onClose={() => setIsEquipmentPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="🔴 Error"
+        message="Already checked in"
+        isOpen={isCheckedInPopupOpen}
+        onClose={() => setIsCheckedInPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="🔴 Error"
+        message="Already checked out"
+        isOpen={isCheckedOutPopupOpen}
+        onClose={() => setIsCheckedOutPopupOpen(false)}
         duration={3000} // Optional: customize duration in milliseconds
       />
     </form>

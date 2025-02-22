@@ -16,7 +16,7 @@ function Dashboard() {
   };
 
   const handleBooking1Click = () => {
-    navigate("/report1");
+    navigate("/booking");
   };
 
   const handleEquipment1Click = () => {

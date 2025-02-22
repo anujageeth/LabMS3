@@ -181,7 +181,7 @@ const BookingReservation = () => {
                                 <TableCell>{booking.date}</TableCell>
                                 <TableCell>{booking.time}</TableCell>
                                 <TableCell>{booking.duration} hrs</TableCell>
-                                <TableCell>{booking.bookedBy}</TableCell>
+                                <TableCell>{booking.user ? `${booking.user.FirstName} ${booking.user.LastName}` : 'N/A'}</TableCell>
                               </TableRow>
                             );
                           })}
