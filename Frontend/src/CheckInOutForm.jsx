@@ -143,10 +143,11 @@
 
 // export default CheckInOutForm;
 // components/EquipmentTransaction.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SidePopup from "./components/SidePopup"
+import './checkinForm.css';
 
 function CheckInOutForm() {
   const [action, setAction] = useState('checkout');
@@ -156,6 +157,11 @@ function CheckInOutForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [equipmentList, setEquipmentList] = useState([]);
+  const [currentInput, setCurrentInput] = useState('');
+  const [currentLineIndex, setCurrentLineIndex] = useState(-1);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const textareaRef = useRef(null);
   const navigate = useNavigate();
 
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
@@ -184,6 +190,74 @@ function CheckInOutForm() {
 
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        const { data } = await api.get('/equipmentImage');
+        setEquipmentList(data);
+      } catch (err) {
+        console.error('Failed to fetch equipment:', err);
+      }
+    };
+    fetchEquipment();
+  }, []);
+
+  // Handle textarea changes and cursor position
+  const handleSerialsChange = (e) => {
+    const value = e.target.value;
+    setSerials(value);
+    updateCurrentLineState(e.target);
+  };
+
+  // Handle cursor movement and selection
+  const handleKeyUp = (e) => {
+    updateCurrentLineState(e.target);
+  };
+
+   // Add this handler for textarea changes
+  //  const handleSerialsChange = (e) => {
+  //   const value = e.target.value;
+  //   setSerials(value);
+    
+  //   const lines = value.split('\n');
+  //   const lastLine = lines[lines.length - 1].trim();
+  //   setCurrentInput(lastLine);
+  //   setShowSuggestions(lastLine.length > 0);
+  // };
+
+  const updateCurrentLineState = (textarea) => {
+    const cursorPosition = textarea.selectionStart;
+    const text = textarea.value;
+    const textUpToCursor = text.slice(0, cursorPosition);
+    const lineIndex = textUpToCursor.split('\n').length - 1;
+    const lines = text.split('\n');
+    const currentLineText = lines[lineIndex] || '';
+    
+    setCurrentLineIndex(lineIndex);
+    setCurrentInput(currentLineText.trim());
+    setShowSuggestions(currentLineText.trim().length > 0);
+  };
+
+  // Add this handler for suggestion selection
+  // const handleSuggestionClick = (serial) => {
+  //   const lines = serials.split('\n');
+  //   lines[lines.length - 1] = serial;
+  //   const newSerials = lines.join('\n') + '\n'; // Add newline for next entry
+  //   setSerials(newSerials);
+  //   setShowSuggestions(false);
+  //   setCurrentInput('');
+  // };
+
+  // // Add this filtering logic for suggestions
+  // const filteredSuggestions = equipmentList.filter(equipment => {
+  //   const searchTerm = currentInput.toLowerCase();
+  //   return (
+  //     equipment.Serial.toLowerCase().includes(searchTerm) ||
+  //     equipment.Name.toLowerCase().includes(searchTerm) ||
+  //     equipment.Category.toLowerCase().includes(searchTerm)
+  //   );
+  // });
 
   /*
   const handleSubmit = async (e) => {
@@ -224,6 +298,36 @@ function CheckInOutForm() {
       setLoading(false);
     }
   };*/
+  const handleSuggestionClick = (serial) => {
+    const lines = serials.split('\n');
+    lines[currentLineIndex] = serial;
+    
+    // Add new line if we're at the last line
+    const newLines = currentLineIndex === lines.length - 1 ? [...lines, ''] : lines;
+    
+    setSerials(newLines.join('\n'));
+    setShowSuggestions(false);
+    
+    // Move cursor to next line
+    setTimeout(() => {
+      const textarea = textareaRef.current;
+      const newCursorPos = newLines.slice(0, currentLineIndex + 1).join('\n').length + 1;
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      textarea.focus();
+    }, 0);
+  };
+
+  // Filter suggestions based on current line input
+  const filteredSuggestions = equipmentList.filter(equipment => {
+    const searchTerm = currentInput.toLowerCase();
+    return (
+      equipment.Serial.toLowerCase().includes(searchTerm) || 
+      equipment.Name.toLowerCase().includes(searchTerm) ||
+      equipment.Category.toLowerCase().includes(searchTerm)
+    );
+  });
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -322,14 +426,43 @@ function CheckInOutForm() {
         ))}
       </select>
 
-      <textarea
+      {/*<textarea
         className="listViewModalInput2"
         value={serials}
         onChange={(e) => setSerials(e.target.value)}
         placeholder="Enter serial numbers, one per line"
         required
         disabled={loading}
-      />
+      />*/}
+      <div className="serials-input-container">
+      <textarea
+          ref={textareaRef}
+          className="listViewModalInput2"
+          value={serials}
+          onChange={handleSerialsChange}
+          onKeyUp={handleKeyUp}
+          onClick={handleKeyUp}
+          placeholder="Enter serial numbers, one per line"
+          required
+          disabled={loading}
+          rows={5}
+        />
+        {showSuggestions && filteredSuggestions.length > 0 && (
+          <div className="suggestions-dropdown">
+            {filteredSuggestions.map(equipment => (
+              <div
+                key={equipment.Serial}
+                className="suggestion-item"
+                onClick={() => handleSuggestionClick(equipment.Serial)}
+              >
+                <strong>{equipment.Serial}</strong>
+                <span>{equipment.Name} ({equipment.Category})</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
 
       {action === 'checkin' && (
         <input
