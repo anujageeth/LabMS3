@@ -106,6 +106,8 @@
 const express = require("express");
 const PDFDocument = require("pdfkit");
 const Equipment = require("../models/equipment");
+const ReportHistory = require("../models/reportHistory");
+const { authenticateToken } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // Get unique categories and names
@@ -135,7 +137,7 @@ const columns = [
 ];
 
 // Full report route
-router.get("/reports/full/pdf", async (req, res) => {
+router.get("/reports/full/pdf",authenticateToken, async (req, res) => {
   try {
     const equipment = await Equipment.find().sort({ createdAt: -1 });
     
@@ -151,6 +153,17 @@ router.get("/reports/full/pdf", async (req, res) => {
     }
     
     doc.pipe(res);
+    // Add history entry AFTER piping but BEFORE ending
+    const newHistory = new ReportHistory({
+      user: req.user.userId,
+      reportType: "full",
+      action: req.query.preview ? "preview" : "download",
+    });
+
+    // Save history but don't await - handle errors separately
+    await newHistory.save().catch(err => console.error("History save error:", err));
+
+
     doc.font("Times-Roman");
 
     // Title and metadata
@@ -221,15 +234,18 @@ router.get("/reports/full/pdf", async (req, res) => {
         yPosition = 50;
       }
     });
+    
 
+    
     doc.end();
+    
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
 });
 
 // Filtered report route
-router.get("/reports/filtered/pdf", async (req, res) => {
+router.get("/reports/filtered/pdf",authenticateToken, async (req, res) => {
   try {
     const { name, category } = req.query;
     
@@ -250,6 +266,20 @@ router.get("/reports/filtered/pdf", async (req, res) => {
     }
     
     doc.pipe(res);
+    
+    const filters =  [];
+    if (name) filters.push(`Name: ${name}`);
+    if (category) filters.push(`Category: ${category}`);
+    
+    const newHistory = new ReportHistory({
+      user: req.user.userId,
+      reportType: "filtered",
+      filters: filters.join(", ") || "None",
+      action: req.query.preview ? "preview" : "download",
+    });
+    await newHistory.save().catch(err => console.error("History save error:", err));
+
+
     doc.font("Times-Roman");
 
     // Title and metadata
@@ -320,9 +350,33 @@ router.get("/reports/filtered/pdf", async (req, res) => {
     });
 
     doc.end();
+    
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
 });
+
+// routes/reports.js
+router.get("/report-history", 
+  authenticateToken,
+  async (req, res) => {
+    try {
+      let query = {};
+      
+      // Restrict to own history if not HOD/Technical Officer
+      if (!["hod", "technical officer"].includes(req.user.role)) {
+        query.user = req.user.userId;
+      }
+
+      const history = await ReportHistory.find(query)
+        .populate("user", "FirstName")
+        .sort({ createdAt: -1 });
+
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
 
 module.exports = router;
