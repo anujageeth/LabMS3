@@ -41,8 +41,36 @@ app.use("/api",bookingRoutes);
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
+  .then(async () => {
+    console.log("MongoDB connected");
+    
+    // Check for existing admin users
+    const adminExists = await User.exists({ 
+      Role: { $in: ["hod", "technical officer"] } 
+    });
+
+    if (!adminExists) {
+      const defaultPassword = process.env.DEFAULT_ADMIN_PASSWORD || "ruhuna";
+      const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+      
+      const adminUser = new User({
+        FirstName: process.env.DEFAULT_ADMIN_FIRSTNAME || "Admin",
+        LastName: process.env.DEFAULT_ADMIN_LASTNAME || "User",
+        Title: process.env.DEFAULT_ADMIN_TITLE || "Dr.",
+        Email: process.env.DEFAULT_ADMIN_EMAIL || "admin@example.com",
+        Role: "hod",
+        Password: hashedPassword,
+        studentId: null,
+        temporaryPassword: true
+      });
+
+      await adminUser.save();
+      console.log("Default admin user created with temporary password");
+    }
+  })
   .catch((error) => console.log(error));
+
+  
 
 // Start the server
 const port = process.env.PORT || 3000;
