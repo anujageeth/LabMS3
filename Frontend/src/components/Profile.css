@@ -1,0 +1,232 @@
+.change-password-btn, .reset-btn {
+    background-color: rgba(0, 115, 165, 1); /* Bootstrap primary color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .change-password-btn:hover, .reset-btn:hover {
+    background-color: #084298; /* Darker shade for hover effect */
+  }
+  
+  .reset-btn {
+    background-color: #dc3545; /* Bootstrap danger color */
+  }
+  
+  .reset-btn:hover {
+    background-color: #b02a37; /* Darker shade for hover */
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    padding-bottom: 0;
+  }
+
+  .profile-pic-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .edit-profile-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    transition: background 0.3s;
+  }
+
+  .edit-profile-btn:hover {
+    background: #e0e0e0;
+  }
+
+  .profile-info h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .profile-info p {
+    margin: 0;
+    color: #666;
+  }
+
+  .profile-form {
+    padding: 2rem;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .input-container {
+    position: relative;
+  }
+
+  .input-container input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: #EDF6F9;
+  }
+
+  .edit-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .edit-icon {
+    font-style: normal;
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    padding-bottom: 0;
+  }
+
+  .profile-pic-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .edit-profile-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    transition: background 0.3s;
+  }
+
+  .edit-profile-btn:hover {
+    background: #e0e0e0;
+  }
+
+  .profile-info h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .profile-info p {
+    margin: 0;
+    color: #666;
+  }
+
+  .profile-form {
+    padding: 2rem;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .input-container {
+    position: relative;
+  }
+
+  .input-container input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: #edf6f9;
+  }
+
+  .edit-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .edit-icon {
+    font-style: normal;
+  }

@@ -12,6 +12,7 @@ const checkinCheckoutRoutes = require("./controllers/inOutActionController");
 const bcrypt = require("bcryptjs");
 const User = require("./models/user");
 const bookingRoutes = require("./routes/bookingRoutes");
+const updatePassword = require("./routes/Password");
 
 const app = express();
 app.use(cors());
@@ -37,6 +38,8 @@ app.use("/api", categoryRoutes);
 app.use("/api", reportRoutes);
 app.use("/api", checkinCheckoutRoutes);
 app.use("/api",bookingRoutes);
+app.use("/api/update", updatePassword);
+app.use("/api/update", updatePassword);
 
 // Connect to MongoDB
 mongoose

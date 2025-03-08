@@ -20,6 +20,7 @@ import CheckInOutHistory from "./CheckInOutHistory";
 import CheckInOutForm from "./CheckInOutForm";
 import BookingPage from "./BookingPage";
 import AddBulkUser from "./AddBulkUser";
+import Profile from "./components/Profile";
 
 
 
@@ -123,6 +124,8 @@ function App() {
             <AddBulkUser refresh={refresh} onRefresh={handleRefresh} />
           }
         />
+
+      <Route path="/profile" element={<Profile />} />
       
       </Routes>
     </BrowserRouter>
