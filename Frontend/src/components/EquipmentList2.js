@@ -70,14 +70,50 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     filterEquipment(value, selectedCategory); // Filter with both search and category
   };
 
-  const filterEquipment = (search, category) => {
+  // const filterEquipment = (search, category) => {
+  //   const filtered = equipment.filter((item) => {
+  //     const matchesCategory = category ? item.Category._id === category : true;
+  //     const matchesSearch = item.Name.toLowerCase().includes(
+  //       search.toLowerCase()
+  //     );
+  //     return matchesCategory && matchesSearch;
+  //   });
+  //   setFilteredEquipment(filtered);
+  // };
+  const filterEquipment = (search, categoryId) => {
+    console.log("Filtering with category:", categoryId, "and search:", search);
+
+    // Find the category name corresponding to the categoryId
+    const categoryName = categoryId
+      ? categories.find((cat) => String(cat._id) === String(categoryId))?.name
+      : "";
+
+    console.log("Category Name for ID:", categoryId, "is", categoryName);
+
     const filtered = equipment.filter((item) => {
-      const matchesCategory = category ? item.Category._id === category : true;
-      const matchesSearch = item.Name.toLowerCase().includes(
-        search.toLowerCase()
+      const matchesCategory = categoryName
+        ? item.Category === categoryName // Match category name
+        : true;
+
+      const matchesSearch = search
+        ? item.Name.toLowerCase().includes(search.toLowerCase()) // Match search term
+        : true;
+
+      console.log(
+        "Item:",
+        item.Name,
+        "Category:",
+        item.Category,
+        "Category Match:",
+        matchesCategory,
+        "Search Match:",
+        matchesSearch
       );
+
       return matchesCategory && matchesSearch;
     });
+
+    console.log("Filtered Equipment:", filtered);
     setFilteredEquipment(filtered);
   };
 
@@ -263,11 +299,11 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                       {new Date(item.updatedAt).toLocaleDateString()}
                     </p>{" "}
                     {/* Display updated date */}
-                    <img src={item.imageUrl} alt={item.Name} />
+                    <img src={item.imageUrl === "default"? "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/noImageAvailable.png?alt=media&token=ae25d497-543a-4ad6-bbfb-89e970c117f6": item.imageUrl} alt={item.Name} />
                     <br />
                     <button
                       className="listViewBtn2"
-                      onClick={() => handleSelect(item)}
+                      onClick={() => {handleSelect(item);  console.log("Selected", item);}}
                     >
                       Select
                     </button>

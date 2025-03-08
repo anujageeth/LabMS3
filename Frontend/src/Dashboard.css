@@ -103,7 +103,9 @@ body {
 
 .menuBox:hover {
     background: #007185;  /* Slightly lighter shade on hover */
-    border: 5px solid #009eb9;  /* Added border on hover */
+
+    border: 0px solid #009eb9;  /* Added border on hover */
+
     box-shadow: 0px 0px 10px #009eb9;
 }
 
@@ -143,5 +145,8 @@ body {
     font-size: 1rem;
     color: #666;
     line-height: 1.5;
-  }
+
   
+
+  }
+

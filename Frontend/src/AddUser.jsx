@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddItem.css";
+import SidePopup from "./components/SidePopup"
 
 import { register } from "./services/authService";
 
@@ -12,11 +13,19 @@ function AddItem() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [title, setTitle] = useState("");
-  //const [studentID, setStudentID] = useState("");
+  const [studentStatus, setStudentStatus] = useState('student');
+
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
 
   const handleCanclClick = () => {
-    navigate("/dashboard");
+    navigate("/usermanage2");
+  };
+
+  const handleBulkUploadClick = () => {
+    navigate("/addbulkuser");
   };
 
   const handleSubmit = async (e) => {
@@ -26,8 +35,8 @@ function AddItem() {
     }
 
     try {
-      await register(firstName, lastName, title, email, password, role);
-      alert("Registration successful");
+      await register(firstName, lastName, title, email, password, role, studentId);
+      setIsSuccessPopupOpen(true);
       setFirstName("");
       setLastName("");
       setTitle("");
@@ -35,8 +44,9 @@ function AddItem() {
       setPassword("");
       setConfirmPassword("");
       setRole("");
+      setStudentId("");
     } catch (error) {
-      alert("Registration failed");
+      setIsErrorPopupOpen(true);
       console.log(error.message);
     }
   };
@@ -70,17 +80,22 @@ function AddItem() {
                 className="typeBoxControl"
               />
             </div>
-            <div className="typeBox">
-              <input
-                type="text"
-                placeholder=" Mr/Mrs/Dr"
-                autoComplete="off"
-                name="text"
+            <label>
+              <select
+                className="typeBoxControl"
+                id="addAvailabilityBtn"
+                name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="typeBoxControl"
-              />
-            </div>
+              >
+                <option value="" disabled>
+                  Select Title
+                </option>
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Dr">Dr</option>
+              </select>
+            </label>
             <div className="typeBox">
               <input
                 type="text"
@@ -115,17 +130,40 @@ function AddItem() {
                 className="typeBoxControl"
               />
             </div>
-            <div className="typeBox">
-              <input
-                type="text"
-                placeholder=" role"
-                autoComplete="off"
-                name="text"
+            <label>
+              <select
+                className="typeBoxControl"
+                id="addAvailabilityBtn"
+                name="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="" disabled>
+                  Select Role
+                </option>
+                <option value="lecturer">Lecturer</option>
+                <option value="instructor">Instructor</option>
+                <option value="hod">Head of Department</option>
+                <option value="technical officer">Technical Officer</option>
+                <option value="student">Student</option>
+              </select>
+            </label>
+
+            {role === 'student' && (
+              <div className="typeBox">
+              <input
+                type="text"
+                placeholder=" Registration Number"
+                autoComplete="off"
+                name="text"
+                value={studentId}
+                onChange={(e) => setStudentId(e.target.value)}
                 className="typeBoxControl"
               />
             </div>
+            )}
+            
+
             {/* <div className="typeBox">
               <input
                 type="text"
@@ -143,11 +181,33 @@ function AddItem() {
             </button>
           </form>
 
-          <button type="submit" className="loginBtn" onClick={handleCanclClick}>
+          <button className="loginBtn" onClick={handleBulkUploadClick}>
+            <b>Upload a bulk</b>
+          </button>
+
+          <button className="loginBtn" onClick={handleCanclClick}>
             <b>Cancel</b>
           </button>
         </div>
       </div>
+
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Added new user"
+        isOpen={isSuccessPopupOpen}
+        onClose={() => setIsSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="error"
+        title="Error"
+        message="Couldn't add new user"
+        isOpen={isErrorPopupOpen}
+        onClose={() => setIsErrorPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
     </div>
   );
 }

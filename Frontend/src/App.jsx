@@ -4,23 +4,22 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Inventory from "./Inventory";
-import AddItem from "./AddItem";
+import AddItem from "./AddItem copy";
 import AddUser from "./AddUser";
 import Home from "./Home";
-import ReportPage1 from "./components/ReportPage1";
-import AddItemTemp from "./AddItemTemp";
+import ReportPage1 from "./components/ReportNew";
 import EquipmentPage1 from "./EquipmentPage1";
-import UserManagePage1 from "./UserManagePage1";
+import UserManagePage2 from "./UserManagePage2";
 import CheckinCheckoutPage from "./equipmentManagement";
 import EquipmentTable from "./components/EquipmentTable";
 import EquipmentTable2 from "./components/EquipmentTable2";
 //import EquipmentList from "./components/EquipmentList";
-import EquipmentList2 from "./components/EquipmentList2";
+import EquipmentList2 from "./components/EquipmentList";
 import ProtectedRoute from "./services/ProtectedRoute";
 import CheckInOutHistory from "./CheckInOutHistory";
 import CheckInOutForm from "./CheckInOutForm";
 import BookingPage from "./BookingPage";
-
+import AddBulkUser from "./AddBulkUser";
 
 
 
@@ -50,10 +49,7 @@ function App() {
           path="/additem"
           element={<AddItem onRefresh={handleRefresh} />}
         ></Route>
-        <Route
-          path="/additemtemp"
-          element={<AddItemTemp onRefresh={handleRefresh} />}
-        ></Route>
+        
         <Route path="/adduser" element={<AddUser />}></Route>
         <Route
           path="/table"
@@ -90,9 +86,9 @@ function App() {
           }
         />
         <Route
-          path="/usermanage1"
+          path="/usermanage2"
           element={
-            <UserManagePage1 refresh={refresh} onRefresh={handleRefresh} />
+            <UserManagePage2 refresh={refresh} onRefresh={handleRefresh} />
           }
         />
         <Route
@@ -114,10 +110,17 @@ function App() {
           }
         />
 
-<Route
+        <Route
           path="/booking"
           element={
             <BookingPage refresh={refresh} onRefresh={handleRefresh} />
+          }
+        />
+
+        <Route
+          path="/addbulkuser"
+          element={
+            <AddBulkUser refresh={refresh} onRefresh={handleRefresh} />
           }
         />
       

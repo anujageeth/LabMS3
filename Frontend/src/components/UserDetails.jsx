@@ -85,7 +85,7 @@ function UserDetails() {
       <div className="userPicDiv" onClick={toggleDropdown} ref={dropdownRef}>
         <img
           className="userPic"
-          src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/tempUser.jpg?alt=media&token=02e254e8-8b02-4dc9-b415-0bf5eccb5cc0"
+          src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/tempUser2.png?alt=media&token=2d6f3951-1e0f-4a67-93fb-02e9e30033ed"
         />
         {dropdownVisible && (
           <div className="dropdownMenu">

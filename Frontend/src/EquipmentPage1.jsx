@@ -15,10 +15,10 @@ import {
   IconButton,
   Tooltip,
   FormControlLabel,
-  Switch
+  Switch,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import "./components/tableModal2.css";
 import CategoryFilter from "./components/CategoryFilter"; // Import the CategoryFilter component
 import CategorySelect from "./components/CategorySelect";
@@ -38,7 +38,7 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
   const [categories, setCategories] = useState([]); // State for category options
   const [selectedCategory, setSelectedCategory] = useState(""); // State to track selected category
   const [searchTerm, setSearchTerm] = useState(""); // State for search input
-  
+
   // Fetch equipment data
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -55,7 +55,9 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/categories");
+        const response = await axios.get(
+          "http://localhost:3001/api/categories"
+        );
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -71,14 +73,17 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
 
     // Apply category filter
     if (selectedCategory) {
-      filtered = filtered.filter(item => item.Category._id === selectedCategory);
+      filtered = filtered.filter(
+        (item) => item.Category._id === selectedCategory
+      );
     }
 
     // Apply search term filter
     if (searchTerm) {
-      filtered = filtered.filter(item =>
-        item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (item) =>
+          item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -176,7 +181,6 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
     navigate("/additem");
   };
 
-
   return (
     <div className="dashPage">
       <div className="gridBox">
@@ -235,124 +239,145 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
             </div>
             <div className="dataTableBox">
               <Box sx={{ width: "100%" }}>
-                  <Paper sx={{ width: "100%", mb: 2 }}>
-
-                      {/* Show Edit and Delete Buttons based on selection */}
-                      <Box
-                        sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}
-                      >
-                        
-                        {/* Category Filter 
+                <Paper sx={{ width: "100%", mb: 2 }}>
+                  {/* Show Edit and Delete Buttons based on selection */}
+                  <Box
+                    sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}
+                  >
+                    {/* Category Filter 
                         <CategoryFilter
                           className="categoryFilter"
                           selectedCategory={selectedCategory}
                           setSelectedCategory={setSelectedCategory}
                         />*/}
 
-                        <Tooltip title="Check out equipment">
-                            <IconButton
-                              onClick={handleEdit}
-                              disabled={selected.length === 0}
-                              className={
-                                selected.length > 0 ? "icon-button-enabled" : "icon-button-disabled"
-                              }>
-                                <RemoveIcon className="iconButtonLogo"/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Check in equipment">
-                            <IconButton
-                              onClick={handleDelete}
-                              disabled={selected.length === 0}
-                              className={
-                                selected.length > 0 ? "icon-button-enabled" : "icon-button-disabled"
-                              }>
-                                <AddIcon className="iconButtonLogo"/>
-                                {/*<button className="tableRowEdit">Delete</button>*/}
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                      <TableContainer>
-                      <Table size={dense ? "small" : "medium"}>
-                          <TableHead>
-                          <TableRow>
-                              <TableCell padding="checkbox">
-                              
-                              </TableCell>
-                              <TableCell><b>Name</b></TableCell>
-                              <TableCell><b>Lab</b></TableCell>
-                              <TableCell><b>Category</b></TableCell>
-                              <TableCell><b>Quantity</b></TableCell>
-                          </TableRow>
-                          </TableHead>
-                          <TableBody>
-                          {filteredEquipment
-                              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                              .map((row, index) => {
-                              const isItemSelected = isSelected(row._id);
-                              return (
-                                  <TableRow
-                                  hover
-                                  onClick={(event) => handleClick(event, row)}
-                                  role="checkbox"
-                                  aria-checked={isItemSelected}
-                                  tabIndex={-1}
-                                  key={row._id}
-                                  selected={isItemSelected}
-                                  >
-                                  <TableCell padding="checkbox">
-                                    <Checkbox
-                                        color="primary"
-                                        checked={isItemSelected}
-                                        inputProps={{
-                                        "aria-labelledby": `enhanced-table-checkbox-${row._id}`,
-                                        }}
-                                    />
-                                  </TableCell>
-                                  <TableCell>{row.Name}</TableCell>
-                                  <TableCell>{row.Lab}</TableCell>
-                                  <TableCell>{row.Category.name}</TableCell>
-                                  <TableCell>{row.Quantity}</TableCell>
-                                  </TableRow>
-                              );
-                              })}
-                          </TableBody>
-                      </Table>
-                      </TableContainer>
-                      <TablePagination
-                      rowsPerPageOptions={[6]}
-                      component="div"
-                      count={filteredEquipment.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                  </Paper>
+                    <Tooltip title="Check out equipment">
+                      <IconButton
+                        onClick={handleEdit}
+                        disabled={selected.length === 0}
+                        className={
+                          selected.length > 0
+                            ? "icon-button-enabled"
+                            : "icon-button-disabled"
+                        }
+                      >
+                        <RemoveIcon className="iconButtonLogo" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Check in equipment">
+                      <IconButton
+                        onClick={handleDelete}
+                        disabled={selected.length === 0}
+                        className={
+                          selected.length > 0
+                            ? "icon-button-enabled"
+                            : "icon-button-disabled"
+                        }
+                      >
+                        <AddIcon className="iconButtonLogo" />
+                        {/*<button className="tableRowEdit">Delete</button>*/}
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                  <TableContainer>
+                    <Table size={dense ? "small" : "medium"}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell padding="checkbox"></TableCell>
+                          <TableCell>
+                            <b>Name</b>
+                          </TableCell>
+                          <TableCell>
+                            <b>Lab</b>
+                          </TableCell>
+                          <TableCell>
+                            <b>Category</b>
+                          </TableCell>
+                          <TableCell>
+                            <b>Quantity</b>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {filteredEquipment
+                          .slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                          .map((row, index) => {
+                            const isItemSelected = isSelected(row._id);
+                            return (
+                              <TableRow
+                                hover
+                                onClick={(event) => handleClick(event, row)}
+                                role="checkbox"
+                                aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={row._id}
+                                selected={isItemSelected}
+                              >
+                                <TableCell padding="checkbox">
+                                  <Checkbox
+                                    color="primary"
+                                    checked={isItemSelected}
+                                    inputProps={{
+                                      "aria-labelledby": `enhanced-table-checkbox-${row._id}`,
+                                    }}
+                                  />
+                                </TableCell>
+                                <TableCell>{row.Name}</TableCell>
+                                <TableCell>{row.Lab}</TableCell>
+                                <TableCell>
+                                  {row.Category
+                                    ? categories.find(
+                                        (cat) =>
+                                          String(cat._id) ===
+                                          String(row.Category)
+                                      )?.name
+                                    : " "}
+                                </TableCell>
+                                <TableCell>{row.Quantity}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <TablePagination
+                    rowsPerPageOptions={[6]}
+                    component="div"
+                    count={filteredEquipment.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Paper>
 
-                  {/* Edit Modal */}
-                  {editModalOpen && (
-                      <div className="">
-                      <div className="tableModal2">
-                          <h3 className="tableModalH3">Edit Equipment</h3>
-                          <input
-                          className="tableModalInput"
-                          type="text"
-                          value={editData.Name}
-                          onChange={(e) =>
-                              setEditData({ ...editData, Name: e.target.value })
-                          }
-                          placeholder="Name"
-                          />
-                          <input
-                          className="tableModalInput"
-                          type="text"
-                          value={editData.Lab}
-                          onChange={(e) =>
-                              setEditData({ ...editData, Lab: e.target.value })
-                          }
-                          placeholder="Lab"
-                          />
-                          {/*<input
+                {/* Edit Modal */}
+                {editModalOpen && (
+                  <div className="">
+                    <div className="tableModal2">
+                      <h3 className="tableModalH3">Edit Equipment</h3>
+                      <input
+                        className="tableModalInput"
+                        type="text"
+                        value={editData.Name}
+                        onChange={(e) =>
+                          setEditData({ ...editData, Name: e.target.value })
+                        }
+                        placeholder="Name"
+                      />
+                      <input
+                        className="tableModalInput"
+                        type="text"
+                        value={editData.Lab}
+                        onChange={(e) =>
+                          setEditData({ ...editData, Lab: e.target.value })
+                        }
+                        placeholder="Lab"
+                      />
+                      {/*<input
                           className="tableModalInput"
                           type="text"
                           value={editData.Category}
@@ -362,39 +387,39 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
                           placeholder="Category"
                           />*/}
 
-                          <CategorySelect
-                            formData={editData.Category}
-                            setFormData={setEditData}
-                          />
+                      <CategorySelect
+                        formData={editData.Category}
+                        setFormData={setEditData}
+                      />
 
-                          <input
-                          className="tableModalInput"
-                          type="number"
-                          value={editData.Quantity}
-                          onChange={(e) =>
-                              setEditData({ ...editData, Quantity: e.target.value })
-                          }
-                          placeholder="Quantity"
-                          />
-                          <button className="tableModalBtn" onClick={handleUpdate}>
-                          Save
-                          </button>
-                          <button className="tableModalBtn" id="editCancelBtn" onClick={closeEditModal}>
-                          Cancel
-                          </button>
-                      </div>
-                      </div>
-                  )}
+                      <input
+                        className="tableModalInput"
+                        type="number"
+                        value={editData.Quantity}
+                        onChange={(e) =>
+                          setEditData({ ...editData, Quantity: e.target.value })
+                        }
+                        placeholder="Quantity"
+                      />
+                      <button className="tableModalBtn" onClick={handleUpdate}>
+                        Save
+                      </button>
+                      <button
+                        className="tableModalBtn"
+                        id="editCancelBtn"
+                        onClick={closeEditModal}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </Box>
             </div>
-            
-
           </div>
         </div>
       </div>
     </div>
-
-    
   );
 };
 

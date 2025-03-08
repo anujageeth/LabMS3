@@ -15,12 +15,16 @@ function Dashboard() {
     navigate("/report1");
   };
 
+  const handleBooking1Click = () => {
+    navigate("/report1");
+  };
+
   const handleEquipment1Click = () => {
     navigate("/checkinouthistory");
   };
 
   const handleUserManage1Click = () => {
-    navigate("/usermanage1");
+    navigate("/usermanage2");
   };
 
   const handleLogoutClick = () => {
@@ -88,7 +92,9 @@ function Dashboard() {
                   </div>
                   <div className="menuBoxText">Equipment Management</div>
                 </div>
-                <div className="menuBox">
+
+                <div className="menuBox" onClick={handleBooking1Click}>
+
                   <div className="menuBoxImageDiv">
                     <FaCogs size={64} />  {/* Bookings & Reservations Icon */}
                   </div>

@@ -38,6 +38,8 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [categories, setCategories] = useState([]); // State for category options
   const [selectedCategory, setSelectedCategory] = useState(""); // State to track selected category
   const [searchTerm, setSearchTerm] = useState(""); // State for search input
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedLab, setSelectedLab] = useState("");
 
   // Fetch equipment data
   useEffect(() => {
@@ -68,27 +70,55 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     fetchCategories();
   }, [refresh]);
 
+  // useEffect(() => {
+  //   let filtered = equipment;
+
+  //   // Apply category filter
+  //   if (selectedCategory) {
+  //     filtered = filtered.filter(
+  //       (item) => item.Category._id === selectedCategory
+  //     );
+  //   }
+
+  //   // Apply search term filter
+  //   if (searchTerm) {
+  //     filtered = filtered.filter(
+  //       (item) =>
+  //         item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //         item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //   }
+
+  //   setFilteredEquipment(filtered);
+  // }, [selectedCategory, searchTerm, equipment]);
+
   useEffect(() => {
-    let filtered = equipment;
+      filterEquipment();
+    }, [selectedCategory, searchTerm, selectedBrand, selectedLab]);
+  
+    const filterEquipment = () => {
+      let filtered = equipment;
+  
+      if (selectedCategory) {
+        filtered = filtered.filter((item) => item.Category === selectedCategory);
+      }
+  
+      if (searchTerm) {
+        filtered = filtered.filter((item) =>
+          item.Name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+  
+      if (selectedBrand) {
+        filtered = filtered.filter((item) => item.Brand === selectedBrand);
+      }
 
-    // Apply category filter
-    if (selectedCategory) {
-      filtered = filtered.filter(
-        (item) => item.Category._id === selectedCategory
-      );
-    }
-
-    // Apply search term filter
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (item) =>
-          item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    setFilteredEquipment(filtered);
-  }, [selectedCategory, searchTerm, equipment]);
+      if (selectedLab) {
+        filtered = filtered.filter((item) => item.Lab === selectedLab);
+      }
+  
+      setFilteredEquipment(filtered);
+    };
 
   const handleCategoryFilter = (categoryId) => {
     setSelectedCategory(categoryId);
@@ -290,44 +320,57 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
 
               <div className="addNsearch">
                 <div className="addItem">
-                  <button
-                    className="addItemBtn"
-                    id="addBtn"
-                    onClick={handleAddItemClick}
-                  >
-                    <b>Add item</b>
+                  <button className="addItemBtn" id="addBtn" onClick={() => navigate("/additem")}>
+                    <b>Add Item</b>
                   </button>
-                  <button
-                    className="addItemBtn"
-                    id="listBtn1"
-                    onClick={handleListViewClick}
-                  >
+                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/list2")}>
                     <b>List View</b>
                   </button>
                 </div>
-
+                
                 <div className="search">
                   <div className="searchContainer">
-                    <input
-                      type="search"
-                      placeholder=" Search..."
-                      className="searchInput"
-                      value={searchTerm}
-                      onChange={handleSearch} // Handle search input
-                    />
+                  <input
+                    type="search"
+                    placeholder="Search by Name..."
+                    className="searchInput"
+                    id="searchList"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
                   </div>
-                  <select
-                    id="categoryFilter"
-                    value={selectedCategory}
-                    onChange={(e) => handleCategoryFilter(e.target.value)}
-                  >
+                </div>
+                
+                <div className="search">
+                  <select id="categoryFilter" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="">All Categories</option>
-                    {categories.map((category) => (
-                      <option key={category._id} value={category._id}>
-                        {category.name}
+                    {Array.from(new Set(equipment.map((item) => item.Category))).map((category) => (
+                      <option key={category} value={category}>
+                        {category}
                       </option>
                     ))}
                   </select>
+
+                  
+
+                  <select id="categoryFilter" value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
+                    <option value="">All Brands</option>
+                    {Array.from(new Set(equipment.map((item) => item.Brand))).map((brand) => (
+                      <option key={brand} value={brand}>
+                        {brand}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select id="categoryFilter" value={selectedLab} onChange={(e) => setSelectedLab(e.target.value)}>
+                    <option value="">All Labs</option>
+                    {Array.from(new Set(equipment.map((item) => item.Lab))).map((lab) => (
+                      <option key={lab} value={lab}>
+                        {lab}
+                      </option>
+                    ))}
+                  </select>
+
                 </div>
               </div>
             </div>
@@ -400,13 +443,19 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                             <b>Name</b>
                           </TableCell>
                           <TableCell>
-                            <b>Lab</b>
+                            <b>Serial No</b>
+                          </TableCell>
+                          <TableCell>
+                            <b>Brand</b>
                           </TableCell>
                           <TableCell>
                             <b>Category</b>
                           </TableCell>
                           <TableCell>
-                            <b>Quantity</b>
+                            <b>LAB</b>
+                          </TableCell>
+                          <TableCell>
+                            <b>Availability</b>
                           </TableCell>
                         </TableRow>
                       </TableHead>
@@ -438,9 +487,11 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                                   />
                                 </TableCell>
                                 <TableCell>{row.Name}</TableCell>
-                                <TableCell>{row.Lab}</TableCell>
+                                <TableCell>{row.Serial}</TableCell>
+                                <TableCell>{row.Brand}</TableCell>
                                 <TableCell>{row.Category}</TableCell>
-                                <TableCell>{row.Quantity}</TableCell>
+                                <TableCell>{row.Lab}</TableCell>
+                                <TableCell>{row.Availability ? "Yes" : "No"}</TableCell>
                               </TableRow>
                             );
                           })}

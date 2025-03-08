@@ -42,6 +42,33 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
   const [categoryId, setCategoryId] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
 
+  const navigate = useNavigate(); 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login"); // Redirect if no token is found
+          return;
+        }
+        const response = await axios.get("http://localhost:3001/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data);
+        //console.log(user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("token"); // Clear token if unauthorized
+          navigate("/login"); // Redirect to login
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   useEffect(() => {
     const fetchLabReports = async () => {
@@ -196,7 +223,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
     setDense(event.target.checked);
   };
 
-  const navigate = useNavigate();
+  
 
   const handleListViewClick = () => {
     navigate("/list2");
@@ -339,18 +366,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
                       onChange={handleSearch} // Handle search input
                     />
                   </div>
-                  <select
-                    id="categoryFilter"
-                    value={selectedCategory}
-                    onChange={(e) => handleCategoryFilter(e.target.value)}
-                  >
-                    <option value="">All Categories</option>
-                    {categories.map((category) => (
-                      <option key={category._id} value={category._id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+                  
                 </div>
               </div>
             </div>
@@ -370,17 +386,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
                           setSelectedCategory={setSelectedCategory}
                         />*/}
 
-                        <Tooltip title="Delete">
-                            <IconButton
-                              onClick={handleDelete}
-                              disabled={selected.length === 0}
-                              className={
-                                selected.length > 0 ? "icon-button-enabled" : "icon-button-disabled"
-                              }>
-                                <DeleteIcon className="iconButtonLogo"/>
-                                {/*<button className="tableRowEdit">Delete</button>*/}
-                            </IconButton>
-                        </Tooltip>
+                        
                     </Box>
                       <TableContainer>
                       <Table size={dense ? "small" : "medium"}>

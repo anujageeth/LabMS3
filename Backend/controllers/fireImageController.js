@@ -15,15 +15,14 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
 
-// Route to add equipment with image upload
-//router.post("/equipmentImage", upload.single("image"),
+
 const addEquipment = async (req, res) => {
   try {
     const { Name, Lab, Category, Brand, Availability, Quantity } = req.body;
 
     // Default image URL from Google Drive
     const defaultImageUrl =
-      "https://drive.google.com/uc?export=view&id=1xkBArWMctBxc9egFTkom01E29cuDqMgP";
+      "default";
 
     let imageUrl;
 
@@ -43,11 +42,7 @@ const addEquipment = async (req, res) => {
           reject(res.status(500).send({ message: err.message }));
         });
 
-        // blobStream.on("finish", () => {
-        //   // Get the public URL of the uploaded image
-        //   imageUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-        //   resolve();
-        // });
+       
 
         blobStream.on("finish", async () => {
           // After the upload is finished, make the file publicly accessible
@@ -87,8 +82,7 @@ const addEquipment = async (req, res) => {
   }
 };
 
-// Route to get all equipment or filter by Lab and Category
-//router.get("/equipmentImage",
+
 const getEquipment = async (req, res) => {
   try {
     const { Lab, Category } = req.query; // Get Lab and Category from query parameters
@@ -120,8 +114,7 @@ const getEquipment = async (req, res) => {
   }
 };
 
-// Route to get equipment by ID with Lab and Category populated
-// router.get("/equipmentImage/:id",
+
 const getEquipmentById = async (req, res) => {
   try {
     const equipment = await Equipment.findById(req.params.id)
@@ -132,10 +125,7 @@ const getEquipmentById = async (req, res) => {
       return res.status(404).send({ message: "Equipment not found" });
     }
 
-    // const equipmentWithName = {
-    //   ...equipment._doc,
-    //   Category: equipment.Category.name, // Replace the category ID with the name
-    // };
+   
     const equipmentDetails = {
       ...equipment._doc,
       Category: equipment.Category.name,
@@ -189,10 +179,7 @@ const deleteEquipment = async (req, res) => {
   }
 };
 
-// router.put(
-//   "/equipmentImage/:id",
-//   authenticateToken,
-//   authorizeRoles("hod", "technical officer"),
+
 const updateEquipment = async (req, res) => {
   try {
     const { id } = req.params;
@@ -203,15 +190,7 @@ const updateEquipment = async (req, res) => {
       return res.status(404).send({ message: "Equipment not found" });
     }
 
-    // Update the equipment with new data from the request body
-    // const updatedData = {
-    //   Name: req.body.Name,
-    //   Lab: req.body.Lab,
-    //   Category: req.body.Category,
-    //   Brand: req.body.Brand,
-    //   Quantity: req.body.Quantity,
-    //   Availability: req.body.Availability || equipment.Availability, // Assuming Availability is a boolean
-    // };
+
     const updatedData = {
       Name: req.body.Name || equipment.Name || req.body.editEquipment.Name,
       Lab: req.body.Lab || equipment.Lab || req.body.editEquipment.Lab,
