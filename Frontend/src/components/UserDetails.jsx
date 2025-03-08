@@ -15,10 +15,10 @@ function UserDetails() {
     setDropdownVisible(!dropdownVisible);
   };
 
-  const handleProfileClick = (option) => {
-    console.log(option);
-    // Add your logic here based on the selected option
+  const handleProfileClick = () => {
+    navigate("/Profile"); // Navigate to Profile page
   };
+
 
   const handleActivityClick = (option) => {
     console.log(option);
@@ -90,7 +90,7 @@ function UserDetails() {
         {dropdownVisible && (
           <div className="dropdownMenu">
             <div
-              onClick={() => handleProfileClick("User Settings")}
+              onClick={() => handleProfileClick("Profile")}
               className="userClickDropdown"
             >
               Profile
