@@ -159,6 +159,7 @@
 
 
 
+
 import React, { useState } from "react";
 import "./BookingForm.css";
 import SidePopup from "./SidePopup";
@@ -384,3 +385,5 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
 };
 
 export default BookingForm;
+
+

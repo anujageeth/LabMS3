@@ -25,4 +25,6 @@ router.get("/bookings", getBookingsByDate);
 // Create a new booking
 router.post("/bookings", createBooking);
 
+
+
 module.exports = router;
