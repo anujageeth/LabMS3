@@ -23,7 +23,7 @@ export const getUserData = async () => {
     if (error.response?.status === 403) {
       console.log("Token expired. Redirecting to login.");
       alert("Your session has expired. Please log in again.");
-      localStorage.removeItem("token");
+      //localStorage.removeItem("token");
       
     } else {
       console.error("Error fetching user data:", error);

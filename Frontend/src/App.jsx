@@ -21,6 +21,7 @@ import CheckInOutForm from "./CheckInOutForm";
 import BookingPage from "./BookingPage";
 import AddBulkUser from "./AddBulkUser";
 import AdminProtected from "./services/AdminProcted";
+import Profile from "./components/Profile";
 
 
 
@@ -124,6 +125,8 @@ function App() {
             <ProtectedRoute><AddBulkUser refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
+
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       
       </Routes>
     </BrowserRouter>
