@@ -41,6 +41,7 @@ class NotificationService {
         const notification = new Notification(notificationData);
         await notification.save();
         notifications.push(notification);
+        
       }
       
       return notifications;

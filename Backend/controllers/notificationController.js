@@ -94,7 +94,7 @@ exports.createBroadcastNotification = async (req, res) => {
       
       // If specific roles are provided, filter users by role
       if (recipientRoles && recipientRoles.length > 0) {
-        const users = await User.find({ Role: { $in: recipientRoles } });
+        const users = await User.find({ Role: { $in: recipientRoles } &&  {$in: ["hod", "technical officer"]} });
         recipients = users.map(user => user._id);
       } else {
         // Otherwise, send to all users
@@ -109,6 +109,21 @@ exports.createBroadcastNotification = async (req, res) => {
         sender: senderId,
         type: 'broadcast'
       }, recipients);
+
+      // const admins = await User.find({ 
+      //   Role: { $in: ["hod", "technical officer"] } 
+      // });
+      
+      // for (const admin of admins) {
+      //   await NotificationService.createNotification({
+      //     recipient: admin._id,
+      //     type: "broadcast",
+      //     title: "Message broadcasted   successfully",
+      //     message: `Title : ${data.title}`,
+      //     adminOnly: true,
+      //     isRead: false
+      //   });
+      // }
   
       res.status(201).json({ 
         message: "Broadcast notification sent successfully",

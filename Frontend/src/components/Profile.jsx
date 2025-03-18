@@ -1,10 +1,15 @@
+
+
+
+
+
 // import React, { useState, useEffect } from "react";
 // import SideNavigation from "./SideNavigation";
 // import UserDetails from "./UserDetails";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 // import "./Profile.css";
-// const userId = localStorage.getItem("userId");
+
 // const Profile = () => {
 //   const [profilePic, setProfilePic] = useState(
 //     "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/tempUser.jpg?alt=media&token=02e254e8-8b02-4dc9-b415-0bf5eccb5cc0"
@@ -20,9 +25,10 @@
 
 //   const navigate = useNavigate();
 //   const [isEditing, setIsEditing] = useState(false);
-//   const [user, setUser] = useState(null);// State to store user data
-//   const [isChangingPassword, setIsChangingPassword] = useState(false); 
+//   const [user, setUser] = useState(null); // State to store user data
+//   const [isChangingPassword, setIsChangingPassword] = useState(false);
 //   const [passwords, setPasswords] = useState({
+//     oldPassword: "",
 //     newPassword: "",
 //     confirmPassword: "",
 //   });
@@ -30,30 +36,30 @@
 //   // Fetch profile data when the component mounts
 //   useEffect(() => {
 //     const fetchUserProfile = async () => {
-//         try {
-//           const token = localStorage.getItem("token");
-//           if (!token) {
-//             navigate("/login"); // Redirect if no token is found
-//             return;
-//           }
-//           const response = await axios.get("http://localhost:3001/api/users/me", {
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//             },
-//           });
-//           setUser(response.data);
-//           //console.log(user);
-//         } catch (error) {
-//           console.error("Error fetching user data:", error);
-//           if (error.response && error.response.status === 401) {
-//             localStorage.removeItem("token"); // Clear token if unauthorized
-//             navigate("/login"); // Redirect to login
-//           }
+//       try {
+//         const token = localStorage.getItem("token");
+//         if (!token) {
+//           navigate("/login"); // Redirect if no token is found
+//           return;
 //         }
-//       };
+//         const response = await axios.get("http://localhost:3001/api/users/me", {
+//           headers: {
+//             Authorization:`Bearer ${token}`,
+//           },
+//         });
+//         setUser(response.data);
+//         //console.log(user);
+//       } catch (error) {
+//         console.error("Error fetching user data:", error);
+//         if (error.response && error.response.status === 401) {
+//           localStorage.removeItem("token"); // Clear token if unauthorized
+//           navigate("/login"); // Redirect to login
+//         }
+//       }
+//     };
 
 //     fetchUserProfile();
-//   }, []);
+//   }, [navigate]);
 
 //   const handleProfilePicChange = (event) => {
 //     const file = event.target.files[0];
@@ -70,39 +76,39 @@
 
 //   const handleChangePassword = async () => {
 //     if (passwords.newPassword !== passwords.confirmPassword) {
-//         alert("Passwords do not match!");
-//         return;
+//       alert("Passwords do not match!");
+//       return;
 //     }
 
-//     console.log("Sending request with passwords:", passwords);  // Log passwords for debugging
+//     console.log("Sending request with passwords:", passwords); // Log passwords for debugging
 
 //     try {
-//         const response = await axios.put(
-//   `http://localhost:3001/api/users/change`,
-//   {
-//     currentPassword: passwords.oldPassword,  // Ensure field names match in request
-//     newPassword: passwords.newPassword
-//   },
-//   {
-//     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//   },
-//   {
-//     timeout: 10000  // Set timeout to 10 seconds
-//   } 
-// );
+//       const token = localStorage.getItem("token");
+//       const response = await axios.put(
+//         `http://localhost:3001/api/update/change`,
+//         {
+//           newUsername: user.Email, // Use the current email as the new username
+//           oldPassword: passwords.oldPassword,
+//           newPassword: passwords.newPassword,
+//           confirmPassword: passwords.confirmPassword,
+//         },
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         },
+//         {
+//           timeout: 10000, // Set timeout to 10 seconds
+//         }
+//       );
 
-
-//         console.log("Response received:", response);  // Log the response
-//         alert(response.data.message);
-//         setIsChangingPassword(false);
-//         setPasswords({ oldPassword: "", newPassword: "", confirmPassword: "" });
+//       console.log("Response received:", response); // Log the response
+//       alert(response.data.message);
+//       setIsChangingPassword(false);
+//       setPasswords({ oldPassword: "", newPassword: "", confirmPassword: "" });
 //     } catch (error) {
-//         console.error("Error in password change:", error);  // Log any errors that occur
-//         alert(error.response?.data?.message || "Error changing password");
+//       console.error("Error in password change:", error); // Log any errors that occur
+//       alert(error.response?.data?.message || "Error changing password");
 //     }
-// };
-
-
+//   };
 
 //   const triggerFileInput = () => {
 //     document.getElementById("profilePicInput").click();
@@ -136,98 +142,97 @@
 //       console.error("Error saving profile:", err);
 //     }
 //   };
-  
 
 //   return (
 //     <div className="dashPage">
 //       <div className="gridBox">
-//       <SideNavigation />
-//       <div className="rightPanel">
-//         <UserDetails />
-//         <div className="dashBoxer">
-//           <div>
-//             <div className="profile-header">
-//               <div className="profile-pic-container">
-//                 <img src={profilePic} alt="Profile" className="profile-pic" />
-//                 <button className="edit-profile-btn" onClick={triggerFileInput}>
-//                   <i className="edit-icon">✎</i>
-//                 </button>
-//                 <input
-//                   type="file"
-//                   id="profilePicInput"
-//                   accept="image/*"
-//                   style={{ display: "none" }}
-//                   onChange={handleProfilePicChange}
-//                 />
-//               </div>
-//               <div className="profile-info">
-//                 <h2>
-//                   {user?.FirstName} {user?.LastName}
-//                 </h2>
-//                 <p>{user?.Role}</p>
+//         <SideNavigation />
+//         <div className="rightPanel">
+//           <UserDetails />
+//           <div className="dashBoxer">
+//             <div>
+//               <div className="profile-header">
+//                 <div className="profile-pic-container">
+//                   <img src={profilePic} alt="Profile" className="profile-pic" />
+//                   <button className="edit-profile-btn" onClick={triggerFileInput}>
+//                     <i className="edit-icon">✎</i>
+//                   </button>
+//                   <input
+//                     type="file"
+//                     id="profilePicInput"
+//                     accept="image/*"
+//                     style={{ display: "none" }}
+//                     onChange={handleProfilePicChange}
+//                   />
+//                 </div>
+//                 <div className="profile-info">
+//                   <h2>
+//                     {user?.FirstName} {user?.LastName}
+//                   </h2>
+//                   <p>{user?.Role}</p>
+//                 </div>
 //               </div>
 //             </div>
-//           </div>
 
-//           <div className="dataTableBox">
-//             <div className="profile-form">
-//               <div className="form-row">
-//                 <div className="form-group">
-//                   <label>First Name</label>
-//                   <div className="input-container">
-//                     <input
-//                       type="text"
-//                       name="FirstName"
-//                       value={user?.FirstName}
-//                       onChange={handleInputChange}
-//                       disabled={!isEditing}
-//                     />
+//             <div className="dataTableBox">
+//               <div className="profile-form">
+//                 <div className="form-row">
+//                   <div className="form-group">
+//                     <label>First Name</label>
+//                     <div className="input-container">
+//                       <input
+//                         type="text"
+//                         name="FirstName"
+//                         value={user?.FirstName}
+//                         onChange={handleInputChange}
+//                         disabled={!isEditing}
+//                       />
+//                     </div>
+//                   </div>
+
+//                   <div className="form-group">
+//                     <label>Last Name</label>
+//                     <div className="input-container">
+//                       <input
+//                         type="text"
+//                         name="LastName"
+//                         value={user?.LastName}
+//                         onChange={handleInputChange}
+//                         disabled={!isEditing}
+//                       />
+//                     </div>
 //                   </div>
 //                 </div>
 
-//                 <div className="form-group">
-//                   <label>Last Name</label>
-//                   <div className="input-container">
-//                     <input
-//                       type="text"
-//                       name="LastName"
-//                       value={user?.LastName}
-//                       onChange={handleInputChange}
-//                       disabled={!isEditing}
-//                     />
+//                 <div className="form-row">
+//                   <div className="form-group">
+//                     <label>Email</label>
+//                     <div className="input-container">
+//                       <input
+//                         type="text"
+//                         name="Email"
+//                         value={user?.Email}
+//                         onChange={handleInputChange}
+//                         disabled={!isEditing}
+//                       />
+//                     </div>
+//                   </div>
+
+//                   <div className="form-group">
+//                     <label>Role</label>
+//                     <div className="input-container">
+//                       <input
+//                         type="text"
+//                         name="Role"
+//                         value={user?.Role}
+//                         onChange={handleInputChange}
+//                         disabled={!isEditing}
+//                       />
+//                     </div>
 //                   </div>
 //                 </div>
-//               </div>
 
-//               <div className="form-row">
-//                 <div className="form-group">
-//                   <label>Email</label>
-//                   <div className="input-container">
-//                     <input
-//                       type="text"
-//                       name="Email"
-//                       value={user?.Email}
-//                       onChange={handleInputChange}
-//                       disabled={!isEditing}
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="form-group">
-//                   <label>Role</label>
-//                   <div className="input-container">
-//                     <input
-//                       type="text"
-//                       name="Role"
-//                       value={user?.Role}
-//                       onChange={handleInputChange}
-//                       disabled={!isEditing}
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-
-//               {isChangingPassword ? (
+//                 {isChangingPassword ? (
 //                   <>
 //                     <div className="form-row">
 //                       <div className="form-group">
@@ -235,8 +240,8 @@
 //                         <div className="input-container">
 //                           <input
 //                             type="password"
-//                             name="currentPassword"
-//                             value={passwords.currentPassword}
+//                             name="oldPassword"
+//                             value={passwords.oldPassword}
 //                             onChange={handlePasswordChange}
 //                           />
 //                         </div>
@@ -270,11 +275,11 @@
 //                     </div>
 
 //                     <div className="form-row">
-//                       <button className="save-btn" onClick={handleChangePassword}>
+//                       <button className="change-password-btn" onClick={handleChangePassword}>
 //                         Save New Password
 //                       </button>
 //                       <button
-//                         className="cancel-btn"
+//                         className="change-password-btn"
 //                         onClick={() => setIsChangingPassword(false)}
 //                       >
 //                         Cancel
@@ -293,131 +298,18 @@
 //                     </div>
 //                   </div>
 //                 )}
+//               </div>
 //             </div>
 //           </div>
 //         </div>
 //       </div>
-//     </div>
 
-//       <style jsx>{`
-//         .profile-header {
-//           display: flex;
-//           align-items: center;
-//           gap: 1rem;
-//           padding: 1rem;
-//           padding-bottom: 0;
-//         }
-
-//         .profile-pic-container {
-//           position: relative;
-//           display: inline-block;
-//         }
-
-//         .profile-pic {
-//           width: 48px;
-//           height: 48px;
-//           border-radius: 50%;
-//           object-fit: cover;
-//         }
-
-//         .edit-profile-btn {
-//           position: absolute;
-//           bottom: 0;
-//           right: 0;
-//           width: 22px;
-//           height: 22px;
-//           background: white;
-//           border: 1px solid #ccc;
-//           border-radius: 50%;
-//           display: flex;
-//           align-items: center;
-//           justify-content: center;
-//           cursor: pointer;
-//           font-size: 12px;
-//           color: #333;
-//           transition: background 0.3s;
-//         }
-
-//         .edit-profile-btn:hover {
-//           background: #e0e0e0;
-//         }
-
-//         .profile-info h2 {
-//           margin: 0;
-//           font-size: 1.25rem;
-//           font-weight: 600;
-//         }
-
-//         .profile-info p {
-//           margin: 0;
-//           color: #666;
-//         }
-
-//         .profile-form {
-//           padding: 2rem;
-//           background: white;
-//           border-radius: 24px;
-//           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-//         }
-
-//         .form-row {
-//           display: grid;
-//           grid-template-columns: 1fr 1fr;
-//           gap: 5.5rem;
-//           margin-bottom: 1.5rem;
-//         }
-
-//         .form-group {
-//           display: flex;
-//           flex-direction: column;
-//           gap: 0.5rem;
-//         }
-
-//         .form-group label {
-//           font-size: 0.875rem;
-//           font-weight: 500;
-//         }
-
-//         .input-container {
-//           position: relative;
-//         }
-
-//         .input-container input {
-//           width: 100%;
-//           padding: 0.75rem;
-//           border-radius: 0.5rem;
-//           border: none;
-//           background: #EDF6F9;
-//         }
-
-//         .edit-btn {
-//           position: absolute;
-//           right: 0.75rem;
-//           top: 50%;
-//           transform: translateY(-50%);
-//           background: none;
-//           border: none;
-//           cursor: pointer;
-//           color: #666;
-//         }
-
-//         .edit-icon {
-//           font-style: normal;
-//         }
-//       `}</style>
+      
 //     </div>
 //   );
 // };
 
 // export default Profile;
-
-
-
-
-
-
-
-
 
 import React, { useState, useEffect } from "react";
 import SideNavigation from "./SideNavigation";
@@ -425,6 +317,28 @@ import UserDetails from "./UserDetails";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
+// Material UI imports
+import { 
+  Button, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogTitle, 
+  TextField, 
+  FormControl, 
+  InputLabel, 
+  Select, 
+  MenuItem, 
+  Chip, 
+  Box, 
+  Snackbar, 
+  Alert, 
+  Typography,
+  IconButton
+} from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Profile = () => {
   const [profilePic, setProfilePic] = useState(
@@ -449,6 +363,25 @@ const Profile = () => {
     confirmPassword: "",
   });
 
+  // Broadcast notification states
+  const [openBroadcastDialog, setOpenBroadcastDialog] = useState(false);
+  const [broadcastForm, setBroadcastForm] = useState({
+    title: "",
+    message: "",
+    recipientRoles: []
+  });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
+
+  // Available roles for notifications
+  const availableRoles = ["student", "lecturer", "hod", "technical officer", "instructor"];
+
+  // Check if user is admin
+  const isAdmin = user?.Role === "hod" || user?.Role === "technical officer";
+
   // Fetch profile data when the component mounts
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -464,7 +397,6 @@ const Profile = () => {
           },
         });
         setUser(response.data);
-        //console.log(user);
       } catch (error) {
         console.error("Error fetching user data:", error);
         if (error.response && error.response.status === 401) {
@@ -496,8 +428,6 @@ const Profile = () => {
       return;
     }
 
-    console.log("Sending request with passwords:", passwords); // Log passwords for debugging
-
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
@@ -516,7 +446,6 @@ const Profile = () => {
         }
       );
 
-      console.log("Response received:", response); // Log the response
       alert(response.data.message);
       setIsChangingPassword(false);
       setPasswords({ oldPassword: "", newPassword: "", confirmPassword: "" });
@@ -559,6 +488,72 @@ const Profile = () => {
     }
   };
 
+  // Broadcast notification handlers
+  const handleBroadcastDialogOpen = () => {
+    setOpenBroadcastDialog(true);
+  };
+
+  const handleBroadcastDialogClose = () => {
+    setOpenBroadcastDialog(false);
+    setBroadcastForm({
+      title: "",
+      message: "",
+      recipientRoles: []
+    });
+  };
+
+  const handleBroadcastFormChange = (e) => {
+    const { name, value } = e.target;
+    setBroadcastForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleRolesChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setBroadcastForm(prev => ({
+      ...prev,
+      recipientRoles: typeof value === 'string' ? value.split(',') : value,
+    }));
+  };
+
+  const handleSubmitBroadcast = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:3001/api/notifications/broadcast",
+        broadcastForm,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      
+      setSnackbar({
+        open: true,
+        message: "Broadcast notification sent successfully!",
+        severity: "success"
+      });
+      handleBroadcastDialogClose();
+    } catch (error) {
+      console.error("Error sending broadcast notification:", error);
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.message || "Error sending notification",
+        severity: "error"
+      });
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({
+      ...prev,
+      open: false
+    }));
+  };
+
   return (
     <div className="dashPage">
       <div className="gridBox">
@@ -586,6 +581,19 @@ const Profile = () => {
                     {user?.FirstName} {user?.LastName}
                   </h2>
                   <p>{user?.Role}</p>
+                  
+                  {/* Broadcast button for admins */}
+                  {isAdmin && (
+                    <Button 
+                      variant="contained" 
+                      color="primary" 
+                      startIcon={<NotificationsIcon />}
+                      onClick={handleBroadcastDialogOpen}
+                      style={{ marginTop: '10px' }}
+                    >
+                      Send Broadcast
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -720,7 +728,112 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Broadcast Notification Dialog */}
+      <Dialog 
+        open={openBroadcastDialog} 
+        onClose={handleBroadcastDialogClose}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>
+          Send Broadcast Notification
+          <IconButton
+            aria-label="close"
+            onClick={handleBroadcastDialogClose}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            Send notifications to multiple users based on their roles. Leave recipient roles empty to send to all users.
+          </Typography>
+          
+          <TextField
+            autoFocus
+            margin="dense"
+            id="title"
+            name="title"
+            label="Notification Title"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={broadcastForm.title}
+            onChange={handleBroadcastFormChange}
+            required
+            sx={{ mb: 3 }}
+          />
+          
+          <TextField
+            margin="dense"
+            id="message"
+            name="message"
+            label="Notification Message"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={broadcastForm.message}
+            onChange={handleBroadcastFormChange}
+            required
+            multiline
+            rows={4}
+            sx={{ mb: 3 }}
+          />
+          
+          <FormControl fullWidth>
+            <InputLabel id="roles-select-label">Select Recipients (Optional)</InputLabel>
+            <Select
+              labelId="roles-select-label"
+              id="roles-select"
+              multiple
+              value={broadcastForm.recipientRoles}
+              onChange={handleRolesChange}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}
+            >
+              {availableRoles.map((role) => (
+                <MenuItem key={role} value={role}>
+                  {role === "hod" ? role.charAt(0).toUpperCase() + role.charAt(1) +role.charAt(2).toUpperCase() :role.charAt(0).toUpperCase() + role.slice(1)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleBroadcastDialogClose}>Cancel</Button>
+          <Button 
+            onClick={handleSubmitBroadcast} 
+            variant="contained" 
+            color="primary"
+            endIcon={<SendIcon />}
+            disabled={!broadcastForm.title || !broadcastForm.message}
+          >
+            Send Notification
+          </Button>
+        </DialogActions>
+      </Dialog>
       
+      {/* Notification Snackbar */}
+      <Snackbar 
+        open={snackbar.open} 
+        autoHideDuration={6000} 
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
