@@ -22,7 +22,8 @@ import BookingPage from "./BookingPage";
 import AddBulkUser from "./AddBulkUser";
 import AdminProtected from "./services/AdminProcted";
 import Profile from "./components/Profile";
-
+import DashCheckInOutCard from "./components/DashCheckInOutCard";
+import Dashboard2 from "./Dashboard2";
 
 
 
@@ -126,7 +127,26 @@ function App() {
           }
         />
 
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute><Profile /></ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashcard1"
+          element={
+            <ProtectedRoute><DashCheckInOutCard refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard2"
+          element={
+            <ProtectedRoute><Dashboard2 refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
+          }
+        />
       
       </Routes>
     </BrowserRouter>

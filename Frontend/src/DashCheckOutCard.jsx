@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import AdminProtected from '../services/AdminProcted';
+import AdminProtected from './services/AdminProcted';
+import "./DashCard.css";
+import CheckInOutForm from './CheckInOutForm';
 
 import {
     Box,
@@ -20,7 +22,7 @@ import {
     Switch,
   } from "@mui/material";
 
-function DashCheckInOutCard() {
+function DashCheckOutCard() {
 
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -67,40 +69,42 @@ function DashCheckInOutCard() {
         setPage(0);
     };
 
+    const handleOpenCheckIn = () => {
+      setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
+
+
   return (
     <div>
-        <div className='dashCardTitle'>Recent Check-ins</div>
+        <div className='dashCardTitle'>Recent Check-outs</div>
         <Box sx={{ width: "100%" }}>
             <Paper sx={{ width: "100%", mb: 2 }}>
                 <TableContainer>
                     <Table size={dense ? "small" : "medium"}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell><b>Equipment</b></TableCell>
-                                <TableCell><b>Action</b></TableCell>
-                                <TableCell><b>User</b></TableCell>
-                                <TableCell><b>Date & Time</b></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
+                        <TableBody className='dashCardTable'>
                         {records
+                            .filter((record) => record.action === "checkout")
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((record, index) => {
                             const isItemSelected = isSelected(record._id);
                             return (
                                 <TableRow
-                                hover
-                                role="checkbox"
-                                aria-checked={isItemSelected}
-                                tabIndex={-1}
-                                key={record._id}
-                                selected={isItemSelected}
+                                    hover
+                                    role="checkbox"
+                                    aria-checked={isItemSelected}
+                                    tabIndex={-1}
+                                    key={record._id}
+                                    selected={isItemSelected}
+                                    className='dashCardTable'
                                 >
                                 
-                                <TableCell>{record.equipment?.Name}</TableCell>
-                                <TableCell>{record.action}</TableCell>
-                                <TableCell>{`${record.selectedUser?.FirstName} ${record.selectedUser?.LastName}`}</TableCell>
-                                <TableCell>{new Date(record.date).toLocaleString()}</TableCell>
+                                <TableCell className='dashCardTable'>{record.equipment?.Name}</TableCell>
+                                <TableCell className='dashCardTable'>{`${record.selectedUser?.FirstName} ${record.selectedUser?.LastName}`}</TableCell>
+                                <TableCell className='dashCardTable'>{new Date(record.date).toLocaleString()}</TableCell>
                                 </TableRow>
                             );
                             })}
@@ -109,8 +113,32 @@ function DashCheckInOutCard() {
                 </TableContainer>
             </Paper>
         </Box>
+        <div className='dashCardBtns'>
+          <button className='dashCardBtn' onClick={() => navigate('/booking')}>
+            See all
+          </button>
+          <button className='dashCardBtn' onClick={handleOpenCheckIn}>
+            Check-out
+          </button>
+        </div>
+        
+
+        {isModalOpen && (
+          <div className="listViewModal2">
+            <div className="listViewModal-content2">
+            <AdminProtected><CheckInOutForm /></AdminProtected>
+              <button
+                className="listViewBtn3"
+                id="closeListBtn"
+                onClick={closeModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
     </div>
   )
 }
 
-export default DashCheckInOutCard;
+export default DashCheckOutCard;
