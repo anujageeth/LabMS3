@@ -236,3 +236,27 @@ table button:hover {
     border-radius: 15px;
     border: 0px;
 }
+
+.calendarIcon {
+    display: flex;
+}
+
+#calenderPadding1 {
+    flex: 1;
+    padding-right: 10px;
+    justify-content: right;
+}
+
+#calenderPadding2 {
+    flex: 1;
+    justify-content: left;
+    align-items: left;
+}
+
+.bookingTableBox {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
+

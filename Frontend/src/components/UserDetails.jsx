@@ -344,19 +344,21 @@ function UserDetails({ onUserDataFetched }) {
             {/* Notification Bell */}
             <div className="notificationBell" onClick={toggleNotificationDropdown} ref={notificationDropdownRef}>
                 <div className="bellIcon">
-                {unreadCount > 0 ? (
-            <NotificationsActiveIcon className="bellIconSvg" />
-        ) : (
-            <NotificationsIcon className="bellIconSvg" />
-        )}
+                    {unreadCount > 0 ? (
+                        <NotificationsActiveIcon className="bellIconSvg" style={{ fontSize: "7vh" }} />
+                            ) : (
+                        <NotificationsIcon className="bellIconSvg" style={{ fontSize: "7vh" }} />
+                    )}
                     <i className="fas fa-bell"></i>
-                    {unreadCount > 0 && <span className="notificationBadge">{unreadCount}</span>}
+                    {unreadCount > 0 &&
+                        <span className="notificationBadge">{unreadCount}</span>
+                    }
                 </div>
                 
                 {notificationDropdownVisible && (
                     <div className="notificationDropdown">
                         <div className="notificationHeader">
-                            <h3>Notifications<NotificationsActiveIcon/></h3>
+                            <h3>Notifications</h3>
                             {unreadCount > 0 && (
                                 <button onClick={markAllAsRead} className="markAllRead">
                                     Mark all as read
