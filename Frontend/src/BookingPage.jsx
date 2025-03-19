@@ -435,11 +435,7 @@ const BookingReservation = () => {
 
                                 <div className="addItem">
                                     <button className="addItemBtn" onClick={toggleCalendar}>
-                                        <div className="calendar" id="calenderBtn"></div>
-                                        <div className="calendarIcon">
-                                            <FaCalendarAlt size={20} />
-                                            Select date
-                                        </div>
+                                        <FaCalendarAlt size={20} />
                                     </button>
                                         <div className="calenderDiv">
                                             {isCalendarVisible && (
@@ -454,7 +450,7 @@ const BookingReservation = () => {
                         </div>
 
                         {/* Availability Table (Moved to Top) */}
-                        <div className="dataTableBox">
+                        <div className="bookingTableBox">
                             <Box sx={{ width: "100%" }}>
                                 <Paper sx={{ width: "100%", mb: 2 }}>
                                     <TableContainer>
@@ -513,7 +509,7 @@ const BookingReservation = () => {
                         </div>
 
                         {/* Existing Bookings Table (Moved to Bottom) */}
-                        <div className="dataTableBox">
+                        <div className="bookingTableBox">
                             <Box sx={{ width: "100%" }}>
                                 <Paper sx={{ width: "100%", mb: 2 }}>
                                     <TableContainer>
