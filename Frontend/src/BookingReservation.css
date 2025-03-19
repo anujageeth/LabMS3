@@ -68,15 +68,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0);
     border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.calendar h4 {
-    font-size: 18px;
-    margin-bottom: 10px;
+    z-index: 5000;
 }
 
 .calendar-dates {
@@ -175,9 +170,7 @@ table button:hover {
 
 .calendar-icon {
     cursor: pointer;
-    margin-left: 20px;
     background-color: white;
-    padding: 10px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -199,7 +192,7 @@ table button:hover {
     z-index: 1000; /* Ensure it's above other elements like the table */
     background-color: white; /* Solid background to prevent transparency */
     border: 1px solid #ccc; /* Add a subtle border */
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 15px; /* Rounded corners */
     padding: 10px; /* Padding inside the popup */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for better visibility */
 }
@@ -209,7 +202,7 @@ table button:hover {
     border: none; /* Remove default border */
     background-color: white; /* Solid background to avoid transparency */
     z-index: 1000; /* Ensure it's layered above other elements */
-    border-radius: 8px; /* Rounded corners for better aesthetics */
+    border-radius: 15px; /* Rounded corners for better aesthetics */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Add shadow for better visibility */
 }
 
@@ -221,3 +214,25 @@ table button:hover {
 
 /* Optional: Ensure the calendar container is isolated */
 
+#calenderBtn {
+    margin: none;
+    padding: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.calenderDiv {
+    z-index: 5000;
+    position: relative;
+}
+
+.calenderDiv .react-calendar {
+    position: absolute;
+    top: 100%; /* Places it below the trigger element */
+    left: 0;
+    z-index: 9999; /* Ensures it appears above all other elements */
+    background: white; /* Prevents overlap transparency issues */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+    border-radius: 15px;
+    border: 0px;
+}

@@ -236,7 +236,7 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
     const [labPlace, setLabPlace] = useState("");
     const [bookedByName, setBookedByName] = useState(user ? `${user.FirstName} ${user.LastName}` : ""); // Auto-fill bookedBy
     const [bookedBy, setBookedBy] = useState(user ? `${user.Email}` : ""); // Auto-fill bookedBy
-    const [timeSlot, setTimeSlot] = useState("8:30-11:30"); // Default time slot
+    const [timeSlot, setTimeSlot] = useState(""); // Default time slot
     const [customStartTime, setCustomStartTime] = useState("");
     const [customEndTime, setCustomEndTime] = useState("");
 
@@ -326,15 +326,17 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
 
     return (
         <div className="booking-form-container">
-            <div className="booking-form">
-                <h2>📅 Book Laboratory</h2>
+            <div className="loginBox" id="bookingFormBox">
+                <h2 className="loginTitle">Laboratory Booking</h2>
                 <form onSubmit={handleSubmit}>
                     {/* Semester Selection */}
-                    <label>Semester</label>
+                    
                     <select
                         value={selectedSemester}
                         onChange={handleSemesterChange}
                         required
+                        className="typeBoxControl"
+                        id="bookingFormField"
                     >
                         <option value="" disabled>
                             Select Semester
@@ -347,15 +349,17 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
                     </select>
 
                     {/* Lab Selection */}
-                    <label>Lab Name</label>
+                    
                     <select
                         value={selectedLab}
                         onChange={handleLabChange}
                         required
                         disabled={!selectedSemester}
+                        className="typeBoxControl"
+                        id="bookingFormField"
                     >
                         <option value="" disabled>
-                            Select Lab
+                            Select Laboratory
                         </option>
                         {selectedSemester &&
                             labsBySemester[selectedSemester].map((lab, index) => (
@@ -366,14 +370,16 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
                     </select>
 
                     {/* Lab Place Selection */}
-                    <label>Lab Place</label>
+                    
                     <select
                         value={labPlace}
                         onChange={(e) => setLabPlace(e.target.value)}
                         required
+                        className="typeBoxControl"
+                        id="bookingFormField"
                     >
                         <option value="" disabled>
-                            Select Lab Place
+                            Select Lab Venue
                         </option>
                         <option value="Electrical Machines Lab">Electrical Machines Lab</option>
                         <option value="Communication Lab">Communication Lab</option>
@@ -382,16 +388,25 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
                     </select>
 
                     {/* Date */}
-                    <label>Date</label>
-                    <input type="text" value={selectedDate.toDateString()} disabled />
+                    
+                    <input
+                        type="text" 
+                        value={`Date: ${selectedDate.toDateString()}`} 
+                        disabled 
+                        className="typeBoxControl"
+                        id="bookingFormInput"
+                    />
 
                     {/* Time Slot Selection */}
-                    <label>Time Slot</label>
+                    
                     <select
                         value={timeSlot}
                         onChange={(e) => setTimeSlot(e.target.value)}
                         required
+                        className="typeBoxControl"
+                        id="bookingFormField"
                     >
+                        <option value="" disabled>Select time slot</option>
                         <option value="8:30-11:30">8:30 AM - 11:30 AM</option>
                         <option value="1:30-4:30">1:30 PM - 4:30 PM</option>
                         <option value="custom">Custom Time</option>
@@ -418,18 +433,20 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
                     )}
 
                     {/* Booked By */}
-                    <label>Booked By</label>
+                    
                     <input
                         type="text"
                         value={bookedByName}
                         onChange={(e) => setBookedByName(e.target.value)}
                         required
                         disabled // Disable the input to prevent manual changes
+                        className="typeBoxControl"
+                        id="bookingFormInput"
                     />
 
                     {/* Form Actions */}
                     <div className="form-actions">
-                        <button type="submit">Confirm Booking</button>
+                        <button type="submit">Confirm</button>
                         <button type="button" onClick={closeForm}>
                             Cancel
                         </button>

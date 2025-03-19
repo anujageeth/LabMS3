@@ -57,33 +57,38 @@
 
 .form-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
+
 .form-actions button {
+    margin-right: 5px;
     padding: 10px 20px;
     font-size: 14px;
     border: none;
-    border-radius: 15px; /* Rounded buttons */
+    border-radius: 15px; 
     cursor: pointer;
-    background-color: #04414f; /* Teal-like color for the buttons */
+    background-color: #04414f; 
     color: white;
     transition: 0.3s ease;
 }
 
 .form-actions button:hover {
-    background-color: #03363d; /* Darker teal on hover */
+    background-color: #03363d; 
 }
 
 .form-actions button[type="button"] {
-    background-color: #c4c4c4; /* Light gray for the cancel button */
+    background-color: #c4c4c4; 
     color: #333;
 }
 
 .form-actions button[type="button"]:hover {
-    background-color: #b0b0b0; /* Slightly darker gray on hover */
+    background-color: #b0b0b0; 
 }
+
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
@@ -106,4 +111,20 @@
         padding: 8px 16px; /* Smaller buttons for smaller screens */
         font-size: 12px;
     }
+}
+
+#bookingFormField {
+    height: 35px;
+    width: 500px;
+}
+
+#bookingFormInput {
+    height: 25px;
+    width: 490px;
+    background-color: #eeeeee;
+}
+
+#bookingFormBox {
+    width: 550px;
+    height: 500px;
 }
