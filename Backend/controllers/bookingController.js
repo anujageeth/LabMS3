@@ -68,6 +68,8 @@
 
 
 const Booking = require("../models/Booking");
+const User = require("../models/user");
+const NotificationService = require("../services/NotificationService");
 
 // Get bookings for a specific date
 exports.getBookingsByDate = async (req, res) => {
@@ -142,6 +144,37 @@ exports.createBooking = async (req, res) => {
             timeSlot: `${selectedSlot.start}-${selectedSlot.end}`, // Save time interval
         });
         await newBooking.save();
+
+        // Notify admins about the new booking
+        const user = await User.findOne({ Email: bookedBy });
+        const admins = await User.find({ Role: { $in: ["hod", "technical officer"] } });
+        
+        if (user && admins.length > 0) {
+            for (const admin of admins) {
+                await NotificationService.createNotification({
+                    recipient: admin._id,
+                    type: "lab_reminder",
+                    title: "New Lab Booking",
+                    message: `${user.FirstName} ${user.LastName} has booked ${labName} at ${labPlace} on ${date} at ${selectedSlot.start}-${selectedSlot.end}`,
+                    relatedItem: newBooking._id,
+                    itemModel: "Booking",
+                    adminOnly: true,
+                    isRead: false 
+                });
+            }
+            
+            // Also notify the user who made the booking
+            await NotificationService.createNotification({
+                recipient: user._id,
+                type: "lab_reminder",
+                title: "Lab Booking Confirmation",
+                message: `You have successfully booked ${labName} at ${labPlace} on ${date} at ${selectedSlot.start}-${selectedSlot.end}`,
+                relatedItem: newBooking._id,
+                itemModel: "Booking",
+                isRead: false 
+            });
+        }
+
 
         res.status(201).json(newBooking);
     } catch (error) {

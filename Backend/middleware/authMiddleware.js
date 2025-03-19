@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 // Middleware to authenticate users based on JWT token
 function authenticateToken(req, res, next) {
@@ -22,7 +23,46 @@ function authorizeRoles(...roles) {
   };
 }
 
-module.exports = { authenticateToken, authorizeRoles };
+const isAdmin = async (req, res, next) => {
+  try {
+    // Ensure req.user is set by authenticateToken
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({ 
+        message: "Access denied. User not authenticated." 
+      });
+    }
+
+    // Check if the user exists and has an admin role
+    const user = await User.findById(req.user.userId);
+    
+    if (!user) {
+      return res.status(404).json({ 
+        message: "User not found" 
+      });
+    }
+    
+    // Check if the user has an admin role
+    if (user.Role === "hod" || user.Role === "technical officer") {
+      next();
+    } else {
+      return res.status(403).json({ 
+        message: "Access denied. Admin privileges required." 
+      });
+    }
+  } catch (error) {
+    console.error("Error checking admin status:", error);
+    return res.status(500).json({ 
+      message: "Server error during admin verification",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+module.exports = { 
+  authenticateToken, 
+  authorizeRoles,
+  isAdmin 
+};
 
 
 /*

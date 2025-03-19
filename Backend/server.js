@@ -13,7 +13,9 @@ const bcrypt = require("bcryptjs");
 const User = require("./models/user");
 const bookingRoutes = require("./routes/bookingRoutes");
 const updatePassword = require("./routes/Password");
-
+const notificationRoutes = require("./routes/notificationRoutes");
+const cron = require("node-cron");
+const NotificationService = require("./services/NotificationService");
 const app = express();
 app.use(cors());
  app.use(
@@ -40,12 +42,60 @@ app.use("/api", checkinCheckoutRoutes);
 app.use("/api",bookingRoutes);
 app.use("/api/update", updatePassword);
 app.use("/api/update", updatePassword);
+app.use("/api", notificationRoutes);
 
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
+  .then(async () => {
+    console.log("MongoDB connected");
+    
+    // Check for existing admin users
+    const adminExists = await User.exists({ 
+      Role: { $in: ["hod", "technical officer"] } 
+    });
+
+    if (!adminExists) {
+      const defaultPassword = process.env.DEFAULT_ADMIN_PASSWORD || "ruhuna";
+      const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+      
+      const adminUser = new User({
+        FirstName: process.env.DEFAULT_ADMIN_FIRSTNAME || "Admin",
+        LastName: process.env.DEFAULT_ADMIN_LASTNAME || "User",
+        Title: process.env.DEFAULT_ADMIN_TITLE || "Dr.",
+        Email: process.env.DEFAULT_ADMIN_EMAIL || "admin@example.com",
+        Role: "hod",
+        Password: hashedPassword,
+        studentId: null,
+        temporaryPassword: true
+      });
+
+      await adminUser.save();
+      console.log("Default admin user created with temporary password");
+    }
+  })
   .catch((error) => console.log(error));
+
+  // Schedule jobs to run at specific times
+// This runs at 6:00 PM every day to notify about tomorrow's labs
+cron.schedule("0 18 * * *", async () => {
+  try {
+    console.log("Running scheduled job: Create upcoming lab notifications");
+    await NotificationService.createUpcomingLabNotifications();
+  } catch (error) {
+    console.error("Error running scheduled job:", error);
+  }
+});
+
+// This runs at 9:00 AM every Monday to report damaged equipment
+cron.schedule("0 9 * * 1", async () => {
+  try {
+    console.log("Running scheduled job: Create damage report notifications");
+    await NotificationService.createDamageReportNotifications();
+  } catch (error) {
+    console.error("Error running scheduled job:", error);
+  }
+});
 
 // Start the server
 const port = process.env.PORT || 3000;
@@ -53,26 +103,4 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-//  async function insertHodUser() {
-//   try {
-//      const hashedPassword = await bcrypt.hash("ruhuna", 10); // Hash the password
 
-//      const hodUser = new User({
-//      FirstName: "John",
-//        LastName: "Doe",
-//        Title: "Dr.",
-//      Email: "johndoe@example.com",
-//        Role: "hod",
-//        Password: hashedPassword, // Store the hashed password
-//        StudentID: null, // HOD doesn't need StudentID, can set to null
-//     });
-
-//     const savedUser = await hodUser.save();
-//     console.log("HOD user inserted:", savedUser);
-//    } catch (error) {
-//    console.error("Error inserting HOD user:", error.message);
-//    }
-// }
-
-// //Call the function to insert the HOD
-// insertHodUser();

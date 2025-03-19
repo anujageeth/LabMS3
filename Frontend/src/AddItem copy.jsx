@@ -91,7 +91,7 @@ function AddItem({ onRefresh }) {
     } catch (error) {
       if (error.response?.status === 403) {
         alert("Session expired. Please log in again.");
-        localStorage.removeItem("token");
+       // localStorage.removeItem("token");
         navigate("/login");
       } else {
         setIsErrorPopupOpen(true);

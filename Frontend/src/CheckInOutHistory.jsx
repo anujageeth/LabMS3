@@ -382,6 +382,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AdminProtected from './services/AdminProcted';
 
 function CheckInOutTable() {
   const [records, setRecords] = useState([]);
@@ -629,7 +630,7 @@ const [dense, setDense] = useState(true);
     {isModalOpen && (
       <div className="listViewModal2">
         <div className="listViewModal-content2">
-          <CheckInOutForm />
+        <AdminProtected><CheckInOutForm /></AdminProtected>
           <button
             className="listViewBtn3"
             id="closeListBtn"

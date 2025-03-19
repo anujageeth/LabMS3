@@ -234,7 +234,8 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
     const [selectedSemester, setSelectedSemester] = useState("");
     const [selectedLab, setSelectedLab] = useState("");
     const [labPlace, setLabPlace] = useState("");
-    const [bookedBy, setBookedBy] = useState(user ? `${user.FirstName} ${user.LastName}` : ""); // Auto-fill bookedBy
+    const [bookedByName, setBookedByName] = useState(user ? `${user.FirstName} ${user.LastName}` : ""); // Auto-fill bookedBy
+    const [bookedBy, setBookedBy] = useState(user ? `${user.Email}` : ""); // Auto-fill bookedBy
     const [timeSlot, setTimeSlot] = useState("8:30-11:30"); // Default time slot
     const [customStartTime, setCustomStartTime] = useState("");
     const [customEndTime, setCustomEndTime] = useState("");
@@ -420,8 +421,8 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
                     <label>Booked By</label>
                     <input
                         type="text"
-                        value={bookedBy}
-                        onChange={(e) => setBookedBy(e.target.value)}
+                        value={bookedByName}
+                        onChange={(e) => setBookedByName(e.target.value)}
                         required
                         disabled // Disable the input to prevent manual changes
                     />

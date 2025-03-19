@@ -58,8 +58,9 @@ const express = require("express");
 const router = express.Router();
 const { authenticateToken } = require("../middleware/authMiddleware");
 const Equipment = require("../models/equipment");
-const selectedUser = require("../models/user")
+const User = require("../models/user")
 const CheckInOut = require("../models/checkinCheckout");
+const NotificationService = require("../services/NotificationService");
 
 
 // Bulk check-in/check-out
@@ -89,10 +90,10 @@ router.post("/checkinout/bulk", authenticateToken, async (req, res) => {
       const record = new CheckInOut({
         user: req.user.userId,
         equipment: equipment._id,
-        selectedUser,
-        action,
-        damageDescription,
-        notes
+        action:action,
+        selectedUser:selectedUser,
+        damageDescription:damageDescription,
+        notes:notes
       });
 
       await record.save();
@@ -103,6 +104,8 @@ router.post("/checkinout/bulk", authenticateToken, async (req, res) => {
         equipment.condition = "damaged";
       }
       await equipment.save();
+
+      await NotificationService.createCheckInOutNotification(record);
 
       results.push({ serial, status: "Success" });
     }

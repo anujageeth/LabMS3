@@ -20,6 +20,7 @@ import CheckInOutHistory from "./CheckInOutHistory";
 import CheckInOutForm from "./CheckInOutForm";
 import BookingPage from "./BookingPage";
 import AddBulkUser from "./AddBulkUser";
+import AdminProtected from "./services/AdminProcted";
 import Profile from "./components/Profile";
 
 
@@ -43,25 +44,25 @@ function App() {
         ></Route>
         <Route
           path="/dashboard"
-          element={<Dashboard user={user} setUser={setUser} />}
+          element={<ProtectedRoute><Dashboard user={user} setUser={setUser} /></ProtectedRoute>}
         ></Route>
         <Route path="/inventory" element={<Inventory />}></Route>
         <Route
           path="/additem"
-          element={<AddItem onRefresh={handleRefresh} />}
+          element={<AdminProtected><AddItem onRefresh={handleRefresh} /></AdminProtected>}
         ></Route>
         
-        <Route path="/adduser" element={<AddUser />}></Route>
+        <Route path="/adduser" element={<AdminProtected><AddUser /></AdminProtected>}></Route>
         <Route
           path="/table"
           element={
-            <EquipmentTable refresh={refresh} onRefresh={handleRefresh} />
+            <AdminProtected><EquipmentTable refresh={refresh} onRefresh={handleRefresh} /></AdminProtected>
           }
         />
         <Route
           path="/table2"
           element={
-            <EquipmentTable2 refresh={refresh} onRefresh={handleRefresh} />
+            <ProtectedRoute> <EquipmentTable2 refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
         {/* <Route
@@ -73,59 +74,59 @@ function App() {
         <Route
           path="/list2"
           element={
-            <EquipmentList2 refresh={refresh} onRefresh={handleRefresh} />
+            <ProtectedRoute><EquipmentList2 refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
         <Route
           path="/report1"
-          element={<ReportPage1 refresh={refresh} onRefresh={handleRefresh} />}
+          element={<ProtectedRoute><ReportPage1 refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>}
         />
         <Route
           path="/equipment1"
           element={
-            <EquipmentPage1 refresh={refresh} onRefresh={handleRefresh} />
+            <ProtectedRoute><EquipmentPage1 refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
         <Route
           path="/usermanage2"
           element={
-            <UserManagePage2 refresh={refresh} onRefresh={handleRefresh} />
+            <AdminProtected><UserManagePage2 refresh={refresh} onRefresh={handleRefresh} /></AdminProtected>
           }
         />
         <Route
           path="/checkin-checkout"
           element={
-            <CheckinCheckoutPage refresh={refresh} onRefresh={handleRefresh} />
+            <AdminProtected><CheckinCheckoutPage refresh={refresh} onRefresh={handleRefresh} /></AdminProtected>
           }
         />
         <Route
           path="/checkinouthistory"
           element={
-            <CheckInOutHistory refresh={refresh} onRefresh={handleRefresh} />
+            <ProtectedRoute><CheckInOutHistory refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
         <Route
           path="/checkinoutform"
           element={
-            <CheckInOutForm refresh={refresh} onRefresh={handleRefresh} />
+            <AdminProtected> <CheckInOutForm refresh={refresh} onRefresh={handleRefresh} /></AdminProtected>
           }
         />
 
         <Route
           path="/booking"
           element={
-            <BookingPage refresh={refresh} onRefresh={handleRefresh} />
+            <ProtectedRoute><BookingPage refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
 
         <Route
           path="/addbulkuser"
           element={
-            <AddBulkUser refresh={refresh} onRefresh={handleRefresh} />
+            <ProtectedRoute><AddBulkUser refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
 
-      <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       
       </Routes>
     </BrowserRouter>
