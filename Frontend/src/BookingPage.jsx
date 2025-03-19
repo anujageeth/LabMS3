@@ -351,7 +351,7 @@ const BookingReservation = () => {
     };
 
     // Toggle calendar visibility
-    const toggleCalendar = () => setIsCalendarVisible(!isCalendarVisible);
+    const toggleCalendar = () => setIsCalendarVisible((prev) => !prev);;
 
     // Toggle booking form visibility
     const toggleFormVisibility = () => setIsFormVisible(!isFormVisible);
@@ -427,32 +427,41 @@ const BookingReservation = () => {
                             </div>
 
                             <div className="addNsearch">
-                                <div className="addItem">
+                                <div className="addItem" id="fullReportGap">
                                     <button className="addItemBtn" onClick={toggleFormVisibility}>
                                         <b>Book your lab</b>
                                     </button>
                                 </div>
 
-                                <div className="calendar">
-                                    <div className="calendarIcon" onClick={toggleCalendar}>
-                                        <FaCalendarAlt size={24} />
-                                    </div>
-                                    {isCalendarVisible && (
-                                        <Calendar onChange={onDateChange} value={date} />
-                                    )}
+                                <div className="addItem">
+                                    <button className="addItemBtn" onClick={toggleCalendar}>
+                                        <div className="calendar" id="calenderBtn"></div>
+                                        <div className="calendarIcon">
+                                            <FaCalendarAlt size={20} />
+                                            Select date
+                                        </div>
+                                    </button>
+                                        <div className="calenderDiv">
+                                            {isCalendarVisible && (
+                                                
+                                                <Calendar onChange={onDateChange} value={date} />
+                                            )}
+                                        </div>
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
 
                         {/* Availability Table (Moved to Top) */}
-                        <div className="slotsTableBox">
+                        <div className="dataTableBox">
                             <Box sx={{ width: "100%" }}>
                                 <Paper sx={{ width: "100%", mb: 2 }}>
                                     <TableContainer>
                                         <Table size="small">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell><b>Lab Place</b></TableCell>
+                                                    <TableCell><b>Venue</b></TableCell>
                                                     {predefinedSlots.map((slot, index) => (
                                                         <TableCell key={index} align="center">
                                                             <b>{slot.label}</b>
@@ -513,7 +522,7 @@ const BookingReservation = () => {
                                                 <TableRow>
                                                     <TableCell padding="checkbox"></TableCell>
                                                     <TableCell><b>Lab Name</b></TableCell>
-                                                    <TableCell><b>Lab Place</b></TableCell>
+                                                    <TableCell><b>Venue</b></TableCell>
                                                     <TableCell><b>Date</b></TableCell>
                                                     <TableCell><b>Time Interval</b></TableCell>
                                                     <TableCell><b>Booked By</b></TableCell>
@@ -587,12 +596,25 @@ const BookingReservation = () => {
 
             {/* Booking Form Popup */}
             {isFormVisible && (
+
                 <BookingForm
                     closeForm={toggleFormVisibility}
                     selectedDate={date}
                     onBookingAdded={fetchBookings}
                     user={user} // Pass user data to BookingForm
                 />
+                
+                /*<div className="">
+                    <div className="tableModal2">
+                        <BookingForm
+                            closeForm={toggleFormVisibility}
+                            selectedDate={date}
+                            onBookingAdded={fetchBookings}
+                            user={user} // Pass user data to BookingForm
+                        />
+                    </div>
+                </div>*/
+                
             )}
         </div>
     );
