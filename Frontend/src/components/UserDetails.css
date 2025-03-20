@@ -10,6 +10,10 @@
     flex: 10;
 }
 
+.userNamePicDiv {
+    
+}
+
 .userNameEmail {
     flex: 3;
 }
@@ -34,9 +38,28 @@
     box-shadow: 0px 0px 10px #00d9ff;
 }
 
+.userNameDiv {
+    padding-right: 5px;
+}
+
 .userPicDiv {
     position: relative;
     cursor: pointer;
+    display: flex;
+    color: #005766;
+    background-color: #ffffff;
+    height: 50px;
+    padding: 2px 5px 2px 15px;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userPicDiv:hover{
+    color: #ffffff;
+    background-color: #0073a5;
+
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .dropdownMenu {
@@ -48,8 +71,9 @@
     background-color: white;
     box-shadow: -5px 10px 20px #00000086;
     border-radius: 15px 0px 15px 15px;
-    width: 150px;
+    width: 200px;
     z-index: 10;
+    animation: dropdownAnimation 0.2s ease-out;
 }
 
 .dropdownMenu div {
@@ -76,13 +100,19 @@
     position: relative;
     margin-right: 20px;
     cursor: pointer;
+    align-items: center;
 }
 
 .bellIcon {
     font-size: 20px;
     color: #555;
     position: relative;
+    align-items: center;
 }
+
+.bellIcon:hover {
+    animation: swing 0.4s ease-in-out;
+  }
 
 .notificationBadge {
     position: absolute;
@@ -113,6 +143,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    animation: dropdownAnimation 0.3s ease-out;
 }
 
 .notificationHeader {
@@ -143,6 +174,7 @@
     overflow-y: auto;
     max-height: 500px;
     padding: 0px 5px;
+    animation: dropdownAnimation 0.5s ease-out;
 }
 
 .notificationItem {

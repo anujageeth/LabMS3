@@ -114,6 +114,10 @@ body {
     padding-top: 5px;
 }
 
+.menuBoxImageDiv:hover {
+  animation: swing 0.4s ease-in-out;
+}
+
 .menuBoxLogo {
     height: 12vh;   /* Adjusted the logo height */
 }
@@ -148,6 +152,23 @@ body {
 
   }
 
+  @keyframes swing {
+    0% { transform: rotate(0deg); }
+    30% { transform: rotate(5deg); }
+    60% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  @keyframes dropdownAnimation {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   /*-------------------*/
 

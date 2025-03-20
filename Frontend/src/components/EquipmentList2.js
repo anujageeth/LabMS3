@@ -384,6 +384,8 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                   </div>
                 </div>
               )}
+
+              
             </div>
           </div>
         </div>

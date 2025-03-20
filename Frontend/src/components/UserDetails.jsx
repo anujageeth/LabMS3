@@ -127,6 +127,10 @@ import "./UserDetails.css";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
+import { 
+    Avatar
+  } from "@mui/material";
+
 function UserDetails({ onUserDataFetched }) {
     const navigate = useNavigate();
 
@@ -332,22 +336,14 @@ function UserDetails({ onUserDataFetched }) {
     return (
         <div className="userDetails">
             <div className="blankUserDetails"></div>
-            <div className="userNameEmail">
-                <div className="userNameDiv">
-                    <b>
-                        {user?.FirstName} {user?.LastName}
-                    </b>
-                </div>
-                <div className="userNameDiv">{user?.Email}</div>
-            </div>
             
             {/* Notification Bell */}
             <div className="notificationBell" onClick={toggleNotificationDropdown} ref={notificationDropdownRef}>
                 <div className="bellIcon">
                     {unreadCount > 0 ? (
-                        <NotificationsActiveIcon className="bellIconSvg" style={{ fontSize: "7vh" }} />
+                        <NotificationsActiveIcon className="bellIconSvg" style={{ fontSize: "45" }} />
                             ) : (
-                        <NotificationsIcon className="bellIconSvg" style={{ fontSize: "7vh" }} />
+                        <NotificationsIcon className="bellIconSvg" style={{ fontSize: "45" }} />
                     )}
                     <i className="fas fa-bell"></i>
                     {unreadCount > 0 &&
@@ -392,11 +388,24 @@ function UserDetails({ onUserDataFetched }) {
             </div>
             
             <div className="userPicDiv" onClick={toggleDropdown} ref={dropdownRef}>
-                <img
-                    className="userPic"
-                    src="https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/tempUser2.png?alt=media&token=2d6f3951-1e0f-4a67-93fb-02e9e30033ed"
-                    alt="User"
-                />
+                <div className="userNamePicDiv">
+                    <div className="userNameDiv">
+                        <b>
+                            {user?.FirstName} {user?.LastName}
+                        </b>
+                    </div>
+                    <div className="userNameDiv">{user?.Email}</div>
+                </div>
+                <Avatar 
+                    sx={{ 
+                        width: 40, 
+                        height: 40, 
+                        bgcolor: '#0073a5',
+                        border: '3px solid #fff'
+                    }}
+                    >
+                    {user?.FirstName?.charAt(0).toUpperCase()}{user?.LastName?.charAt(0).toUpperCase()}
+                </Avatar>
                 {dropdownVisible && (
                     <div className="dropdownMenu">
                         <div

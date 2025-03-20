@@ -17,6 +17,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
 
   const [selectedEquipment, setSelectedEquipment] = useState(null); // For modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editEquipment, setEditEquipment] = useState({
     Name: "",
     Lab: "",
@@ -134,6 +135,10 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     }
   };
 
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  }
+
   return (
     <div className="dashPage">
       <div className="gridBox">
@@ -242,18 +247,63 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
           <div className="listViewModal-content2">
             <h2>Edit Equipment</h2>
             <input className="listViewModalInput2" type="text" name="Name" value={editEquipment.Name} onChange={handleInputChange} placeholder="Equipment Name" />
-            <input className="listViewModalInput2" type="text" name="Lab" value={editEquipment.Lab} onChange={handleInputChange} placeholder="Lab" />
             <input className="listViewModalInput2" type="text" name="Category" value={editEquipment.Category} onChange={handleInputChange} placeholder="Category" />
             <input className="listViewModalInput2" type="text" name="Brand" value={editEquipment.Brand} onChange={handleInputChange} placeholder="Brand" />
             <input className="listViewModalInput2" type="text" name="SerialCode" value={editEquipment.Serial} onChange={handleInputChange} placeholder="Serial Code" />
+            
+            <select 
+              className="listViewModalInput2" 
+              id="listViewModalInput2Select"
+              name="Lab" 
+              value={editEquipment.Lab} 
+              onChange={handleInputChange}
+            >
+              <option value="Electrical Machines Lab">Electrical Machines Lab</option>
+              <option value="Communication Lab">Communication Lab</option>
+              <option value="Measurements Lab">Measurements Lab</option>
+              <option value="High Voltage Lab">High Voltage Lab</option>
+            </select>
+            
+            <select 
+              className="listViewModalInput2" 
+              id="listViewModalInput2Select"
+              name="condition" 
+              value={editEquipment.condition} 
+              onChange={handleInputChange}
+            >
+              
+              <option value="Good">Good</option>
+              <option value="Damaged">Damaged</option>
+            </select>
+
 
             <button className="listViewBtn3" onClick={handleUpdate}>Update</button>
-            <button className="listViewBtn3" id="deleteListBtn" onClick={() => handleDelete(selectedEquipment._id)}>Delete</button>
+            <button className="listViewBtn3" id="deleteListBtn" onClick={() => setDeleteModalOpen(true)}>Delete</button>
             <button className="listViewBtn3" id="closeListBtn" onClick={closeModal}>Close</button>
           </div>
         </div>
       )}
 
+      {deleteModalOpen &&
+        <div className="listViewModal2">
+          <div className="listViewModal-content2">
+          <h2>Delete Equipment</h2>
+          <button
+            className="listViewBtn3"
+            id="deleteListBtn"
+            onClick={() => {
+              handleDelete(editEquipment._id);
+              closeDeleteModal();
+              closeModal();
+            }}
+          >
+            Confirm
+          </button>
+
+          <button className="listViewBtn3" id="closeListBtn" onClick={closeDeleteModal}>Cancel</button>
+          </div>
+        </div>
+      }
       
     </div>
   );
