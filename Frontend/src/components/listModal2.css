@@ -26,6 +26,7 @@
     /* Subtle shadow for depth */
     transition: transform 0.2s;
     /* Animation effect */
+    /* animation: dropdownAnimation 0.3s ease-out; */
 }
 
 .equipment-item2:hover {
@@ -194,6 +195,7 @@
     border-radius: 20px;
     background-color: #005766;
     color: white;
+    animation: dropdownAnimation 0.3s ease-out;
 }
 
 #categoryFilter:hover {
@@ -202,4 +204,8 @@
 
 #searchList {
     width: 435px;
+}
+
+#listViewModalInput2Select {
+    width: 600px;
 }

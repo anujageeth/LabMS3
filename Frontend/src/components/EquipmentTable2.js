@@ -34,6 +34,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editData, setEditData] = useState(null);
   const [categories, setCategories] = useState([]); // State for category options
   const [selectedCategory, setSelectedCategory] = useState(""); // State to track selected category
@@ -41,19 +42,21 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedLab, setSelectedLab] = useState("");
 
+  const fetchEquipment = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/api/equipmentImage"
+      );
+      setEquipment(response.data);
+      setFilteredEquipment(response.data); // Initially set filtered data to all equipment
+    } catch (error) {
+      console.error("Error fetching equipment:", error);
+    }
+  };
+
   // Fetch equipment data
   useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/api/equipmentImage"
-        );
-        setEquipment(response.data);
-        setFilteredEquipment(response.data); // Initially set filtered data to all equipment
-      } catch (error) {
-        console.error("Error fetching equipment:", error);
-      }
-    };
+    fetchEquipment();
 
     const fetchCategories = async () => {
       try {
@@ -162,6 +165,10 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     setEditData(null);
   };
 
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  }
+
   // Handle update action
   // const handleUpdate = async () => {
   //   try {
@@ -245,6 +252,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
       setEquipment((prev) =>
         prev.filter((item) => !selected.includes(item._id))
       );
+      onRefresh();
     } catch (error) {
       if (error.response?.status === 403) {
         console.log("Token expired. Redirecting to login.");
@@ -403,7 +411,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                     </Tooltip>
                     <Tooltip title="Delete">
                       <IconButton
-                        onClick={handleDelete}
+                        onClick={() => setDeleteModalOpen(true)}
                         disabled={selected.length === 0}
                         className={
                           selected.length > 0
@@ -511,11 +519,11 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
 
                 {/* Edit Modal */}
                 {editModalOpen && (
-                  <div className="">
-                    <div className="tableModal2">
-                      <h3 className="tableModalH3">Edit Equipment</h3>
+                  <div className="listViewModal2">
+                    <div className="listViewModal-content2">
+                      <h2>Edit Equipment</h2>
                       <input
-                        className="tableModalInput"
+                        className="listViewModalInput2"
                         type="text"
                         value={editData.Name}
                         onChange={(e) =>
@@ -523,15 +531,65 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         }
                         placeholder="Name"
                       />
+                      
                       <input
-                        className="tableModalInput"
+                        className="listViewModalInput2"
                         type="text"
-                        value={editData.Lab}
+                        value={editData.Category}
+                        onChange={(e) =>
+                          setEditData({ ...editData, Category: e.target.value })
+                        }
+                        placeholder="Category"
+                      />
+
+                      <input
+                        className="listViewModalInput2"
+                        type="text"
+                        value={editData.Brand}
+                        onChange={(e) =>
+                          setEditData({ ...editData, Brand: e.target.value })
+                        }
+                        placeholder="Category"
+                      />
+
+                      <input
+                        className="listViewModalInput2"
+                        type="text"
+                        value={editData.Serial}
+                        onChange={(e) =>
+                          setEditData({ ...editData, Serial: e.target.value })
+                        }
+                        placeholder="Category"
+                      />
+
+                     <select 
+                        className="listViewModalInput2" 
+                        id="listViewModalInput2Select"
+                        name="Lab" 
+                        value={editData.Lab} 
                         onChange={(e) =>
                           setEditData({ ...editData, Lab: e.target.value })
                         }
-                        placeholder="Lab"
-                      />
+                      >
+                        <option value="Electrical Machines Lab">Electrical Machines Lab</option>
+                        <option value="Communication Lab">Communication Lab</option>
+                        <option value="Measurements Lab">Measurements Lab</option>
+                        <option value="High Voltage Lab">High Voltage Lab</option>
+                      </select>
+
+                      <select 
+                        className="listViewModalInput2" 
+                        name="condition" 
+                        value={editData.condition} 
+                        onChange={(e) =>
+                          setEditData({ ...editData, condition: e.target.value })
+                        }
+                      >
+                        
+                        <option value="Good">Good</option>
+                        <option value="Damaged">Damaged</option>
+                      </select>
+
                       {/*<input
                           className="tableModalInput"
                           type="text"
@@ -540,7 +598,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                               setEditData({ ...editData, Category: e.target.value })
                           }
                           placeholder="Category"
-                          />*/}
+                          />
 
                       <CategorySelect
                         formData={editData.Category}
@@ -555,13 +613,22 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                           setEditData({ ...editData, Quantity: e.target.value })
                         }
                         placeholder="Quantity"
-                      />
-                      <button className="tableModalBtn" onClick={handleUpdate}>
+                      />*/}
+
+                      <button className="listViewBtn3" onClick={handleUpdate}>
                         Save
                       </button>
+
+                      <button 
+                        className="listViewBtn3"
+                        id="deleteListBtn"
+                        onClick={() => setDeleteModalOpen(true)}
+                        >
+                          Delete
+                        </button>
                       <button
-                        className="tableModalBtn"
-                        id="editCancelBtn"
+                        className="listViewBtn3"
+                        id="closeListBtn"
                         onClick={closeEditModal}
                       >
                         Cancel
@@ -569,6 +636,27 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                     </div>
                   </div>
                 )}
+
+                {deleteModalOpen &&
+                  <div className="listViewModal2">
+                    <div className="listViewModal-content2">
+                    <h2>Delete Equipment</h2>
+                    <button
+                      className="listViewBtn3"
+                      id="deleteListBtn"
+                      onClick={() => {
+                        handleDelete();
+                        closeDeleteModal();
+                        closeEditModal();
+                      }}
+                    >
+                      Confirm
+                    </button>
+
+                    <button className="listViewBtn3" id="closeListBtn" onClick={closeDeleteModal}>Cancel</button>
+                    </div>
+                  </div>
+                }
               </Box>
             </div>
           </div>

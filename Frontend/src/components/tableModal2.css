@@ -84,6 +84,7 @@
 
 .dataTableBox {
     padding: 30px;
+    animation: dropdownAnimation 0.3s ease-out;
 }
 
 .addNsearch {

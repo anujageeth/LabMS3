@@ -105,15 +105,16 @@ function SideNavigation() {
 
       <button
         className={`navBtn ${getActiveClass("/usermanage2")}`}
+        id="bottom"
         onClick={handleUserManage1Click}
       >
         <b>User Management</b>
       </button>
       <br />
 
-      <button className={`navBtn ${getActiveClass("/feedback")}`} id="bottom">
+      {/*<button className={`navBtn ${getActiveClass("/feedback")}`}>
         <b>Feedback</b>
-      </button>
+      </button>*/}
 
       <br />
       <br />

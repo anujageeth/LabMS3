@@ -285,6 +285,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
 
       {/* Modal for Edit/Delete */}
       {isModalOpen && selectedEquipment && (
+        
         <div className="listViewModal2">
           <div className="listViewModal-content2">
             <h2>Edit Equipment</h2>
@@ -293,6 +294,29 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
             <input className="listViewModalInput2" type="text" name="Category" value={editEquipment.Category} onChange={handleInputChange} placeholder="Category" />
             <input className="listViewModalInput2" type="text" name="Brand" value={editEquipment.Brand} onChange={handleInputChange} placeholder="Brand" />
             <input className="listViewModalInput2" type="text" name="SerialCode" value={editEquipment.Serial} onChange={handleInputChange} placeholder="Serial Code" />
+            
+            <select 
+              className="listViewModalInput2" 
+              name="Lab" 
+              value={editEquipment.Lab} 
+              onChange={handleInputChange}
+            >
+              <option value="Electrical Machines Lab">Electrical Machines Lab</option>
+              <option value="Communication Lab">Communication Lab</option>
+              <option value="Measurements Lab">Measurements Lab</option>
+              <option value="High Voltage Lab">High Voltage Lab</option>
+            </select>
+            
+            <select 
+              className="listViewModalInput2" 
+              name="condition" 
+              value={editEquipment.condition} 
+              onChange={handleInputChange}
+            >
+              <option value="Good">Good</option>
+              <option value="Damaged">Damaged</option>
+            </select>
+
 
             <button className="listViewBtn3" onClick={handleUpdate}>Update</button>
             <button className="listViewBtn3" id="deleteListBtn" onClick={() => handleDelete(selectedEquipment._id)}>Delete</button>
@@ -300,6 +324,8 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
           </div>
         </div>
       )}
+
+      
     </div>
   );
 };
