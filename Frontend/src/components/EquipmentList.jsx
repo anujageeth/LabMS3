@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../components/listModal2.css";
+import "./listModal2.css";
+//import "../components/damageBatch.css";
 
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";
@@ -9,6 +10,12 @@ import UserDetails from "./UserDetails";
 const EquipmentList2 = ({ refresh, onRefresh }) => {
   const [equipment, setEquipment] = useState([]);
   const [filteredEquipment, setFilteredEquipment] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12); // Show 12 items per page in grid
+  const [sortBy, setSortBy] = useState('Name');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [loading, setLoading] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState(""); // Name filter
@@ -28,44 +35,56 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/api/equipmentImage");
-        setEquipment(response.data);
-        setFilteredEquipment(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchEquipment();
-  }, [refresh]);
+  }, [page, limit, sortBy, sortOrder, selectedCategory, searchTerm, selectedBrand, selectedLab, refresh]);
 
-  useEffect(() => {
-    filterEquipment();
-  }, [selectedCategory, searchTerm, selectedBrand, selectedLab]);
+  const fetchEquipment = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
 
-  const filterEquipment = () => {
-    let filtered = equipment;
+      const queryParams = new URLSearchParams({
+        page,
+        limit,
+        sortBy,
+        sortOrder,
+        ...(searchTerm && { search: searchTerm }),
+        ...(selectedCategory && { Category: selectedCategory }),
+        ...(selectedLab && { Lab: selectedLab }),
+        ...(selectedBrand && { Brand: selectedBrand })
+      });
 
-    if (selectedCategory) {
-      filtered = filtered.filter((item) => item.Category === selectedCategory);
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter((item) =>
-        item.Name.toLowerCase().includes(searchTerm.toLowerCase())
+      // Updated endpoint to match backend route
+      const response = await axios.get(
+        `http://localhost:3001/api/equipmentImage?${queryParams}`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
       );
-    }
 
-    if (selectedBrand) {
-      filtered = filtered.filter((item) => item.Brand === selectedBrand);
+      // If loading more, append to existing items
+      if (page > 1) {
+        setEquipment(prev => [...prev, ...response.data.equipment]);
+        setFilteredEquipment(prev => [...prev, ...response.data.equipment]);
+      } else {
+        setEquipment(response.data.equipment);
+        setFilteredEquipment(response.data.equipment);
+      }
+      
+      setTotalItems(response.data.pagination.total);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      handleAuthError(error);
     }
+  };
 
-    if (selectedLab) {
-      filtered = filtered.filter((item) => item.Lab === selectedLab);
-    }
-
-    setFilteredEquipment(filtered);
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
   // Open modal for selected equipment
@@ -122,9 +141,17 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         navigate("/login");
         return;
       }
+
+      // Include condition and availability in update
+      const updateData = {
+        ...editEquipment,
+        condition: editEquipment.condition || 'good',
+        Availability: editEquipment.condition === 'damaged' ? false : editEquipment.Availability
+      };
+
       await axios.put(
         `http://localhost:3001/api/equipmentImage/${selectedEquipment._id}`,
-        editEquipment,
+        updateData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       onRefresh();
@@ -208,6 +235,9 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
               <ul className="equipment-list2">
                 {filteredEquipment.map((item) => (
                   <li key={item._id} className="equipment-item2">
+                    {item.condition === 'damaged' && (
+                      <span className="damage-badge">Damaged</span>
+                    )}
                     <h3>{item.Brand} {item.Name}</h3>
                     <p><b>Lab:</b> {item.Lab}</p>
                     <p><b>Category:</b> {item.Category}</p>
@@ -230,6 +260,21 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                   </li>
                 ))}
               </ul>
+
+              {loading && (
+                <div className="loading-indicator">
+                  Loading...
+                </div>
+              )}
+
+              {!loading && filteredEquipment.length < totalItems && (
+                <button 
+                  className="load-more-btn" 
+                  onClick={handleLoadMore}
+                >
+                  Load More
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -246,6 +291,17 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
             <input className="listViewModalInput2" type="text" name="Category" value={editEquipment.Category} onChange={handleInputChange} placeholder="Category" />
             <input className="listViewModalInput2" type="text" name="Brand" value={editEquipment.Brand} onChange={handleInputChange} placeholder="Brand" />
             <input className="listViewModalInput2" type="text" name="SerialCode" value={editEquipment.Serial} onChange={handleInputChange} placeholder="Serial Code" />
+
+            {/* Add condition select */}
+            <select
+              className="listViewModalInput2"
+              name="condition"
+              value={editEquipment.condition || 'good'}
+              onChange={handleInputChange}
+            >
+              <option value="good">Good</option>
+              <option value="damaged">Damaged</option>
+            </select>
 
             <button className="listViewBtn3" onClick={handleUpdate}>Update</button>
             <button className="listViewBtn3" id="deleteListBtn" onClick={() => handleDelete(selectedEquipment._id)}>Delete</button>

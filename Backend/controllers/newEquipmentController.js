@@ -68,34 +68,105 @@ const addEquipment = async (req, res) => {
   }
 };
 
-// **Get Equipment**
+// **Get Equipment with Pagination and Filtering**
 const getEquipment = async (req, res) => {
   try {
-    const { Lab, Category } = req.query;
+    const {
+      page = 1,
+      limit = 10,
+      Lab,
+      Category,
+      search,
+      sortBy = 'Name',
+      sortOrder = 'asc',
+      condition
+    } = req.query;
 
+    // Build filter object
     let filter = {};
     if (Lab) filter.Lab = Lab;
     if (Category) filter.Category = Category;
+    if (condition) filter.condition = condition;
+    if (search) {
+      filter.$or = [
+        { Name: { $regex: search, $options: 'i' } },
+        { Serial: { $regex: search, $options: 'i' } },
+        { Brand: { $regex: search, $options: 'i' } }
+      ];
+    }
 
-    const equipment = await Equipment.find(filter);
-    res.status(200).send(equipment);
+    // Build sort object
+    const sort = {};
+    sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
+
+    // Calculate skip value for pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    // Execute queries in parallel
+    const [equipment, total] = await Promise.all([
+      Equipment.find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(parseInt(limit))
+        .lean(),
+      Equipment.countDocuments(filter)
+    ]);
+
+    // Add metadata about damaged equipment
+    const damagedCount = await Equipment.countDocuments({ condition: 'damaged' });
+
+    res.status(200).json({
+      equipment,
+      pagination: {
+        total,
+        totalPages: Math.ceil(total / parseInt(limit)),
+        currentPage: parseInt(page),
+        limit: parseInt(limit)
+      },
+      metadata: {
+        damagedCount,
+        availableCount: total - damagedCount
+      }
+    });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    console.error('Error fetching equipment:', error);
+    res.status(500).json({ 
+      message: "Error fetching equipment", 
+      error: error.message 
+    });
   }
 };
 
-// **Get Equipment By ID**
+// **Get Equipment By ID with Optimizations**
 const getEquipmentById = async (req, res) => {
   try {
-    const equipment = await Equipment.findById(req.params.id);
+    const equipment = await Equipment.findById(req.params.id)
+      .select('-__v') // Exclude version key
+      .lean(); // Convert to plain JS object for better performance
 
     if (!equipment) {
-      return res.status(404).send({ message: "Equipment not found" });
+      return res.status(404).json({ message: "Equipment not found" });
     }
 
-    res.status(200).send(equipment);
+    // Add related equipment suggestions (same category)
+    const relatedEquipment = await Equipment.find({
+      Category: equipment.Category,
+      _id: { $ne: equipment._id }
+    })
+      .select('Name Brand Serial condition')
+      .limit(5)
+      .lean();
+
+    res.status(200).json({
+      equipment,
+      relatedEquipment
+    });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    console.error('Error fetching equipment by ID:', error);
+    res.status(500).json({ 
+      message: "Error fetching equipment", 
+      error: error.message 
+    });
   }
 };
 
@@ -123,13 +194,13 @@ const deleteEquipment = async (req, res) => {
   }
 };
 
-// **Update Equipment**
+// **Update Equipment with Condition Handling**
 const updateEquipment = async (req, res) => {
   try {
     const { id } = req.params;
     const equipment = await Equipment.findById(id);
     if (!equipment) {
-      return res.status(404).send({ message: "Equipment not found" });
+      return res.status(404).json({ message: "Equipment not found" });
     }
 
     const updatedData = {
@@ -138,25 +209,164 @@ const updateEquipment = async (req, res) => {
       Category: req.body.Category || equipment.Category,
       Brand: req.body.Brand || equipment.Brand,
       Serial: req.body.Serial || equipment.Serial,
-      Availability: req.body.Availability !== undefined ? req.body.Availability : equipment.Availability,
+      condition: req.body.condition || equipment.condition,
+      // Set Availability based on condition
+      Availability: req.body.condition === 'damaged' ? false : 
+        (req.body.Availability !== undefined ? req.body.Availability : equipment.Availability)
     };
 
-    // Regenerate uniqueId if Serial, Category, Name, or Brand changes
+    // Regenerate uniqueId
     updatedData.uniqueId = `${updatedData.Category}/${updatedData.Name}/${updatedData.Brand}/${updatedData.Serial}`;
 
-    const updatedEquipment = await Equipment.findByIdAndUpdate(id, updatedData, { new: true });
+    const updatedEquipment = await Equipment.findByIdAndUpdate(
+      id, 
+      updatedData, 
+      { new: true, runValidators: true }
+    );
 
-    res.status(200).send({ message: "Equipment updated successfully", equipment: updatedEquipment });
+    res.status(200).json({ 
+      message: "Equipment updated successfully", 
+      equipment: updatedEquipment 
+    });
   } catch (error) {
-    res.status(500).send({ message: "Error updating equipment", error: error.message });
+    console.error('Error updating equipment:', error);
+    res.status(500).json({ 
+      message: "Error updating equipment", 
+      error: error.message 
+    });
   }
 };
 
+// **Get Equipment Statistics**
+const getEquipmentStats = async (req, res) => {
+  try {
+    // Category-wise stats (existing code)
+    const categoryStats = await Equipment.aggregate([
+      {
+        $group: {
+          _id: '$Category',
+          total: { $sum: 1 },
+          available: {
+            $sum: { $cond: [{ $eq: ['$condition', 'good'] }, 1, 0] }
+          },
+          damaged: {
+            $sum: { $cond: [{ $eq: ['$condition', 'damaged'] }, 1, 0] }
+          },
+          inUse: {
+            $sum: { $cond: [{ $eq: ['$Availability', false] }, 1, 0] }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          category: '$_id',
+          total: 1,
+          available: 1,
+          damaged: 1,
+          inUse: 1,
+          availabilityRate: {
+            $multiply: [
+              { $divide: ['$available', { $max: ['$total', 1] }] },
+              100
+            ]
+          }
+        }
+      },
+      { $sort: { total: -1 } }
+    ]);
+
+    // Name-wise stats (new addition)
+    const nameStats = await Equipment.aggregate([
+      {
+        $group: {
+          _id: '$Name',
+          total: { $sum: 1 },
+          categories: { $addToSet: '$Category' },
+          available: {
+            $sum: { $cond: [{ $eq: ['$condition', 'good'] }, 1, 0] }
+          },
+          damaged: {
+            $sum: { $cond: [{ $eq: ['$condition', 'damaged'] }, 1, 0] }
+          },
+          inUse: {
+            $sum: { $cond: [{ $eq: ['$Availability', false] }, 1, 0] }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          name: '$_id',
+          total: 1,
+          categories: 1,
+          available: 1,
+          damaged: 1,
+          inUse: 1,
+          availabilityRate: {
+            $multiply: [
+              { $divide: ['$available', { $max: ['$total', 1] }] },
+              100
+            ]
+          }
+        }
+      },
+      { $sort: { total: -1 } }
+    ]);
+
+    // Overall stats (existing code)
+    const overall = await Equipment.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalEquipment: { $sum: 1 },
+          totalAvailable: {
+            $sum: { $cond: [{ $eq: ['$condition', 'good'] }, 1, 0] }
+          },
+          totalDamaged: {
+            $sum: { $cond: [{ $eq: ['$condition', 'damaged'] }, 1, 0] }
+          },
+          totalInUse: {
+            $sum: { $cond: [{ $eq: ['$Availability', false] }, 1, 0] }
+          },
+          uniqueNames: { $addToSet: '$Name' },
+          uniqueCategories: { $addToSet: '$Category' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalEquipment: 1,
+          totalAvailable: 1,
+          totalDamaged: 1,
+          totalInUse: 1,
+          uniqueNameCount: { $size: '$uniqueNames' },
+          uniqueCategoryCount: { $size: '$uniqueCategories' }
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      categoryStats,
+      nameStats,
+      overall: overall[0]
+    });
+  } catch (error) {
+    console.error('Error fetching equipment statistics:', error);
+    res.status(500).json({ 
+      message: "Error fetching equipment statistics", 
+      error: error.message 
+    });
+  }
+};
+
+// Update the exports to include getEquipmentStats
 module.exports = {
   addEquipment,
   getEquipment,
   getEquipmentById,
   updateEquipment,
   deleteEquipment,
+  getEquipmentStats,
   upload,
 };
