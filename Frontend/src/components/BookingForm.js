@@ -309,7 +309,7 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
                 onBookingAdded(); // Refresh bookings list
                 setTimeout(() => {
                     closeForm(); // Close the form after the popup is shown
-                }, 2000); // Adjust the delay (2000ms = 2 seconds)
+                }, 2000);            
             } else {
                 const result = await response.json();
                 if (result.error === "Lab is already booked at that time.") {
@@ -323,6 +323,31 @@ const BookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) => {
             setIsErrorPopupOpen(true);
         }
     };
+
+    const fetchUserProfile = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            navigate("/login"); // Redirect if no token is found
+            return;
+          }
+          const response = await axios.get("http://localhost:3001/api/users/me", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(response.data);
+          //console.log(user);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          if (error.response && error.response.status === 401) {
+            localStorage.removeItem("token"); // Clear token if unauthorized
+            navigate("/login"); // Redirect to login
+          }
+        }
+      };
+
+    fetchUserProfile();
 
     return (
         <div className="booking-form-container">

@@ -75,7 +75,13 @@ const NotificationService = require("../services/NotificationService");
 exports.getBookingsByDate = async (req, res) => {
     try {
         const { date } = req.query;
+
+        if (!date) {
+            return res.status(400).json({ error: "Date is required." });
+        }
+
         const bookings = await Booking.find({ date });
+
         res.status(200).json(bookings);
     } catch (error) {
         console.error("Error fetching bookings:", error.message);
@@ -83,6 +89,7 @@ exports.getBookingsByDate = async (req, res) => {
     }
 };
 
+// Create a new booking
 // Create a new booking
 exports.createBooking = async (req, res) => {
     try {
