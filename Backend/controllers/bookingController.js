@@ -70,6 +70,7 @@
 const Booking = require("../models/Booking");
 const User = require("../models/user");
 const NotificationService = require("../services/NotificationService");
+const emailService = require('../services/emailService');
 
 // Get bookings for a specific date
 exports.getBookingsByDate = async (req, res) => {
@@ -180,6 +181,29 @@ exports.createBooking = async (req, res) => {
                 itemModel: "Booking",
                 isRead: false 
             });
+
+            // Send email notifications (non-blocking)
+            try {
+                // Email to user
+                await emailService.sendBookingConfirmation(
+                    newBooking, 
+                    user.Email,
+                    `${user.FirstName} ${user.LastName}`
+                );
+                
+                // Email to admins
+                for (const admin of admins) {
+                    await emailService.sendAdminNotification(
+                        newBooking,
+                        admin.Email,
+                        `${admin.FirstName} ${admin.LastName}`,
+                        `${user.FirstName} ${user.LastName}`
+                    );
+                }
+            } catch (emailError) {
+                console.error("Error sending emails:", emailError);
+                // Don't fail the request if email fails
+            }
         }
 
 
