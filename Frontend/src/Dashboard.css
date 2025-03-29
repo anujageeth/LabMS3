@@ -170,6 +170,28 @@ body {
     }
   }
 
+  @keyframes dropleft {
+    0% {
+      opacity: 0;
+      transform: translateX(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes wipeRight {
+    0% {
+      clip-path: inset(0 0 0 100%);
+      opacity: 0;
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
+
   /*-------------------*/
 
   .dashCardRow {

@@ -2,8 +2,6 @@
     display: flex;
     height: 10vh;
     padding-right: 20px;
-    
-   
 }
 
 .blankUserDetails {
@@ -53,6 +51,7 @@
     border-radius: 50px;
     align-items: center;
     justify-content: space-between;
+    animation: wipeRight 0.3s ease-out, dropleft 0.3s ease-out;
 }
 
 .userPicDiv:hover{

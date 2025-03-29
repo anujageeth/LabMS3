@@ -16,6 +16,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const [sortBy, setSortBy] = useState('Name');
   const [sortOrder, setSortOrder] = useState('asc');
   const [loading, setLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedCondition, setSelectedCondition] = useState("");
@@ -117,6 +118,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
       });
       onRefresh();
       closeModal();
+      closeEquipmentBox();
     } catch (error) {
       handleAuthError(error);
     }
@@ -166,6 +168,10 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
 
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
+  }
+
+  const closeEquipmentBox = () => {
+    setSelectedItem(null);
   }
 
   return (
@@ -247,30 +253,100 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
             </div>
 
             <div className="dataTableBox">
+              {selectedItem && (
+                <div className="equipment-popup">
+                  <div className="popup-content">
+                    <button 
+                      className="popup-close-btn"
+                      onClick={() => setSelectedItem(null)}
+                    >
+                      ×
+                    </button>
+                    <h3>{selectedItem.Brand} {selectedItem.Name}</h3>
+                    <div className="popup-details">
+                      <div className="popup-text">
+                        <p><b>Lab:</b> {selectedItem.Lab}</p>
+                        <p><b>Category:</b> {selectedItem.Category}</p>
+                        <p><b>Brand:</b> {selectedItem.Brand}</p>
+                        <p><b>Serial Code:</b> {selectedItem.Serial}</p>
+                        <p><b>Availability:</b> {selectedItem.Availability ? "Available" : "Not Available"}</p>
+                        <p><b>Condition:</b> {selectedItem.condition}</p>
+                        <p><b>Added on:</b> {new Date(selectedItem.createdAt).toLocaleDateString()}</p>
+                        <p><b>Last updated on:</b> {new Date(selectedItem.updatedAt).toLocaleDateString()}</p>
+                      </div>
+                      <div className="popup-image">
+                        <img
+                          src={selectedItem.imageUrl === "default"
+                            ? "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/noImageAvailable.png?alt=media"
+                            : selectedItem.imageUrl}
+                          alt={selectedItem.Name}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="equipmentBoxBtns">
+                      <button 
+                        className="popup-btn" 
+                        onClick={() => {
+                          handleSelect(selectedItem);
+                        }}
+                      >
+                        Update
+                      </button>
+
+                      <button
+                        className="popup-btn"
+                        id="popup-delete-btn"
+                        onClick={() => setDeleteModalOpen(true)}
+                      >
+                        Delete
+                      </button>
+
+                      <button
+                        className="popup-btn"
+                        id="popup-cancel-btn"
+                        onClick={() => setSelectedItem(null)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* Original List */}
               <ul className="equipment-list2">
                 {filteredEquipment.map((item) => (
-                  <li key={item._id} className="equipment-item2">
+                  <li 
+                    key={item._id} 
+                    className="equipment-item2"
+                    onClick={() => setSelectedItem(item)}
+                  >
                     {item.condition === 'damaged' && (
                       <span className="damage-badge">Damaged</span>
                     )}
                     <h3>{item.Brand} {item.Name}</h3>
-                    <p><b>Lab:</b> {item.Lab}</p>
-                    <p><b>Category:</b> {item.Category}</p>
-                    <p><b>Brand:</b> {item.Brand}</p>
-                    <p><b>Serial Code:</b> {item.Serial}</p>
-                    <p><b>Availability:</b> {item.Availability ? "Available" : "Not Available"}</p>
-                    <p><b>Condition:</b> {item.condition}</p>
-                    <p><b>Added on:</b> {new Date(item.createdAt).toLocaleDateString()}</p>
-                    <p><b>Last updated on:</b> {new Date(item.updatedAt).toLocaleDateString()}</p>
+                    <div><div>
+                      <p><b>Lab:</b> {item.Lab}</p>
+                      <p><b>Category:</b> {item.Category}</p>
+                      <p><b>Brand:</b> {item.Brand}</p>
+                      <p><b>Serial Code:</b> {item.Serial}</p>
+                    </div>
+
                     <img
                       src={item.imageUrl === "default"
                         ? "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/noImageAvailable.png?alt=media"
                         : item.imageUrl}
                       alt={item.Name}
                     />
-                    <br />
+                      </div>
+
+                    <button className="listViewBtn2" onClick={() => setSelectedItem(item)}>
+                      Details
+                    </button>
                     <button className="listViewBtn2" onClick={() => {handleSelect(item)}}>
-                      Select
+                      Update
                     </button>
                   </li>
                 ))}

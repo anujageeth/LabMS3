@@ -125,7 +125,13 @@ const EquipmentStats = ({ stats, searchTerm }) => {
                   <LinearProgress 
                     variant="determinate" 
                     value={item.availabilityRate} 
-                    sx={{ mt: 1 }}
+                    sx={{ 
+                      mt: 1,
+                      backgroundColor: '#ff2424', // Background color of the bar
+                      '& .MuiLinearProgress-bar': {
+                        backgroundColor: '#00cc07', // Color of the progress bar
+                      }
+                    }}
                   />
                 </Box>
               </Grid>
