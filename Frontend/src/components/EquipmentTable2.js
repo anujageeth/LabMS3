@@ -11,128 +11,132 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TableSortLabel,
   Checkbox,
   IconButton,
   Tooltip,
   FormControlLabel,
   Switch,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Chip,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "../components/tableModal2.css";
 import CategoryFilter from "./CategoryFilter"; // Import the CategoryFilter component
 import CategorySelect from "./CategorySelect";
-
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";
 
 const EquipmentTable = ({ onRefresh, refresh }) => {
+  const navigate = useNavigate();
   const [equipment, setEquipment] = useState([]);
-  const [filteredEquipment, setFilteredEquipment] = useState([]); // State for filtered equipment
+  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
-  const [dense, setDense] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [totalItems, setTotalItems] = useState(0);
+  const [sortBy, setSortBy] = useState('Name');
+  const [sortOrder, setSortOrder] = useState('asc');
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editData, setEditData] = useState(null);
-  const [categories, setCategories] = useState([]); // State for category options
-  const [selectedCategory, setSelectedCategory] = useState(""); // State to track selected category
-  const [searchTerm, setSearchTerm] = useState(""); // State for search input
-  const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectedLab, setSelectedLab] = useState("");
+  const [dense, setDense] = useState(false);
+  const [filters, setFilters] = useState({
+    search: '',
+    category: '',
+    lab: '',
+    brand: '',
+    condition: ''
+  });
 
+  // Fetch equipment with pagination and filters
   const fetchEquipment = async () => {
     try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const queryParams = new URLSearchParams({
+        page: page + 1,
+        limit: rowsPerPage,
+        sortBy,
+        sortOrder,
+        ...(filters.search && { search: filters.search }),
+        ...(filters.category && { Category: filters.category }),
+        ...(filters.lab && { Lab: filters.lab }),
+        ...(filters.brand && { Brand: filters.brand }),
+        ...(filters.condition && { condition: filters.condition })
+      });
+
       const response = await axios.get(
-        "http://localhost:3001/api/equipmentImage"
+        `http://localhost:3001/api/equipmentImage?${queryParams}`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
       );
-      setEquipment(response.data);
-      setFilteredEquipment(response.data); // Initially set filtered data to all equipment
+
+      if (response.data && response.data.equipment) {
+        setEquipment(response.data.equipment);
+        setTotalItems(response.data.pagination.total);
+      } else {
+        console.error("Invalid response format:", response.data);
+      }
     } catch (error) {
       console.error("Error fetching equipment:", error);
+      if (error.response?.status === 403) {
+        alert("Your session has expired. Please log in again.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Fetch equipment data
   useEffect(() => {
     fetchEquipment();
-
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/api/categories"
-        );
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
+    return () => {
+      // Cleanup
+      setEquipment([]);
+      setSelected([]);
     };
+  }, [page, rowsPerPage, sortBy, sortOrder, filters, refresh]);
 
-    fetchEquipment();
-    fetchCategories();
-  }, [refresh]);
-
-  // useEffect(() => {
-  //   let filtered = equipment;
-
-  //   // Apply category filter
-  //   if (selectedCategory) {
-  //     filtered = filtered.filter(
-  //       (item) => item.Category._id === selectedCategory
-  //     );
-  //   }
-
-  //   // Apply search term filter
-  //   if (searchTerm) {
-  //     filtered = filtered.filter(
-  //       (item) =>
-  //         item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //         item.Lab.toLowerCase().includes(searchTerm.toLowerCase())
-  //     );
-  //   }
-
-  //   setFilteredEquipment(filtered);
-  // }, [selectedCategory, searchTerm, equipment]);
-
-  useEffect(() => {
-      filterEquipment();
-    }, [selectedCategory, searchTerm, selectedBrand, selectedLab]);
-  
-    const filterEquipment = () => {
-      let filtered = equipment;
-  
-      if (selectedCategory) {
-        filtered = filtered.filter((item) => item.Category === selectedCategory);
-      }
-  
-      if (searchTerm) {
-        filtered = filtered.filter((item) =>
-          item.Name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-  
-      if (selectedBrand) {
-        filtered = filtered.filter((item) => item.Brand === selectedBrand);
-      }
-
-      if (selectedLab) {
-        filtered = filtered.filter((item) => item.Lab === selectedLab);
-      }
-  
-      setFilteredEquipment(filtered);
-    };
-
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
+  // Handle sort
+  const handleSort = (property) => {
+    const isAsc = sortBy === property && sortOrder === 'asc';
+    setSortOrder(isAsc ? 'desc' : 'asc');
+    setSortBy(property);
   };
 
-  // Search handler
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+  // Render sort label
+  const renderSortLabel = (id, label) => (
+    <TableCell>
+      <TableSortLabel
+        active={sortBy === id}
+        direction={sortBy === id ? sortOrder : 'asc'}
+        onClick={() => handleSort(id)}
+      >
+        <b>{label}</b>
+      </TableSortLabel>
+    </TableCell>
+  );
+
+  // Handle filter changes
+  const handleFilterChange = (field, value) => {
+    setFilters(prev => ({ ...prev, [field]: value }));
+    setPage(0); // Reset to first page when filters change
   };
 
-  // Handle selection of rows
   const handleClick = (event, row) => {
     const selectedIndex = selected.indexOf(row._id);
     let newSelected = [];
@@ -152,14 +156,12 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     setSelected(newSelected);
   };
 
-  // Open edit modal
   const handleEdit = () => {
     const itemToEdit = equipment.find((item) => item._id === selected[0]);
     setEditData(itemToEdit);
     setEditModalOpen(true);
   };
 
-  // Close modal
   const closeEditModal = () => {
     setEditModalOpen(false);
     setEditData(null);
@@ -193,40 +195,43 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login"); // Redirect if no token is found
+        navigate("/login");
         return;
       }
+
+      // Set availability based on condition
+      const updatedData = {
+        ...editData,
+        Availability: editData.condition === 'damaged' ? false : editData.Availability
+      };
+
       await axios.put(
         `http://localhost:3001/api/equipmentImage/${editData._id}`,
-        editData,
+        updatedData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      // Refresh after update
+
+      // Update local state
       setEquipment((prev) =>
         prev.map((item) =>
-          item._id === editData._id ? { ...item, ...editData } : item
+          item._id === editData._id ? { ...item, ...updatedData } : item
         )
       );
       onRefresh();
       closeEditModal();
     } catch (error) {
       if (error.response?.status === 403) {
-        console.log("Token expired. Redirecting to login.");
         alert("Your session has expired. Please log in again.");
         localStorage.removeItem("token");
         navigate("/login");
       } else if (error.response?.status === 408) {
-        console.log("You have no access");
-        alert("Anministrators only");
+        alert("Administrators only");
       } else {
-        console.error(
-          "Error updating equipment:",
-          error.response?.data || error
-        );
+        console.error("Error updating equipment:", error);
       }
     }
   };
@@ -271,39 +276,20 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     }
   };
 
-  // const handleDelete = async () => {
-  //   try {
-  //     await Promise.all(
-  //       selected.map((id) =>
-  //         axios.delete(`http://localhost:3001/api/equipmentImage/${id}`)
-  //       )
-  //     );
-  //     setSelected([]); // Clear selection after delete
-  //     // Refresh equipment data
-  //     setEquipment((prev) =>
-  //       prev.filter((item) => !selected.includes(item._id))
-  //     );
-  //   } catch (error) {
-  //     console.error("Error deleting equipment:", error);
-  //   }
-  // };
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (id) => id && selected.indexOf(id) !== -1;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 5));
     setPage(0);
   };
 
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
-
-  const navigate = useNavigate();
 
   const handleListViewClick = () => {
     navigate("/list2");
@@ -319,7 +305,8 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
         <SideNavigation />
         <div className="rightPanel">
           <UserDetails />
-
+          
+            
           <div className="dashBoxer">
             <div className="dashBox">
               <div className="dashName">
@@ -334,6 +321,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/list2")}>
                     <b>List View</b>
                   </button>
+                  <button className="addItemBtn" onClick={() => navigate("/equipment-stats")}>
+                    <b>View Statistics</b>
+                  </button>
                 </div>
                 
                 <div className="search">
@@ -343,14 +333,25 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                     placeholder="Search by Name..."
                     className="searchInput"
                     id="searchList"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={filters.search}
+                    onChange={(e) => handleFilterChange('search', e.target.value)}
                   />
                   </div>
                 </div>
                 
                 <div className="search">
-                  <select id="categoryFilter" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                  <select 
+                    id="conditionFilter" 
+                    value={filters.condition} 
+                    onChange={(e) => handleFilterChange('condition', e.target.value)}
+                  >
+                    <option value="">All Conditions</option>
+                    <option value="good">Good</option>
+                    <option value="damaged">Damaged</option>
+                  </select>
+
+                  {/* Existing filters */}
+                  <select id="categoryFilter" value={filters.category} onChange={(e) => handleFilterChange('category', e.target.value)}>
                     <option value="">All Categories</option>
                     {Array.from(new Set(equipment.map((item) => item.Category))).map((category) => (
                       <option key={category} value={category}>
@@ -361,7 +362,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
 
                   
 
-                  <select id="categoryFilter" value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
+                  <select id="categoryFilter" value={filters.brand} onChange={(e) => handleFilterChange('brand', e.target.value)}>
                     <option value="">All Brands</option>
                     {Array.from(new Set(equipment.map((item) => item.Brand))).map((brand) => (
                       <option key={brand} value={brand}>
@@ -370,7 +371,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                     ))}
                   </select>
 
-                  <select id="categoryFilter" value={selectedLab} onChange={(e) => setSelectedLab(e.target.value)}>
+                  <select id="categoryFilter" value={filters.lab} onChange={(e) => handleFilterChange('lab', e.target.value)}>
                     <option value="">All Labs</option>
                     {Array.from(new Set(equipment.map((item) => item.Lab))).map((lab) => (
                       <option key={lab} value={lab}>
@@ -382,6 +383,8 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 </div>
               </div>
             </div>
+            
+            
             <div className="dataTableBox">
               <Box sx={{ width: "100%" }}>
                 <Paper sx={{ width: "100%", mb: 2 }}>
@@ -425,55 +428,46 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                     </Tooltip>
                   </Box>
                   <TableContainer>
-                    <Table size={dense ? "small" : "medium"}>
+                    <Table size="small">
                       <TableHead>
                         <TableRow>
                           <TableCell padding="checkbox">
                             <Checkbox
                               indeterminate={
                                 selected.length > 0 &&
-                                selected.length < filteredEquipment.length
+                                selected.length < equipment.length
                               }
                               checked={
-                                filteredEquipment.length > 0 &&
-                                selected.length === filteredEquipment.length
+                                equipment.length > 0 &&
+                                selected.length === equipment.length
                               }
                               onChange={(event) =>
                                 setSelected(
                                   event.target.checked
-                                    ? filteredEquipment.map((n) => n._id)
+                                    ? equipment.map((n) => n._id)
                                     : []
                                 )
                               }
                             />
                           </TableCell>
-                          <TableCell>
-                            <b>Name</b>
-                          </TableCell>
-                          <TableCell>
-                            <b>Serial No</b>
-                          </TableCell>
-                          <TableCell>
-                            <b>Brand</b>
-                          </TableCell>
-                          <TableCell>
-                            <b>Category</b>
-                          </TableCell>
-                          <TableCell>
-                            <b>LAB</b>
-                          </TableCell>
-                          <TableCell>
-                            <b>Availability</b>
-                          </TableCell>
+                          {renderSortLabel('Name', 'Name')}
+                          {renderSortLabel('Serial', 'Serial No')}
+                          {renderSortLabel('Brand', 'Brand')}
+                          {renderSortLabel('Category', 'Category')}
+                          {renderSortLabel('Lab', 'LAB')}
+                          {renderSortLabel('condition', 'Condition')}
+                          {renderSortLabel('Availability', 'Availability')}
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {filteredEquipment
-                          .slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                          )
-                          .map((row, index) => {
+                        {loading ? (
+                          <TableRow>
+                            <TableCell colSpan={8} align="center">
+                              <CircularProgress />
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          equipment.map((row) => {
                             const isItemSelected = isSelected(row._id);
                             return (
                               <TableRow
@@ -486,34 +480,45 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                                 selected={isItemSelected}
                               >
                                 <TableCell padding="checkbox">
-                                  <Checkbox
-                                    color="primary"
-                                    checked={isItemSelected}
-                                    inputProps={{
-                                      "aria-labelledby": `enhanced-table-checkbox-${index}`,
-                                    }}
-                                  />
+                                  <Checkbox checked={isItemSelected} />
                                 </TableCell>
                                 <TableCell>{row.Name}</TableCell>
                                 <TableCell>{row.Serial}</TableCell>
                                 <TableCell>{row.Brand}</TableCell>
                                 <TableCell>{row.Category}</TableCell>
                                 <TableCell>{row.Lab}</TableCell>
-                                <TableCell>{row.Availability ? "Yes" : "No"}</TableCell>
+                                <TableCell>
+                                  <Chip 
+                                    label={row.condition || 'good'} 
+                                    color={row.condition === 'damaged' ? 'error' : 'success'}
+                                    size="small"
+                                  />
+                                </TableCell>
+                                <TableCell>
+                                  <Chip 
+                                    label={row.Availability ? "Available" : "Unavailable"}
+                                    color={row.Availability ? "success" : "error"}
+                                    size="small"
+                                  />
+                                </TableCell>
                               </TableRow>
                             );
-                          })}
+                          })
+                        )}
                       </TableBody>
                     </Table>
                   </TableContainer>
                   <TablePagination
-                    rowsPerPageOptions={[6]}
                     component="div"
-                    count={filteredEquipment.length}
-                    rowsPerPage={rowsPerPage}
+                    count={totalItems}
                     page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    onPageChange={(e, newPage) => setPage(newPage)}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={(e) => {
+                      setRowsPerPage(parseInt(e.target.value, 10));
+                      setPage(0);
+                    }}
+                    rowsPerPageOptions={[5, 10, 25, 50]}
                   />
                 </Paper>
 
@@ -604,18 +609,19 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         formData={editData.Category}
                         setFormData={setEditData}
                       />
-
-                      <input
+                      <select
                         className="tableModalInput"
-                        type="number"
-                        value={editData.Quantity}
-                        onChange={(e) =>
-                          setEditData({ ...editData, Quantity: e.target.value })
-                        }
-                        placeholder="Quantity"
-                      />*/}
-
-                      <button className="listViewBtn3" onClick={handleUpdate}>
+                        value={editData.condition || 'good'}
+                        onChange={(e) => setEditData({ 
+                          ...editData, 
+                          condition: e.target.value,
+                          Availability: e.target.value === 'damaged' ? false : editData.Availability
+                        })}
+                      >
+                        <option value="good">Good</option>
+                        <option value="damaged">Damaged</option>
+                      </select>*/}
+                      <button className="tableModalBtn" onClick={handleUpdate}>
                         Save
                       </button>
 

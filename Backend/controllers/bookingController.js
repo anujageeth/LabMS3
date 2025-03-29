@@ -70,12 +70,19 @@
 const Booking = require("../models/Booking");
 const User = require("../models/user");
 const NotificationService = require("../services/NotificationService");
+const emailService = require('../services/emailService');
 
 // Get bookings for a specific date
 exports.getBookingsByDate = async (req, res) => {
     try {
         const { date } = req.query;
+
+        if (!date) {
+            return res.status(400).json({ error: "Date is required." });
+        }
+
         const bookings = await Booking.find({ date });
+
         res.status(200).json(bookings);
     } catch (error) {
         console.error("Error fetching bookings:", error.message);
@@ -83,6 +90,7 @@ exports.getBookingsByDate = async (req, res) => {
     }
 };
 
+// Create a new booking
 // Create a new booking
 exports.createBooking = async (req, res) => {
     try {
@@ -173,6 +181,29 @@ exports.createBooking = async (req, res) => {
                 itemModel: "Booking",
                 isRead: false 
             });
+
+            // Send email notifications (non-blocking)
+            try {
+                // Email to user
+                await emailService.sendBookingConfirmation(
+                    newBooking, 
+                    user.Email,
+                    `${user.FirstName} ${user.LastName}`
+                );
+                
+                // Email to admins
+                for (const admin of admins) {
+                    await emailService.sendAdminNotification(
+                        newBooking,
+                        admin.Email,
+                        `${admin.FirstName} ${admin.LastName}`,
+                        `${user.FirstName} ${user.LastName}`
+                    );
+                }
+            } catch (emailError) {
+                console.error("Error sending emails:", emailError);
+                // Don't fail the request if email fails
+            }
         }
 
 
