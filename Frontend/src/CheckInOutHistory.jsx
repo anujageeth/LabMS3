@@ -70,9 +70,11 @@ function CheckInOutTable() {
     if (!dateString) return '-';
 
     try {
+      // Parse the ISO 8601 date string
       const date = new Date(dateString);
       if (isNaN(date.getTime())) return '-'; // Invalid date check
 
+      // Format the date to 'DD/MM/YYYY, HH:MM AM/PM'
       return date.toLocaleString('en-GB', {
         day: '2-digit',
         month: '2-digit',
