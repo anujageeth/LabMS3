@@ -321,7 +321,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/list2")}>
                     <b>List View</b>
                   </button>
-                  <button className="addItemBtn" onClick={() => navigate("/equipment-stats")}>
+                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/equipment-stats")}>
                     <b>View Statistics</b>
                   </button>
                 </div>
@@ -341,7 +341,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 
                 <div className="search">
                   <select 
-                    id="conditionFilter" 
+                    id="categoryFilter" 
                     value={filters.condition} 
                     onChange={(e) => handleFilterChange('condition', e.target.value)}
                   >

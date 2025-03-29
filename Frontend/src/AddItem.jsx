@@ -266,7 +266,7 @@ function AddItem(onRefresh) {
           <button
             type="submit"
             className="loginBtn"
-            onClick={handleCancelClick}
+            onClick={() => navigate(-1)}
           >
             <b>Cancel</b>
           </button>

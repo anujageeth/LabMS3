@@ -468,6 +468,20 @@ const Profile = () => {
     }));
   };
 
+  const formatRole = (role) => {
+    if (!role) return ""; // Handle undefined/null cases
+  
+    const roleMapping = {
+      hod: "Head of the Department",
+      "technical officer": "Technical Officer",
+      instructor: "Instructor",
+      lecturer: "Lecturer",
+      student: "Student",
+    };
+  
+    return roleMapping[role.toLowerCase()] || role; // Default to original if not mapped
+  };
+
   const handleSaveProfile = async () => {
     try {
       const response = await fetch("/api/user/users/me", {
@@ -687,13 +701,13 @@ const Profile = () => {
                   <div className="form-group">
                     <label>Role</label>
                     <div className="input-container">
-                      <input
-                        type="text"
-                        name="Role"
-                        value={user?.Role}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
+                    <input
+                      type="text"
+                      name="Role"
+                      value={formatRole(user?.Role)}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                    />
                     </div>
                   </div>
                 </div>

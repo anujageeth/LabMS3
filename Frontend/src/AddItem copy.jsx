@@ -214,7 +214,7 @@ function AddItem({ onRefresh }) {
           </form>
 
           {/* Cancel Button */}
-          <button type="button" className="loginBtn" onClick={handleCancelClick}><b>Cancel</b></button>
+          <button type="button" className="loginBtn" onClick={() => navigate(-1)}><b>Cancel</b></button>
         </div>
       </div>
 
