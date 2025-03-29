@@ -14,6 +14,7 @@ const User = require("./models/user");
 const bookingRoutes = require("./routes/bookingRoutes");
 const updatePassword = require("./routes/Password");
 const notificationRoutes = require("./routes/notificationRoutes");
+const consumableRoutes = require('./routes/consumableRoutes');
 const cron = require("node-cron");
 const NotificationService = require("./services/NotificationService");
 const app = express();
@@ -43,6 +44,7 @@ app.use("/api",bookingRoutes);
 app.use("/api/update", updatePassword);
 app.use("/api/update", updatePassword);
 app.use("/api", notificationRoutes);
+app.use("/api", consumableRoutes);
 
 // Connect to MongoDB
 mongoose

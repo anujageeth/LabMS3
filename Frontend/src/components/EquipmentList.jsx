@@ -12,7 +12,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const [filteredEquipment, setFilteredEquipment] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(12); // Show 12 items per page in grid
+  const [limit, setLimit] = useState(6); // Show 12 items per page in grid
   const [sortBy, setSortBy] = useState('Name');
   const [sortOrder, setSortOrder] = useState('asc');
   const [loading, setLoading] = useState(false);
