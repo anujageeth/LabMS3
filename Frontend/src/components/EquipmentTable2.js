@@ -39,7 +39,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(4);
   const [totalItems, setTotalItems] = useState(0);
   const [sortBy, setSortBy] = useState('Name');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -518,7 +518,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                       setRowsPerPage(parseInt(e.target.value, 10));
                       setPage(0);
                     }}
-                    rowsPerPageOptions={[5, 10, 25, 50]}
+                    rowsPerPageOptions={[4]}
                   />
                 </Paper>
 
