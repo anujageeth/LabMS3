@@ -1,9 +1,14 @@
 /* Equipment Stats Styles */
 .stats-card {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px 0px #0000001f;
     margin-bottom: 1rem;
+  }
+
+  .stats-card:hover {
+    box-shadow: 0px 0px 15px 0px #00000052;
   }
   
   .stats-content {
@@ -26,4 +31,10 @@
     height: 4px;
     border-radius: 2px;
     margin-top: 8px;
+  }
+
+  .statisticsSubTopic {
+    font-size: 20px;
+    color: #0073a5;
+    font-weight: 1000;
   }

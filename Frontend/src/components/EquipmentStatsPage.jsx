@@ -4,11 +4,13 @@ import EquipmentStats from './EquipmentStats';
 import SideNavigation from './SideNavigation';
 import UserDetails from './UserDetails';
 import axios from 'axios';
-import './equipmentStatsPage.css'
+import './equipmentStatsPage.css';
+import { TextField } from '@mui/material';
 
 const EquipmentStatsPage = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchStats = async () => {
     try {
@@ -19,7 +21,6 @@ const EquipmentStatsPage = () => {
       }
 
       const response = await axios.get(
-        // Make sure this path matches exactly with your backend route
         `http://localhost:3001/api/equipmentImage-stats`,
         {
           headers: { 
@@ -67,14 +68,26 @@ const EquipmentStatsPage = () => {
                     <b>Go back</b>
                   </button>
                 </div>
+
+                <div className="search">
+                  <div className="searchContainer">
+                    <input
+                      type="search"
+                      placeholder="  Search Equipment..."
+                      className="searchInput"
+                      id="searchList"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                </div>
+
               </div>
-                
             </div>
 
             <div className="dataTableBox">
-              <EquipmentStats stats={stats} />
+              <EquipmentStats stats={stats} searchTerm={searchTerm} />
             </div>
-            
           </div>
         </div>
       </div>
