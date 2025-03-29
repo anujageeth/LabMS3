@@ -51,7 +51,19 @@ equipmentSchema.pre('save', function (next) {
   }
   next();
 });
-
+equipmentSchema.pre('save', function(next) {
+  if (this.condition === 'damaged') {
+    this.Availability = false;
+  }
+  next();
+});
+// Add indexes for commonly queried fields
+equipmentSchema.index({ Lab: 1 });
+equipmentSchema.index({ Category: 1 });
+equipmentSchema.index({ Serial: 1 }, { unique: true });
+equipmentSchema.index({ uniqueId: 1 }, { unique: true });
+equipmentSchema.index({ Name: 'text' }); // Text index for search
+equipmentSchema.index({ condition: 1 }); // Index for condition
 
 const Equipment = mongoose.model("Equipment", equipmentSchema);
 module.exports = Equipment;

@@ -194,10 +194,20 @@ function CheckInOutForm() {
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
-        const { data } = await api.get('/equipmentImage');
-        setEquipmentList(data);
+        // Changed from '/equipmentImage' to '/equipment'
+        const { data } = await api.get('/equipment');
+        console.log('Equipment data:', data);
+        
+        // Ensure we're working with an array
+        if (Array.isArray(data)) {
+          setEquipmentList(data);
+        } else {
+          console.error('Expected array but got:', typeof data);
+          setEquipmentList([]);
+        }
       } catch (err) {
         console.error('Failed to fetch equipment:', err);
+        setEquipmentList([]);
       }
     };
     fetchEquipment();
@@ -300,6 +310,7 @@ function CheckInOutForm() {
   };*/
   const handleSuggestionClick = (serial) => {
     const lines = serials.split('\n');
+    // Make sure to use the correct field name (Serial) based on your backend model
     lines[currentLineIndex] = serial;
     
     // Add new line if we're at the last line
@@ -318,14 +329,18 @@ function CheckInOutForm() {
   };
 
   // Filter suggestions based on current line input
-  const filteredSuggestions = equipmentList.filter(equipment => {
-    const searchTerm = currentInput.toLowerCase();
-    return (
-      equipment.Serial.toLowerCase().includes(searchTerm) || 
-      equipment.Name.toLowerCase().includes(searchTerm) ||
-      equipment.Category.toLowerCase().includes(searchTerm)
-    );
-  });
+  const filteredSuggestions = Array.isArray(equipmentList) 
+  ? equipmentList.filter(equipment => {
+      if (!equipment) return false;
+      
+      const searchTerm = currentInput.toLowerCase();
+      return (
+        (equipment.Serial?.toLowerCase() || '').includes(searchTerm) || 
+        (equipment.Name?.toLowerCase() || '').includes(searchTerm) ||
+        (equipment.Category?.toLowerCase() || '').includes(searchTerm)
+      );
+    })
+  : [];
 
 
 
@@ -337,6 +352,14 @@ function CheckInOutForm() {
 
     try {
         const serialList = serials.split('\n').map(s => s.trim()).filter(s => s);
+
+        if (serialList.length === 0) {
+          throw new Error('Please enter at least one serial number');
+        }
+        
+        if (!selectedUser) {
+          throw new Error('Please select a user');
+        }
         
         const { data } = await api.post('/checkinout/bulk', {
             action,

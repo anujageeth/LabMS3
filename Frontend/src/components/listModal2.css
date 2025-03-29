@@ -206,6 +206,25 @@
     width: 435px;
 }
 
-#listViewModalInput2Select {
-    width: 600px;
+/* Add these new styles at the end of the file */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.load-more-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: linear-gradient(#00d9ff, #009eb9);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+.load-more-btn:hover {
+    background: linear-gradient(#00cad8, #00a5c2, #007185);
+    box-shadow: 0px 0px 5px rgb(0, 255, 242);
 }

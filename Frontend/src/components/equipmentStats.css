@@ -1,0 +1,29 @@
+/* Equipment Stats Styles */
+.stats-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+  }
+  
+  .stats-content {
+    padding: 1rem;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .stats-item {
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+  }
+  
+  .stats-progress {
+    height: 4px;
+    border-radius: 2px;
+    margin-top: 8px;
+  }

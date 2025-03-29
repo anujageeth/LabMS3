@@ -22,6 +22,8 @@ import BookingPage from "./BookingPage";
 import AddBulkUser from "./AddBulkUser";
 import AdminProtected from "./services/AdminProcted";
 import Profile from "./components/Profile";
+import EquipmentStatsPage from "./components/EquipmentStatsPage";
+
 import DashCheckInOutCard from "./components/DashCheckInOutCard";
 import Dashboard2 from "./Dashboard2";
 
@@ -125,6 +127,14 @@ function App() {
           element={
             <ProtectedRoute><AddBulkUser refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
+        />
+        <Route 
+          path="/equipment-stats" 
+          element={
+            
+              <EquipmentStatsPage />
+            
+          } 
         />
 
         <Route
