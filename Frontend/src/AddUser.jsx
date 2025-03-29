@@ -185,7 +185,7 @@ function AddItem() {
             <b>Upload a bulk</b>
           </button>
 
-          <button className="loginBtn" onClick={handleCanclClick}>
+          <button className="loginBtn" onClick={() => navigate(-1)}>
             <b>Cancel</b>
           </button>
         </div>

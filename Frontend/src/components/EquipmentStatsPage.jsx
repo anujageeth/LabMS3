@@ -57,12 +57,18 @@ const EquipmentStatsPage = () => {
               <div className="dashName">
                 <h1 className="pageTitle">Equipment Statistics</h1>
               </div>
-              <button 
-                className="addItemBtn" 
-                onClick={() => navigate(-1)}
-              >
-                <b>Back to Inventory</b>
-              </button>
+
+              <div className="addNsearch">
+                <div className="addItem">
+                  <button className="addItemBtn" id="addBtn" onClick={() => navigate("/additem")}>
+                    <b>Add Item</b>
+                  </button>
+                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate(-1)}>
+                    <b>Go back</b>
+                  </button>
+                </div>
+              </div>
+                
             </div>
             <EquipmentStats stats={stats} />
           </div>

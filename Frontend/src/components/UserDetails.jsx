@@ -414,12 +414,7 @@ function UserDetails({ onUserDataFetched }) {
                         >
                             Profile
                         </div>
-                        <div
-                            onClick={() => handleActivityClick("User Settings")}
-                            className="userClickDropdown"
-                        >
-                            Activity
-                        </div>
+                        
                         <div
                             onClick={() => handleLogoutClick("Logout")}
                             className="userClickDropdown"

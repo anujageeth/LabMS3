@@ -18,6 +18,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const [loading, setLoading] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCondition, setSelectedCondition] = useState("");
   const [searchTerm, setSearchTerm] = useState(""); // Name filter
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedLab, setSelectedLab] = useState("");
@@ -37,7 +38,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
 
   useEffect(() => {
     fetchEquipment();
-  }, [page, limit, sortBy, sortOrder, selectedCategory, searchTerm, selectedBrand, selectedLab, refresh]);
+  }, [page, limit, sortBy, sortOrder, selectedCondition, selectedCategory, searchTerm, selectedBrand, selectedLab, refresh]);
 
   const fetchEquipment = async () => {
     try {
@@ -55,6 +56,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         sortOrder,
         ...(searchTerm && { search: searchTerm }),
         ...(selectedCategory && { Category: selectedCategory }),
+        ...(selectedCondition && { condition: selectedCondition }),
         ...(selectedLab && { Lab: selectedLab }),
         ...(selectedBrand && { Brand: selectedBrand })
       });
@@ -187,6 +189,9 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                   <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/table2")}>
                     <b>Table View</b>
                   </button>
+                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/equipment-stats")}>
+                    <b>View Statistics</b>
+                  </button>
                 </div>
                 
                 <div className="search">
@@ -203,6 +208,13 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                 </div>
                 
                 <div className="search">
+
+                  <select id="categoryFilter" value={equipment.condition} onChange={(e) => setSelectedCondition(e.target.value)}>
+                    <option value="">All Conditions</option>
+                    <option value="good">Good</option>
+                    <option value="damaged">Damaged</option>
+                  </select>
+
                   <select id="categoryFilter" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="">All Categories</option>
                     {Array.from(new Set(equipment.map((item) => item.Category))).map((category) => (
@@ -211,8 +223,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                       </option>
                     ))}
                   </select>
-
-                  
 
                   <select id="categoryFilter" value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
                     <option value="">All Brands</option>

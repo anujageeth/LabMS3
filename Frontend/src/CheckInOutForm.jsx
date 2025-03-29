@@ -308,6 +308,7 @@ function CheckInOutForm() {
       setLoading(false);
     }
   };*/
+  
   const handleSuggestionClick = (serial) => {
     const lines = serials.split('\n');
     // Make sure to use the correct field name (Serial) based on your backend model
@@ -332,6 +333,10 @@ function CheckInOutForm() {
   const filteredSuggestions = Array.isArray(equipmentList) 
   ? equipmentList.filter(equipment => {
       if (!equipment) return false;
+
+      console.log('Current input:', currentInput);
+      console.log('Show suggestions:', showSuggestions);
+      console.log('Filtered suggestions:', filteredSuggestions);
       
       const searchTerm = currentInput.toLowerCase();
       return (
