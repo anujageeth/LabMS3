@@ -7,13 +7,13 @@ import {
   Grid, 
   LinearProgress,
   Chip,
-  Button,
   IconButton
 } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import "./equipmentStats.css"
 
-const EquipmentStats = ({ stats }) => {
+const EquipmentStats = ({ stats, searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 2;
 
@@ -21,13 +21,16 @@ const EquipmentStats = ({ stats }) => {
 
   const { categoryStats, nameStats, overall } = stats;
 
-  // Calculate total pages
-  const totalPages = nameStats ? Math.ceil(nameStats.length / itemsPerPage) : 0;
+  // Filter items based on the search term
+  const filteredItems = nameStats.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Calculate total pages based on filtered items
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   
-  // Get current items
-  const currentItems = nameStats 
-    ? nameStats.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage) 
-    : [];
+  // Get current items after filtering
+  const currentItems = filteredItems.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   // Navigation handlers
   const handlePrevPage = () => {
@@ -43,7 +46,7 @@ const EquipmentStats = ({ stats }) => {
       {/* Overall Stats */}
       <Card sx={{ mb: 2 }}>
         <CardContent>
-          <Typography variant="h6" gutterBottom>Overall Statistics</Typography>
+          <Typography className='statisticsSubTopic' gutterBottom>Overall Statistics</Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={3}>
               <Typography variant="subtitle2">Total Equipment</Typography>
@@ -74,8 +77,16 @@ const EquipmentStats = ({ stats }) => {
       {/* Name-wise Stats */}
       <Card sx={{ mb: 2 }}>
         <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6">Equipment by Name</Typography>
+          {/* Title and Pagination in one line */}
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            mb: 2 
+          }}>
+            <Typography className='statisticsSubTopic'>Equipment by Name</Typography>
+            
+            {/* Pagination */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <IconButton 
                 onClick={handlePrevPage} 
@@ -97,10 +108,11 @@ const EquipmentStats = ({ stats }) => {
             </Box>
           </Box>
           
+          {/* Rest of your content... */}
           <Grid container spacing={2}>
             {currentItems.map((item) => (
               <Grid item xs={12} md={6} key={item.name}>
-                <Box sx={{ p: 2, border: '1px solid #eee', borderRadius: 1 }}>
+                <Box className="stats-card">
                   <Typography variant="subtitle1">{item.name}</Typography>
                   <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
                     {item.categories.map((cat) => (
@@ -120,11 +132,11 @@ const EquipmentStats = ({ stats }) => {
             ))}
           </Grid>
           
-          {/* Show a message if no items */}
+          {/* No Data Message */}
           {currentItems.length === 0 && (
             <Box sx={{ textAlign: 'center', py: 3 }}>
               <Typography variant="body1" color="text.secondary">
-                No equipment data available
+                No equipment found matching your search
               </Typography>
             </Box>
           )}
