@@ -8,6 +8,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    
 }
 
 .uniLogoDiv {
@@ -42,12 +43,16 @@
     border: none;
     color: #ffffff;
     background-color: #00788d;
-    transition: background-color 0.2s ease;
+
+    transition: background-color 0.2s ease, color 0.2s ease, font-size 0.2s ease;
 }
 
 .navBtn:hover {
     background-color: #00d9ff;
     color: #005766;
+    font-size: 105%;
+
+    transition: background-color 0.2s ease, color 0.2s ease, font-size 0.2s ease;
 }
 
 #top {

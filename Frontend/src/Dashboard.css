@@ -114,6 +114,10 @@ body {
     padding-top: 5px;
 }
 
+.menuBoxImageDiv:hover {
+  animation: swing 0.4s ease-in-out;
+}
+
 .menuBoxLogo {
     height: 12vh;   /* Adjusted the logo height */
 }
@@ -146,7 +150,47 @@ body {
     color: #666;
     line-height: 1.5;
 
-  
-
   }
 
+  @keyframes swing {
+    0% { transform: rotate(0deg); }
+    30% { transform: rotate(5deg); }
+    60% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  @keyframes dropdownAnimation {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /*-------------------*/
+
+  .dashCardRow {
+    display: flex;
+  }
+
+  .dashCardDiv {
+    flex: 1;
+    margin: 10px 10px;
+    padding: 10px;
+    background: linear-gradient(#009eb9, #009eb9);
+    border-radius: 15px;
+    height: 25vh;
+    box-shadow: 0 0 0px #000000;
+  }
+
+  .dashCardDiv:hover {
+    background: linear-gradient(#009eb9, #008fa8);
+    box-shadow: 0 0 10px #00d9ff;
+  }
+
+  #dash2Title {
+    padding: 0px 20px;
+  }

@@ -68,15 +68,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0);
     border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.calendar h4 {
-    font-size: 18px;
-    margin-bottom: 10px;
+    z-index: 5000;
 }
 
 .calendar-dates {
@@ -175,9 +170,7 @@ table button:hover {
 
 .calendar-icon {
     cursor: pointer;
-    margin-left: 20px;
     background-color: white;
-    padding: 10px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -199,7 +192,7 @@ table button:hover {
     z-index: 1000; /* Ensure it's above other elements like the table */
     background-color: white; /* Solid background to prevent transparency */
     border: 1px solid #ccc; /* Add a subtle border */
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 15px; /* Rounded corners */
     padding: 10px; /* Padding inside the popup */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for better visibility */
 }
@@ -209,7 +202,7 @@ table button:hover {
     border: none; /* Remove default border */
     background-color: white; /* Solid background to avoid transparency */
     z-index: 1000; /* Ensure it's layered above other elements */
-    border-radius: 8px; /* Rounded corners for better aesthetics */
+    border-radius: 15px; /* Rounded corners for better aesthetics */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Add shadow for better visibility */
 }
 
@@ -220,4 +213,170 @@ table button:hover {
 }
 
 /* Optional: Ensure the calendar container is isolated */
+
+#calenderBtn {
+    margin: none;
+    padding: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.calenderDiv {
+    z-index: 5000;
+    position: relative;
+}
+
+.calenderDiv .react-calendar {
+    position: absolute;
+    top: 100%; /* Places it below the trigger element */
+    left: 0;
+    z-index: 9999; /* Ensures it appears above all other elements */
+    background: white; /* Prevents overlap transparency issues */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+    border-radius: 15px;
+    border: 0px;
+}
+
+.calendarIcon {
+    display: flex;
+}
+
+#calenderPadding1 {
+    flex: 1;
+    padding-right: 10px;
+    justify-content: right;
+}
+
+#calenderPadding2 {
+    flex: 1;
+    justify-content: left;
+    align-items: left;
+}
+
+.bookingTableBox {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* Calendar Styles */
+.react-calendar {
+    width: 350px;
+    max-width: 100%;
+    background: white;
+    border: 1px solid #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5em;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    margin-top: 5px;
+}
+
+/* Past dates styling */
+.react-calendar .past-date {
+    opacity: 0.4;
+    color: #aaa;
+}
+
+/* Current date styling */
+.react-calendar .current-date {
+    font-weight: bold;
+    color: #fff;
+    background-color: #3f51b5;
+    border-radius: 50%;
+}
+
+/* Booking indicator */
+.booking-indicator {
+    height: 6px;
+    width: 6px;
+    background-color: #f44336;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Calendar navigation */
+.react-calendar__navigation {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+    min-width: 44px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #3f51b5;
+    cursor: pointer;
+}
+
+/* Calendar tile styles */
+.react-calendar__tile {
+    max-width: 100%;
+    padding: 10px 6.6667px;
+    background: none;
+    text-align: center;
+    line-height: 16px;
+    position: relative;
+    border-radius: 50%;
+    height: 36px;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+    background-color: #e6e6e6;
+}
+
+.react-calendar__tile--now {
+    background: #ffff76;
+    color: #000;
+}
+
+.react-calendar__tile--active {
+    background: #3f51b5;
+    color: white;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: #303f9f;
+}
+
+/* Calendar month view */
+.react-calendar__month-view__weekdays {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.75em;
+    color: #757575;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+    padding: 0.5em;
+}
+
+.react-calendar__month-view__days__day--weekend {
+    color: #d10000;
+}
+
+/* Calendar buttons */
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+    background-color: #f5f5f5;
+}
+
+.react-calendar__navigation button[disabled] {
+    background-color: #f5f5f5;
+    color: #bdbdbd;
+}
+
+
 

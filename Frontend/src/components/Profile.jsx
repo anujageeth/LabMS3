@@ -334,7 +334,8 @@ import {
   Snackbar, 
   Alert, 
   Typography,
-  IconButton
+  IconButton,
+  Avatar
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -563,7 +564,47 @@ const Profile = () => {
           <div className="dashBoxer">
             <div>
               <div className="profile-header">
-                <div className="profile-pic-container">
+              <Box sx={{ 
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2
+              }}>
+                <Avatar 
+                  sx={{ 
+                    width: 80, 
+                    height: 80, 
+                    bgcolor: '#0073a5',
+                    fontSize: '2rem',
+                    boxShadow: 1,
+                    border: '3px solid #fff'
+                  }}
+                >
+                  {user?.FirstName?.charAt(0).toUpperCase()}{user?.LastName?.charAt(0).toUpperCase()}
+                </Avatar>
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600, color: '#2c3e50' }}>
+                    {user?.FirstName} {user?.LastName}
+                  </Typography>
+                  <Typography variant="subtitle1" sx={{ color: '#7f8c8d' }}>
+                    {user?.Role}
+                  </Typography>
+                </Box>
+
+              </Box>
+
+                  {isAdmin && (
+                    <Button 
+                      variant="contained" 
+                      color="primary" 
+                      startIcon={<NotificationsIcon />}
+                      onClick={handleBroadcastDialogOpen}
+                      style={{ marginTop: '10px' }}
+                    >
+                      Send Broadcast
+                    </Button>
+                  )}
+                {/*<div className="profile-pic-container">
                   <img src={profilePic} alt="Profile" className="profile-pic" />
                   <button className="edit-profile-btn" onClick={triggerFileInput}>
                     <i className="edit-icon">✎</i>
@@ -582,7 +623,6 @@ const Profile = () => {
                   </h2>
                   <p>{user?.Role}</p>
                   
-                  {/* Broadcast button for admins */}
                   {isAdmin && (
                     <Button 
                       variant="contained" 
@@ -594,8 +634,10 @@ const Profile = () => {
                       Send Broadcast
                     </Button>
                   )}
-                </div>
+                </div>*/}
+                
               </div>
+              
             </div>
 
             <div className="dataTableBox">

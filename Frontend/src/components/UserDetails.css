@@ -10,6 +10,10 @@
     flex: 10;
 }
 
+.userNamePicDiv {
+    
+}
+
 .userNameEmail {
     flex: 3;
 }
@@ -34,9 +38,28 @@
     box-shadow: 0px 0px 10px #00d9ff;
 }
 
+.userNameDiv {
+    padding-right: 5px;
+}
+
 .userPicDiv {
     position: relative;
     cursor: pointer;
+    display: flex;
+    color: #005766;
+    background-color: #ffffff;
+    height: 50px;
+    padding: 2px 5px 2px 15px;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userPicDiv:hover{
+    color: #ffffff;
+    background-color: #0073a5;
+
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .dropdownMenu {
@@ -46,10 +69,11 @@
     /* Adjust this to position it below the profile picture */
     right: 0;
     background-color: white;
-    box-shadow: -5px 10px 20px #585858;
+    box-shadow: -5px 10px 20px #00000086;
     border-radius: 15px 0px 15px 15px;
-    width: 150px;
+    width: 200px;
     z-index: 10;
+    animation: dropdownAnimation 0.2s ease-out;
 }
 
 .dropdownMenu div {
@@ -76,13 +100,19 @@
     position: relative;
     margin-right: 20px;
     cursor: pointer;
+    align-items: center;
 }
 
 .bellIcon {
     font-size: 20px;
     color: #555;
     position: relative;
+    align-items: center;
 }
+
+.bellIcon:hover {
+    animation: swing 0.4s ease-in-out;
+  }
 
 .notificationBadge {
     position: absolute;
@@ -102,17 +132,18 @@
 
 .notificationDropdown {
     position: absolute;
-    top: 35px;
-    right: -10px;
+    top: 50px;
+    right: 0px;
     background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px 0px 15px 15px;
+    box-shadow: 0px 10px 30px #00000086;
     width: 350px;
-    max-height: 400px;
+    max-height: 500px;
     z-index: 1000;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    animation: dropdownAnimation 0.3s ease-out;
 }
 
 .notificationHeader {
@@ -126,21 +157,24 @@
 .notificationHeader h3 {
     margin: 0;
     font-size: 16px;
-    color: #333;
+    color: #005766;
 }
 
 .markAllRead {
-    background: none;
+    background: linear-gradient(#00d9ff, #009fbb);
     border: none;
-    color: #2196f3;
+    border-radius: 15px;
+    color: #ffffff;
     cursor: pointer;
     font-size: 12px;
-    padding: 0;
+    padding: 5px 15px;
 }
 
 .notificationList {
     overflow-y: auto;
-    max-height: 350px;
+    max-height: 500px;
+    padding: 0px 5px;
+    animation: dropdownAnimation 0.5s ease-out;
 }
 
 .notificationItem {
@@ -150,14 +184,20 @@
     transition: background-color 0.2s;
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
+    margin: 5px 0px;
 }
 
 .notificationItem:hover {
-    background-color: #f9f9f9;
+    background-color: #f3f3f3;
 }
 
 .notificationItem.unread {
     background-color: #edf6fd;
+}
+
+.notificationItem.unread:hover {
+    background-color: #d3ecff;
 }
 
 .notificationContent {

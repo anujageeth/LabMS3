@@ -26,6 +26,7 @@
     /* Subtle shadow for depth */
     transition: transform 0.2s;
     /* Animation effect */
+    /* animation: dropdownAnimation 0.3s ease-out; */
 }
 
 .equipment-item2:hover {
@@ -189,11 +190,12 @@
     padding-left: 5px;
     padding-right: 5px;
     height: 30px;
-    width: auto;
+    width: 135px;
     border: none;
     border-radius: 20px;
     background-color: #005766;
     color: white;
+    animation: dropdownAnimation 0.3s ease-out;
 }
 
 #categoryFilter:hover {

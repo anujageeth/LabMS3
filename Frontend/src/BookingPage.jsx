@@ -1,225 +1,3 @@
-
-
-// import React, { useState, useEffect } from "react";
-// import Calendar from "react-calendar";
-// import { FaCalendarAlt } from "react-icons/fa";
-// import {
-//     Box,
-//     Paper,
-//     Table,
-//     TableBody,
-//     TableCell,
-//     TableContainer,
-//     TableHead,
-//     TablePagination,
-//     TableRow,
-//     Checkbox,
-//     Tooltip,
-//     IconButton,
-// } from "@mui/material";
-// import AddIcon from "@mui/icons-material/Add";
-// import RemoveIcon from "@mui/icons-material/Remove";
-// import SideNavigation from "./components/SideNavigation";
-// import UserDetails from "./components/UserDetails";
-// import BookingForm from "./components/BookingForm";
-// import "./BookingReservation.css";
-// import "react-calendar/dist/Calendar.css";
-
-// const BookingReservation = () => {
-//     const [date, setDate] = useState(new Date());
-//     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-//     const [isFormVisible, setIsFormVisible] = useState(false);
-//     const [bookings, setBookings] = useState([]);
-//     const [page, setPage] = useState(0);
-//     const [rowsPerPage, setRowsPerPage] = useState(5);
-//     const [selected, setSelected] = useState([]);
-//     const [user, setUser] = useState(null); // State to store user data
-
-//     useEffect(() => {
-//         fetchBookings();
-//     }, [date]);
-
-//     const fetchBookings = async () => {
-//         try {
-//             const formattedDate = date.toISOString().split("T")[0];
-//             const response = await fetch(
-//                 `http://localhost:3001/api/bookings?date=${formattedDate}`
-//             );
-//             if (response.ok) {
-//                 const data = await response.json();
-//                 setBookings(data);
-//             } else {
-//                 console.error("Failed to fetch bookings.");
-//             }
-//         } catch (error) {
-//             console.error("Error fetching bookings:", error.message);
-//         }
-//     };
-
-//     const onDateChange = (newDate) => {
-//         const year = newDate.getFullYear();
-//         const month = newDate.getMonth();
-//         const day = newDate.getDate();
-//         const localDate = new Date(year, month, day, 12, 0, 0);
-//         setDate(localDate);
-//         setIsCalendarVisible(false);
-//     };
-
-//     const toggleCalendar = () => setIsCalendarVisible(!isCalendarVisible);
-
-//     const toggleFormVisibility = () => setIsFormVisible(!isFormVisible);
-
-//     const handleClick = (event, row) => {
-//         const selectedIndex = selected.indexOf(row._id);
-//         let newSelected = [];
-
-//         if (selectedIndex === -1) {
-//             newSelected = newSelected.concat(selected, row._id);
-//         } else if (selectedIndex === 0) {
-//             newSelected = newSelected.concat(selected.slice(1));
-//         } else if (selectedIndex === selected.length - 1) {
-//             newSelected = newSelected.concat(selected.slice(0, -1));
-//         } else if (selectedIndex > 0) {
-//             newSelected = newSelected.concat(
-//                 selected.slice(0, selectedIndex),
-//                 selected.slice(selectedIndex + 1)
-//             );
-//         }
-
-//         setSelected(newSelected);
-//     };
-
-//     const isSelected = (id) => selected.indexOf(id) !== -1;
-
-//     const handleChangePage = (event, newPage) => {
-//         setPage(newPage);
-//     };
-
-//     const handleChangeRowsPerPage = (event) => {
-//         setRowsPerPage(parseInt(event.target.value, 10));
-//         setPage(0);
-//     };
-
-//     const handleUserDataFetched = (userData) => {
-//         setUser(userData); // Set user data in state
-//     };
-
-//     return (
-//         <div className="dashPage">
-//             <div className="gridBox">
-//                 <SideNavigation />
-//                 <div className="rightPanel">
-//                     <UserDetails onUserDataFetched={handleUserDataFetched} /> {/* Pass callback */}
-//                     <div className="dashBoxer">
-//                         <div className="dashBox">
-//                             <div className="dashName">
-//                                 <h1 className="pageTitle">Booking & Reservation</h1>
-//                             </div>
-
-//                             <div className="addNsearch">
-//                                 <div className="addItem">
-//                                     <button className="addItemBtn" onClick={toggleFormVisibility}>
-//                                         <b>Book your lab</b>
-//                                     </button>
-//                                 </div>
-
-//                                 <div className="calendar">
-//                                     <div className="calendarIcon" onClick={toggleCalendar}>
-//                                         <FaCalendarAlt size={24} />
-//                                     </div>
-//                                     {isCalendarVisible && (
-//                                         <Calendar onChange={onDateChange} value={date} />
-//                                     )}
-//                                 </div>
-//                             </div>
-//                         </div>
-
-//                         <div className="dataTableBox">
-//                             <Box sx={{ width: "100%" }}>
-//                                 <Paper sx={{ width: "100%", mb: 2 }}>
-//                                     <TableContainer>
-//                                         <Table size="small">
-//                                             <TableHead>
-//                                                 <TableRow>
-//                                                     <TableCell padding="checkbox"></TableCell>
-//                                                     <TableCell><b>Lab Name</b></TableCell>
-//                                                     <TableCell><b>Lab Place</b></TableCell>
-//                                                     <TableCell><b>Date</b></TableCell>
-//                                                     <TableCell><b>Time</b></TableCell>
-//                                                     <TableCell><b>Duration</b></TableCell>
-//                                                     <TableCell><b>Booked By</b></TableCell>
-//                                                 </TableRow>
-//                                             </TableHead>
-//                                             <TableBody>
-//                                                 {bookings
-//                                                     .slice(
-//                                                         page * rowsPerPage,
-//                                                         page * rowsPerPage + rowsPerPage
-//                                                     )
-//                                                     .map((booking) => {
-//                                                         const isItemSelected = isSelected(booking._id);
-//                                                         return (
-//                                                             <TableRow
-//                                                                 hover
-//                                                                 onClick={(event) => handleClick(event, booking)}
-//                                                                 role="checkbox"
-//                                                                 aria-checked={isItemSelected}
-//                                                                 tabIndex={-1}
-//                                                                 key={booking._id}
-//                                                                 selected={isItemSelected}
-//                                                             >
-//                                                                 <TableCell padding="checkbox">
-//                                                                     <Checkbox
-//                                                                         color="primary"
-//                                                                         checked={isItemSelected}
-//                                                                         inputProps={{
-//                                                                             "aria-labelledby": `enhanced-table-checkbox-${booking._id}`,
-//                                                                         }}
-//                                                                     />
-//                                                                 </TableCell>
-//                                                                 <TableCell>{booking.labName}</TableCell>
-//                                                                 <TableCell>{booking.labPlace}</TableCell>
-//                                                                 <TableCell>{booking.date}</TableCell>
-//                                                                 <TableCell>{booking.time}</TableCell>
-//                                                                 <TableCell>{booking.duration} hrs</TableCell>
-//                                                                 <TableCell>{booking.bookedBy}</TableCell>
-//                                                             </TableRow>
-//                                                         );
-//                                                     })}
-//                                             </TableBody>
-//                                         </Table>
-//                                     </TableContainer>
-//                                     <TablePagination
-//                                         rowsPerPageOptions={[5, 10, 25]}
-//                                         component="div"
-//                                         count={bookings.length}
-//                                         rowsPerPage={rowsPerPage}
-//                                         page={page}
-//                                         onPageChange={handleChangePage}
-//                                         onRowsPerPageChange={handleChangeRowsPerPage}
-//                                     />
-//                                 </Paper>
-//                             </Box>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-
-//             {isFormVisible && (
-//                 <BookingForm
-//                     closeForm={toggleFormVisibility}
-//                     selectedDate={date}
-//                     onBookingAdded={fetchBookings}
-//                     user={user} // Pass user data to BookingForm
-//                 />
-//             )}
-//         </div>
-//     );
-// };
-
-// export default BookingReservation;
-
-
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import { FaCalendarAlt } from "react-icons/fa";
@@ -251,8 +29,9 @@ const BookingReservation = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selected, setSelected] = useState([]);
-    const [user, setUser] = useState(null); // State to store user data
-    const [availableSlots, setAvailableSlots] = useState([]); // State to store available slots
+    const [user, setUser] = useState(null);
+    const [availableSlots, setAvailableSlots] = useState([]);
+    const [isPastDate, setIsPastDate] = useState(false);
 
     // Predefined time slots
     const predefinedSlots = [
@@ -268,6 +47,13 @@ const BookingReservation = () => {
         "High Voltage Lab",
     ];
 
+    // Check if selected date is in the past
+    useEffect(() => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        setIsPastDate(date < today);
+    }, [date]);
+
     // Fetch bookings for the selected date
     useEffect(() => {
         fetchBookings();
@@ -282,8 +68,6 @@ const BookingReservation = () => {
             if (response.ok) {
                 const data = await response.json();
                 setBookings(data);
-
-                // Calculate available slots
                 calculateAvailableSlots(data, formattedDate);
             } else {
                 console.error("Failed to fetch bookings.");
@@ -293,7 +77,6 @@ const BookingReservation = () => {
         }
     };
 
-    // Calculate available time slots
     const calculateAvailableSlots = (bookings, date) => {
         const bookedSlots = bookings.map((booking) => ({
             start: booking.timeSlot.split("-")[0],
@@ -340,7 +123,41 @@ const BookingReservation = () => {
         setAvailableSlots(slots);
     };
 
-    // Handle date change from the calendar
+    // Custom calendar tile styling
+    const tileClassName = ({ date, view }) => {
+        if (view === 'month') {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (date < today) {
+                return 'past-date';
+            }
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'current-date';
+            }
+        }
+        return null;
+    };
+
+    // Custom calendar tile content
+    const tileContent = ({ date, view }) => {
+        if (view === 'month') {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const formattedDate = date.toISOString().split('T')[0];
+            const hasBookings = bookings.some(booking => 
+                new Date(booking.date).toDateString() === date.toDateString()
+            );
+            
+            if (hasBookings) {
+                return <div className="booking-indicator"></div>;
+            }
+        }
+        return null;
+    };
+
     const onDateChange = (newDate) => {
         const year = newDate.getFullYear();
         const month = newDate.getMonth();
@@ -350,13 +167,10 @@ const BookingReservation = () => {
         setIsCalendarVisible(false);
     };
 
-    // Toggle calendar visibility
-    const toggleCalendar = () => setIsCalendarVisible(!isCalendarVisible);
+    const toggleCalendar = () => setIsCalendarVisible((prev) => !prev);
 
-    // Toggle booking form visibility
     const toggleFormVisibility = () => setIsFormVisible(!isFormVisible);
 
-    // Handle row selection in the table
     const handleClick = (event, row) => {
         const selectedIndex = selected.indexOf(row._id);
         let newSelected = [];
@@ -377,26 +191,21 @@ const BookingReservation = () => {
         setSelected(newSelected);
     };
 
-    // Check if a row is selected
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
-    // Handle pagination page change
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
-    // Handle rows per page change
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    // Handle user data fetched from UserDetails
     const handleUserDataFetched = (userData) => {
-        setUser(userData); // Set user data in state
+        setUser(userData);
     };
 
-    // Handle delete booking
     const handleDeleteBooking = async (id) => {
         try {
             const response = await fetch(`http://localhost:3001/api/bookings/${id}`, {
@@ -404,7 +213,6 @@ const BookingReservation = () => {
             });
 
             if (response.ok) {
-                // Refresh the bookings list after deletion
                 fetchBookings();
             } else {
                 console.error("Failed to delete booking.");
@@ -419,7 +227,7 @@ const BookingReservation = () => {
             <div className="gridBox">
                 <SideNavigation />
                 <div className="rightPanel">
-                    <UserDetails onUserDataFetched={handleUserDataFetched} /> {/* Pass callback */}
+                    <UserDetails onUserDataFetched={handleUserDataFetched} />
                     <div className="dashBoxer">
                         <div className="dashBox">
                             <div className="dashName">
@@ -427,32 +235,40 @@ const BookingReservation = () => {
                             </div>
 
                             <div className="addNsearch">
-                                <div className="addItem">
-                                    <button className="addItemBtn" onClick={toggleFormVisibility}>
-                                        <b>Book your lab</b>
-                                    </button>
-                                </div>
-
-                                <div className="calendar">
-                                    <div className="calendarIcon" onClick={toggleCalendar}>
-                                        <FaCalendarAlt size={24} />
+                                {!isPastDate && (
+                                    <div className="addItem" id="fullReportGap">
+                                        <button className="addItemBtn" onClick={toggleFormVisibility}>
+                                            <b>Book your lab</b>
+                                        </button>
                                     </div>
-                                    {isCalendarVisible && (
-                                        <Calendar onChange={onDateChange} value={date} />
-                                    )}
+                                )}
+
+                                <div className="addItem">
+                                    <button className="addItemBtn" onClick={toggleCalendar}>
+                                        <FaCalendarAlt size={20} />
+                                    </button>
+                                    <div className="calenderDiv">
+                                        {isCalendarVisible && (
+                                            <Calendar 
+                                                onChange={onDateChange} 
+                                                value={date}
+                                                tileClassName={tileClassName}
+                                                tileContent={tileContent}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Availability Table (Moved to Top) */}
-                        <div className="slotsTableBox">
+                        <div className="bookingTableBox">
                             <Box sx={{ width: "100%" }}>
                                 <Paper sx={{ width: "100%", mb: 2 }}>
                                     <TableContainer>
                                         <Table size="small">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell><b>Lab Place</b></TableCell>
+                                                    <TableCell><b>Venue</b></TableCell>
                                                     {predefinedSlots.map((slot, index) => (
                                                         <TableCell key={index} align="center">
                                                             <b>{slot.label}</b>
@@ -503,8 +319,7 @@ const BookingReservation = () => {
                             </Box>
                         </div>
 
-                        {/* Existing Bookings Table (Moved to Bottom) */}
-                        <div className="dataTableBox">
+                        <div className="bookingTableBox">
                             <Box sx={{ width: "100%" }}>
                                 <Paper sx={{ width: "100%", mb: 2 }}>
                                     <TableContainer>
@@ -513,7 +328,7 @@ const BookingReservation = () => {
                                                 <TableRow>
                                                     <TableCell padding="checkbox"></TableCell>
                                                     <TableCell><b>Lab Name</b></TableCell>
-                                                    <TableCell><b>Lab Place</b></TableCell>
+                                                    <TableCell><b>Venue</b></TableCell>
                                                     <TableCell><b>Date</b></TableCell>
                                                     <TableCell><b>Time Interval</b></TableCell>
                                                     <TableCell><b>Booked By</b></TableCell>
@@ -555,8 +370,8 @@ const BookingReservation = () => {
                                                                 <TableCell>
                                                                     <IconButton
                                                                         onClick={(e) => {
-                                                                            e.stopPropagation(); // Prevent row click event
-                                                                            handleDeleteBooking(booking._id); // Call delete function
+                                                                            e.stopPropagation();
+                                                                            handleDeleteBooking(booking._id);
                                                                         }}
                                                                         aria-label="delete"
                                                                     >
@@ -585,13 +400,12 @@ const BookingReservation = () => {
                 </div>
             </div>
 
-            {/* Booking Form Popup */}
             {isFormVisible && (
                 <BookingForm
                     closeForm={toggleFormVisibility}
                     selectedDate={date}
                     onBookingAdded={fetchBookings}
-                    user={user} // Pass user data to BookingForm
+                    user={user}
                 />
             )}
         </div>
