@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Box, 
   Card, 
@@ -6,13 +6,37 @@ import {
   Typography, 
   Grid, 
   LinearProgress,
-  Chip
+  Chip,
+  Button,
+  IconButton
 } from '@mui/material';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 const EquipmentStats = ({ stats }) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 2;
+
   if (!stats) return null;
 
   const { categoryStats, nameStats, overall } = stats;
+
+  // Calculate total pages
+  const totalPages = nameStats ? Math.ceil(nameStats.length / itemsPerPage) : 0;
+  
+  // Get current items
+  const currentItems = nameStats 
+    ? nameStats.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage) 
+    : [];
+
+  // Navigation handlers
+  const handlePrevPage = () => {
+    setCurrentPage(prev => Math.max(0, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(prev => Math.min(totalPages - 1, prev + 1));
+  };
 
   return (
     <Box sx={{ mt: 2 }}>
@@ -50,9 +74,31 @@ const EquipmentStats = ({ stats }) => {
       {/* Name-wise Stats */}
       <Card sx={{ mb: 2 }}>
         <CardContent>
-          <Typography variant="h6" gutterBottom>Equipment by Name</Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6">Equipment by Name</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton 
+                onClick={handlePrevPage} 
+                disabled={currentPage === 0}
+                size="small"
+              >
+                <KeyboardArrowLeftIcon />
+              </IconButton>
+              <Typography variant="body2" sx={{ mx: 1 }}>
+                Page {currentPage + 1} of {totalPages}
+              </Typography>
+              <IconButton 
+                onClick={handleNextPage} 
+                disabled={currentPage >= totalPages - 1}
+                size="small"
+              >
+                <KeyboardArrowRightIcon />
+              </IconButton>
+            </Box>
+          </Box>
+          
           <Grid container spacing={2}>
-            {nameStats?.map((item) => (
+            {currentItems.map((item) => (
               <Grid item xs={12} md={6} key={item.name}>
                 <Box sx={{ p: 2, border: '1px solid #eee', borderRadius: 1 }}>
                   <Typography variant="subtitle1">{item.name}</Typography>
@@ -73,6 +119,15 @@ const EquipmentStats = ({ stats }) => {
               </Grid>
             ))}
           </Grid>
+          
+          {/* Show a message if no items */}
+          {currentItems.length === 0 && (
+            <Box sx={{ textAlign: 'center', py: 3 }}>
+              <Typography variant="body1" color="text.secondary">
+                No equipment data available
+              </Typography>
+            </Box>
+          )}
         </CardContent>
       </Card>
     </Box>

@@ -70,7 +70,11 @@ const EquipmentStatsPage = () => {
               </div>
                 
             </div>
-            <EquipmentStats stats={stats} />
+
+            <div className="dataTableBox">
+              <EquipmentStats stats={stats} />
+            </div>
+            
           </div>
         </div>
       </div>
