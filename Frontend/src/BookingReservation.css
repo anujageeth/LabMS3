@@ -379,4 +379,21 @@ table button:hover {
 }
 
 
+/* Add to BookingReservation.css */
+.MuiTabs-root {
+    margin-bottom: 20px;
+}
+
+.MuiTab-root {
+    font-weight: bold;
+    text-transform: none;
+}
+
+.Mui-selected {
+    color: #1976d2 !important;
+}
+
+
+
+
 
