@@ -1971,168 +1971,262 @@ const BookingReservation = () => {
       )}
 
       {/* Academic Details Dialog */}
-      <Dialog 
-        open={isDetailsDialogOpen} 
-        onClose={toggleDetailsDialog}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>Manage Academic Details</DialogTitle>
-        <DialogContent>
-          {/* Semester Selection */}
-          <Box sx={{ mb: 3 }}>
-            <FormControl fullWidth>
-              <InputLabel>Select Semester</InputLabel>
-              <Select
-                value={selectedSemester}
-                onChange={(e) => {
-                  setSelectedSemester(e.target.value);
-                  setSelectedModule("");
-                }}
-                label="Select Semester"
-              >
-                {semesters.map(semester => (
-                  <MenuItem key={semester.id} value={semester.id}>
-                    {semester.number}. {semester.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+      <Dialog
+  open={isDetailsDialogOpen}
+  onClose={toggleDetailsDialog}
+  maxWidth={false} // Disable Material-UI's maxWidth
+  PaperProps={{
+    style: {
+      width: '500px', // Fixed width
+      maxWidth: 'none', // Override default maxWidth
+      borderRadius: '30px',
+      padding: '20px',
+      margin: '16px' // Add some margin
+    }
+  }}
+>
+  <DialogTitle style={{ 
+    textAlign: 'center', 
+    padding: '16px 0',
+    fontSize: '20px',
+    fontWeight: 'bold'
+  }}>
+    Manage Academic Details
+  </DialogTitle>
+  
+  <DialogContent style={{ 
+    padding: '0 20px 20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px'
+  }}>
+    {/* Semester Selection */}
+    <Box style={{ width: '100%' }}>
+      <FormControl fullWidth>
+        <InputLabel>Select Semester</InputLabel>
+        <Select
+          value={selectedSemester}
+          onChange={(e) => {
+            setSelectedSemester(e.target.value);
+            setSelectedModule("");
+          }}
+          style={{
+            borderRadius: '30px',
+            height: '40px'
+          }}
+        >
+          {semesters.map(semester => (
+            <MenuItem key={semester.id} value={semester.id}>
+              {semester.number}. {semester.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+
+    {selectedSemester && (
+      <>
+        {/* Module Section */}
+        <Box style={{
+          width: '100%',
+          padding: '16px',
+          border: '1px solid #eee',
+          borderRadius: '12px'
+        }}>
+          <Typography variant="h6" style={{ marginBottom: '16px' }}>
+            Manage Modules
+          </Typography>
+          
+          {/* Add Module Form */}
+          <Box style={{ 
+            display: 'flex', 
+            gap: '12px',
+            marginBottom: '16px',
+            alignItems: 'flex-end'
+          }}>
+            <TextField
+              label="Module Name"
+              value={newModule.name}
+              onChange={(e) => setNewModule({...newModule, name: e.target.value})}
+              fullWidth
+              size="small"
+            />
+            <TextField
+              label="Module Code"
+              value={newModule.code}
+              onChange={(e) => setNewModule({...newModule, code: e.target.value})}
+              fullWidth
+              size="small"
+            />
+            <Button 
+              variant="contained" 
+              onClick={handleAddModule}
+              disabled={!newModule.name.trim() || !newModule.code.trim()}
+              style={{
+                height: '40px',
+                minWidth: '100px',
+                color: '#fff',
+                backgroundColor: '#007bff',
+              }}
+            >
+              Add
+            </Button>
           </Box>
-
-          {selectedSemester && (
-            <>
-              {/* Module Section */}
-              <Box sx={{ mb: 4, p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-                <Typography variant="h6" gutterBottom>Manage Modules</Typography>
-                
-                {/* Add Module Form */}
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                  <TextField
-                    label="Module Name"
-                    value={newModule.name}
-                    onChange={(e) => setNewModule({...newModule, name: e.target.value})}
-                    fullWidth
-                  />
-                  <TextField
-                    label="Module Code"
-                    value={newModule.code}
-                    onChange={(e) => setNewModule({...newModule, code: e.target.value})}
-                    fullWidth
-                  />
-                  <Button 
-                    variant="contained" 
-                    onClick={handleAddModule}
-                    disabled={!newModule.name.trim() || !newModule.code.trim()}
-                  >
-                    Add Module
-                  </Button>
-                </Box>
-                
-                {/* Module List */}
-                <Typography variant="subtitle1" gutterBottom>Modules in Selected Semester</Typography>
-                {getModulesForSelectedSemester().length > 0 ? (
-                  <List dense>
-                    {getModulesForSelectedSemester().map(module => (
-                      <ListItem 
-                        key={module.id}
-                        secondaryAction={
-                          <IconButton
-                            edge="end"
-                            onClick={() => handleDeleteItem('module', module.id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        }
-                      >
-                        <ListItemText 
-                          primary={`${module.code} - ${module.name}`}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                ) : (
-                  <Typography variant="body2" color="textSecondary">
-                    No modules added for this semester
-                  </Typography>
-                )}
-              </Box>
-
-              {/* Module Selection for Labs */}
-              <Box sx={{ mb: 3 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Select Module</InputLabel>
-                  <Select
-                    value={selectedModule}
-                    onChange={(e) => setSelectedModule(e.target.value)}
-                    label="Select Module"
-                    disabled={getModulesForSelectedSemester().length === 0}
-                  >
-                    {getModulesForSelectedSemester().map(module => (
-                      <MenuItem key={module.id} value={module.id}>
-                        {module.code} - {module.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-
-              {selectedModule && (
-                /* Lab Section */
-                <Box sx={{ p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-                  <Typography variant="h6" gutterBottom>Manage Labs</Typography>
-                  
-                  {/* Add Lab Form */}
-                  <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                    <TextField
-                      label="Lab Name"
-                      value={newLab.name}
-                      onChange={(e) => setNewLab({...newLab, name: e.target.value})}
-                      fullWidth
-                    />
-                    <Button 
-                      variant="contained" 
-                      onClick={handleAddLab}
-                      disabled={!newLab.name.trim()}
+          
+          {/* Module List */}
+          <Typography variant="subtitle1" style={{ marginBottom: '8px' }}>
+            Modules in Selected Semester
+          </Typography>
+          {getModulesForSelectedSemester().length > 0 ? (
+            <List dense style={{ maxHeight: '200px', overflowY: 'auto' }}>
+              {getModulesForSelectedSemester().map(module => (
+                <ListItem 
+                  key={module.id}
+                  style={{
+                    padding: '8px 16px',
+                    borderBottom: '1px solid #f0f0f0'
+                  }}
+                  secondaryAction={
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDeleteItem('module', module.id)}
+                      size="small"
                     >
-                      Add Lab
-                    </Button>
-                  </Box>
-                  
-                  {/* Lab List */}
-                  <Typography variant="subtitle1" gutterBottom>Labs in Selected Module</Typography>
-                  {getLabsForSelectedModule().length > 0 ? (
-                    <List dense>
-                      {getLabsForSelectedModule().map(lab => (
-                        <ListItem 
-                          key={lab.id}
-                          secondaryAction={
-                            <IconButton
-                              edge="end"
-                              onClick={() => handleDeleteItem('lab', lab.id)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          }
-                        >
-                          <ListItemText primary={lab.name} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  ) : (
-                    <Typography variant="body2" color="textSecondary">
-                      No labs added for this module
-                    </Typography>
-                  )}
-                </Box>
-              )}
-            </>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  }
+                >
+                  <ListItemText 
+                    primary={`${module.code} - ${module.name}`}
+                    primaryTypographyProps={{ style: { fontSize: '14px' } }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <Typography variant="body2" style={{ color: '#666' }}>
+              No modules added for this semester
+            </Typography>
           )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={toggleDetailsDialog}>Close</Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
+
+        {/* Module Selection for Labs */}
+        <Box style={{ width: '100%' }}>
+          <FormControl fullWidth>
+            <InputLabel>Select Module</InputLabel>
+            <Select
+              value={selectedModule}
+              onChange={(e) => setSelectedModule(e.target.value)}
+              disabled={getModulesForSelectedSemester().length === 0}
+              style={{
+                borderRadius: '30px',
+                height: '40px'
+              }}
+            >
+              {getModulesForSelectedSemester().map(module => (
+                <MenuItem key={module.id} value={module.id}>
+                  {module.code} - {module.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        {selectedModule && (
+          /* Lab Section */
+          <Box style={{
+            width: '100%',
+            padding: '16px',
+            border: '1px solid #eee',
+            borderRadius: '12px'
+          }}>
+            <Typography variant="h6" style={{ marginBottom: '16px' }}>
+              Manage Labs
+            </Typography>
+            
+            {/* Add Lab Form */}
+            <Box style={{ 
+              display: 'flex', 
+              gap: '12px',
+              marginBottom: '16px',
+              alignItems: 'flex-end'
+            }}>
+              <TextField
+                label="Lab Name"
+                value={newLab.name}
+                onChange={(e) => setNewLab({...newLab, name: e.target.value})}
+                fullWidth
+                size="small"
+              />
+              <Button 
+                variant="contained" 
+                onClick={handleAddLab}
+                disabled={!newLab.name.trim()}
+                style={{
+                  height: '40px',
+                  minWidth: '100px'
+                }}
+              >
+                Add
+              </Button>
+            </Box>
+            
+            {/* Lab List */}
+            <Typography variant="subtitle1" style={{ marginBottom: '8px' }}>
+              Labs in Selected Module
+            </Typography>
+            {getLabsForSelectedModule().length > 0 ? (
+              <List dense style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                {getLabsForSelectedModule().map(lab => (
+                  <ListItem 
+                    key={lab.id}
+                    style={{
+                      padding: '8px 16px',
+                      borderBottom: '1px solid #f0f0f0'
+                    }}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        onClick={() => handleDeleteItem('lab', lab.id)}
+                        size="small"
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    }
+                  >
+                    <ListItemText 
+                      primary={lab.name}
+                      primaryTypographyProps={{ style: { fontSize: '14px' } }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Typography variant="body2" style={{ color: '#666' }}>
+                No labs added for this module
+              </Typography>
+            )}
+          </Box>
+        )}
+      </>
+    )}
+  </DialogContent>
+  <DialogActions style={{ 
+    padding: '16px 24px',
+    justifyContent: 'center'
+  }}>
+    <Button 
+      onClick={toggleDetailsDialog}
+      variant="contained"
+      style={{
+        width: '120px',
+        borderRadius: '20px'
+      }}
+    >
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
 
       {/* Snackbar for notifications */}
       <Snackbar
