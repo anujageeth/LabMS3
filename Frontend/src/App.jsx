@@ -27,6 +27,8 @@ import EquipmentStatsPage from "./components/EquipmentStatsPage";
 import DashCheckInOutCard from "./components/DashCheckInOutCard";
 import Dashboard2 from "./Dashboard2";
 
+import SidePopup from "./components/SidePopup";
+
 
 
 function App() {
@@ -155,6 +157,13 @@ function App() {
           path="/dashboard2"
           element={
             <ProtectedRoute><Dashboard2 refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sidepopup"
+          element={
+            <ProtectedRoute><SidePopup /></ProtectedRoute>
           }
         />
       
