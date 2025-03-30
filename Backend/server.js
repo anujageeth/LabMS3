@@ -17,7 +17,6 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const consumableRoutes = require('./routes/consumableRoutes');
 const cron = require("node-cron");
 const NotificationService = require("./services/NotificationService");
-
 const app = express();
 app.use(cors());
  app.use(
@@ -46,7 +45,6 @@ app.use("/api/update", updatePassword);
 app.use("/api/update", updatePassword);
 app.use("/api", notificationRoutes);
 app.use("/api", consumableRoutes);
-app.use('/api/academic-details', require('./routes/academicDetailsRoutes'));
 
 // Connect to MongoDB
 mongoose

@@ -230,7 +230,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
           <div className="dashBoxer">
             <div className="dashBox">
               <div className="dashName">
-                <h1 className="pageTitle">Inventory Management</h1>
+                <h1 className="pageTitle">Inventoryk Management</h1>
               </div>
 
               <div className="addNsearch">
