@@ -399,6 +399,7 @@ function UserDetails({ onUserDataFetched }) {
                     <div className="userNameDiv">{user?.Email}</div>
                 </div>
                 <Avatar 
+                className="userPicIcon"
                     sx={{ 
                         width: 40, 
                         height: 40, 

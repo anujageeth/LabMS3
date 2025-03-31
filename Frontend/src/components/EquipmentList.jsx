@@ -427,7 +427,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
       )}
 
       {deleteModalOpen &&
-        <div className="listViewModal2">
+        <div className="equipment-popup">
           <div className="listViewModal-content2">
           <h2>Delete Equipment</h2>
           <button

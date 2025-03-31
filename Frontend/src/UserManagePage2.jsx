@@ -48,6 +48,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     const [selectedRole, setSelectedRole] = useState("");
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
     const [selectedCategory, setSelectedCategory] = useState([]);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
     const [records, setRecords] = useState([]);
     const [selectedRecords, setSelectedRecords] = useState([]);
@@ -64,7 +65,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
 
     useEffect(() => {
         fetchUsersList();
-      }, []);
+      }, [userData]);
 
     const fetchUsersList = async () => {
         try {
@@ -232,11 +233,11 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
           })
         )
       );
-      setSelected([]); // Clear selection after delete
-      // Refresh equipment data
-      setUserData((prev) =>
-        prev.filter((item) => !selected.includes(item._id))
-      );
+      const updatedUserData = userData.filter((item) => !selected.includes(item._id));
+      setUserData([...updatedUserData]); 
+      setFilteredUser([...updatedUserData]); // Force update filtered list
+      setSelected([]);
+
     } catch (error) {
       if (error.response?.status === 403) {
         console.log("Token expired. Redirecting to login.");
@@ -254,6 +255,10 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
       }
     }
   };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  }
 
 
   return (
@@ -344,7 +349,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                         </Tooltip>*/}
                         <Tooltip title="Delete">
                           <IconButton
-                            onClick={handleDelete}
+                            onClick={() => setDeleteModalOpen(true)}
                             disabled={selected.length === 0}
                             className={
                               selected.length > 0
@@ -430,11 +435,32 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                       />
                   </Paper>
 
+                  {deleteModalOpen &&
+                    <div className="equipment-popup">
+                      <div className="listViewModal-content2" id="deleteBox">
+                      <h2>Delete User</h2>
+                      <button
+                        className="listViewBtn3"
+                        id="deleteListBtn"
+                        onClick={() => {
+                          handleDelete();
+                          closeDeleteModal();
+                          closeEditModal();
+                        }}
+                      >
+                        Confirm
+                      </button>
+
+                      <button className="listViewBtn3" id="closeListBtn" onClick={closeDeleteModal}>Cancel</button>
+                      </div>
+                    </div>
+                  }
+
                   {/* Edit Modal */}
                   {editModalOpen && (
                     <div className="">
                       <div className="tableModal2">
-                        <h3 className="tableModalH3">Edit Equipment</h3>
+                        <h3 className="tableModalH3">Edit User</h3>
                         <input
                           className="tableModalInput"
                           type="text"

@@ -36,6 +36,10 @@
     box-shadow: 0px 0px 10px #00d9ff;
 }
 
+.userPicIcon:hover {
+    animation: swing 0.4s ease-in-out;
+}
+
 .userNameDiv {
     padding-right: 5px;
 }
