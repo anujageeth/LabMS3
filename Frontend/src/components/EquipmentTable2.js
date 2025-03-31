@@ -629,9 +629,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         className="listViewBtn3"
                         id="deleteListBtn"
                         onClick={() => setDeleteModalOpen(true)}
-                        >
-                          Delete
-                        </button>
+                      >
+                        Delete
+                      </button>
                       <button
                         className="listViewBtn3"
                         id="closeListBtn"

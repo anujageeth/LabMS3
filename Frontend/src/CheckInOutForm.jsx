@@ -195,7 +195,7 @@ function CheckInOutForm() {
           data.results.map(result => result.serial).join('\n')
         }`;
         
-        setSuccess(successMessage);
+        //setSuccess(successMessage);
         setIsSuccessPopupOpen(true);
 
         // Clear form on success
