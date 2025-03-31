@@ -1,59 +1,3 @@
-// const express = require("express");
-// const router = express.Router();
-// const CheckinCheckout = require("../models/checkinCheckout");
-// const Equipment = require("../models/equipment");
-
-// // Add a check-in or check-out
-// router.post("/checkin-checkout", async (req, res) => {
-//   try {
-//     const { equipmentId, username, quantity, action } = req.body;
-
-//     // Validate availability for check-out
-//     if (action === "checkout") {
-//       const equipment = await Equipment.findById(equipmentId);
-//       if (equipment.Quantity < quantity) {
-//         return res
-//           .status(400)
-//           .json({ error: "Insufficient quantity available." });
-//       }
-//       equipment.Quantity -= quantity;
-//       await equipment.save();
-//     }
-
-//     // Adjust quantity for check-in
-//     if (action === "checkin") {
-//       const equipment = await Equipment.findById(equipmentId);
-//       equipment.Quantity += quantity;
-//       await equipment.save();
-//     }
-
-//     const record = new CheckinCheckout({
-//       equipment: equipmentId,
-//       username,
-//       quantity,
-//       action,
-//     });
-
-//     await record.save();
-//     res.status(201).json(record);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-// // Get all check-in and check-out records
-// router.get("/checkin-checkout", async (req, res) => {
-//   try {
-//     const records = await CheckinCheckout.find()
-//       .populate("equipment", "Name Category")
-//       .exec();
-//     res.json(records);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-// module.exports = router;
 const express = require("express");
 const router = express.Router();
 const { authenticateToken } = require("../middleware/authMiddleware");
@@ -67,65 +11,140 @@ const NotificationService = require("../services/NotificationService");
 router.post("/checkinout/bulk", authenticateToken, async (req, res) => {
   try {
     const { action, selectedUser, serials, damageDescription, notes } = req.body;
-    const results = [];
-    
-    for (const serial of serials) {
-      const equipment = await Equipment.findOne({ Serial: serial });
-      
-      if (!equipment) {
-        results.push({ serial, status: "Equipment not found" });
-        continue;
-      }
 
-      if (action === "checkout" && !equipment.Availability) {
-        results.push({ serial, status: "Already checked out" });
-        continue;
-      }
-
-      if (action === "checkin" && equipment.Availability) {
-        results.push({ serial, status: "Already checked in" });
-        continue;
-      }
-
-      const record = new CheckInOut({
-        user: req.user.userId,
-        equipment: equipment._id,
-        action:action,
-        selectedUser:selectedUser,
-        damageDescription:damageDescription,
-        notes:notes
-      });
-
-      await record.save();
-      
-      // Update equipment status
-      equipment.Availability = action === "checkin";
-      if (action === "checkin" && damageDescription) {
-        equipment.condition = "damaged";
-      }
-      await equipment.save();
-
-      await NotificationService.createCheckInOutNotification(record);
-
-      results.push({ serial, status: "Success" });
+    // Validate input
+    if (!Array.isArray(serials) || serials.length === 0) {
+      return res.status(400).json({ message: "Serials must be a non-empty array" });
+    }
+    if (!["checkin", "checkout"].includes(action)) {
+      return res.status(400).json({ message: "Invalid action. Must be 'checkin' or 'checkout'" });
     }
 
-    res.status(207).json(results);
+    const results = [];
+    const errors = [];
+
+    for (const serial of serials) {
+      try {
+        const equipment = await Equipment.findOne({ Serial: serial });
+
+        if (!equipment) {
+          errors.push({ serial, error: "Equipment not found" });
+          continue;
+        }
+
+        if (action === "checkout" && !equipment.Availability) {
+          errors.push({ serial, error: "Already checked out" });
+          continue;
+        }
+
+        if (action === "checkin" && equipment.Availability) {
+          errors.push({ serial, error: "Already checked in" });
+          continue;
+        }
+
+        // Create check-in/out record
+        const record = new CheckInOut({
+          user: req.user.userId,
+          equipment: equipment._id,
+          action,
+          selectedUser,
+          damageDescription,
+          notes
+        });
+
+        await record.save();
+
+        // Update equipment status
+        equipment.Availability = action === "checkin";
+        if (action === "checkin" && damageDescription) {
+          equipment.condition = "damaged";
+        }
+        await equipment.save();
+
+        // Create notification
+        try {
+          await NotificationService.createCheckInOutNotification(record);
+        } catch (notificationError) {
+          console.error("Notification error:", notificationError.message);
+        }
+
+        results.push({ serial, status: "Success" });
+      } catch (itemError) {
+        errors.push({ serial, error: itemError.message });
+      }
+    }
+
+    // Return a summary response
+    res.status(200).json({
+      results,
+      errors,
+      summary: {
+        total: serials.length,
+        successful: results.length,
+        failed: errors.length
+      }
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Bulk check-in/out error:", error.message);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
 
-// Get all check-in/out records
+// Get all check-in/out records with filters, pagination, and sorting
 router.get("/checkinout", authenticateToken, async (req, res) => {
   try {
-    const records = await CheckInOut.find()
-      .populate("user", "FirstName LastName Email")
-      .populate("equipment", "Name Category Serial Brand")
-      .populate("selectedUser", "FirstName LastName Email Role");
-    res.json(records);
+    const {
+      page = 1, // Default to page 1
+      limit = 10, // Default to 10 records per page
+      sortBy = "timestamp", // Default sorting field
+      sortOrder = "desc", // Default sorting order
+      action, // Filter by action (checkin/checkout)
+      user, // Filter by user ID
+      equipment, // Filter by equipment ID
+      startDate, // Filter by start date
+      endDate // Filter by end date
+    } = req.query;
+
+    // Build the filter object
+    const filter = {};
+    if (action) filter.action = action;
+    if (user) filter.user = user;
+    if (equipment) filter.equipment = equipment;
+    if (startDate || endDate) {
+      filter.timestamp = {};
+      if (startDate) filter.timestamp.$gte = new Date(startDate);
+      if (endDate) filter.timestamp.$lte = new Date(endDate);
+    }
+
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const sort = { [sortBy]: sortOrder === "desc" ? -1 : 1 };
+
+    // Fetch records with filters, pagination, and sorting
+    const [records, total] = await Promise.all([
+      CheckInOut.find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(parseInt(limit))
+        .populate("user", "FirstName LastName Email")
+        .populate("equipment", "Name Category Serial Brand")
+        .populate("selectedUser", "FirstName LastName Email Role"),
+      CheckInOut.countDocuments(filter)
+    ]);
+
+    // Return paginated response
+    res.status(200).json({
+      records,
+      pagination: {
+        total,
+        pages: Math.ceil(total / parseInt(limit)),
+        currentPage: parseInt(page),
+        limit: parseInt(limit)
+      }
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching check-in/out records:", error.message);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
 

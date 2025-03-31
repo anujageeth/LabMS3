@@ -1,148 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { BrowserRouter as Router } from "react-router-dom";
-// import {
-//     getCheckinCheckoutRecords,
-//     addCheckinCheckoutRecord,
-//   } from "../src/services/checkinCheckoutService";
-// import { useNavigate } from "react-router-dom";
-// import "./AddItem.css";
-// import { getAllEquipment } from "../src/services/equipmentService";
-
-// import { register } from "./services/authService";
-
-// const CheckInOutForm = () => {
-//   const navigate = useNavigate();
-//   const [firstName, setFirstName] = useState("");
-//   const [lastName, setLastName] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [confirmPassword, setConfirmPassword] = useState("");
-//   const [role, setRole] = useState("");
-//   const [title, setTitle] = useState("");
-//   //const [studentID, setStudentID] = useState("");
-
-//     const [records, setRecords] = useState([]);
-//     const [equipmentList, setEquipmentList] = useState([]);
-//     const [form, setForm] = useState({
-//         equipmentId: "",
-//         username: "",
-//         quantity: 1,
-//         action: "checkout",
-//     });
-
-//     useEffect(() => {
-//         fetchRecords();
-//         fetchEquipmentList();
-//       }, []);
-    
-//     const fetchRecords = async () => {
-//         const data = await getCheckinCheckoutRecords();
-//         setRecords(data);
-//     };
-
-//     const fetchEquipmentList = async () => {
-//         const data = await getAllEquipment();
-//         setEquipmentList(data);
-//     };
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         await addCheckinCheckoutRecord(form);
-//         fetchRecords();
-//         await navigate("/checkinouthistory");
-//     };
-
-//     const handleInputChange = (e) => {
-//         setForm({ ...form, [e.target.name]: e.target.value });
-//     };
-
-//     const handleCancelClick = () => {
-//         navigate("/checkinouthistory");
-//     };
-  
-
-//   return (
-//     <div className="loginPage">
-//       <div className="fullBox">
-//         <div className="overlay"></div>
-//         <div className="loginBox" id="addUserBox">
-//             <h2 className="loginTitle">Check in / out</h2>
-//             <form onSubmit={handleSubmit}>
-//                 <div className="typeBox">
-//                     <select
-//                     name="equipmentId"
-//                     value={form.equipmentId}
-//                     onChange={handleInputChange}
-//                     required
-//                     className="typeBoxControl"
-//                     id="addAvailabilityBtn"
-//                     >
-//                     <option value="">Select Equipment</option>
-//                     {equipmentList.map((equipment) => (
-//                         <option key={equipment._id} value={equipment._id}>
-//                         {equipment.Name}
-//                         </option>
-//                     ))}
-//                     </select>
-//                 </div>
-
-//                 <div className="typeBox">
-//                     <input
-//                     type="text"
-//                     placeholder="Username"
-//                     autoComplete="off"
-//                     name="username"
-//                     value={form.username}
-//                     onChange={handleInputChange}
-//                     className="typeBoxControl"
-//                     required
-//                     />
-//                 </div>
-
-//                 <div className="typeBox">
-//                     <input
-//                     type="number"
-//                     placeholder="Quantity"
-//                     autoComplete="off"
-//                     name="quantity"
-//                     value={form.quantity}
-//                     onChange={handleInputChange}
-//                     min="1"
-//                     className="typeBoxControl"
-//                     required
-//                     />
-//                 </div>
-
-//                 <div className="typeBox">
-//                     <select
-//                     name="action"
-//                     value={form.action}
-//                     onChange={handleInputChange}
-//                     required
-//                     className="typeBoxControl"
-//                     id="addAvailabilityBtn"
-//                     >
-//                     <option value="checkout">Check-out</option>
-//                     <option value="checkin">Check-in</option>
-//                     </select>
-//                 </div>
-
-//                 <button type="submit" className="loginBtn">
-//                     <b>Submit</b>
-//                 </button>
-
-//                 <button type="button" className="loginBtn" onClick={handleCancelClick}>
-//                     <b>History</b>
-//                 </button>
-//                 </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CheckInOutForm;
-// components/EquipmentTransaction.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -170,6 +25,9 @@ function CheckInOutForm() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
 
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
   const api = axios.create({
     baseURL: 'http://localhost:3001/api',
     headers: {
@@ -194,24 +52,34 @@ function CheckInOutForm() {
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
-        // Changed from '/equipmentImage' to '/equipment'
-        const { data } = await api.get('/equipment');
-        console.log('Equipment data:', data);
+        const { data } = await api.get('/equipmentImage', {
+          params: {
+            page,
+            limit: 50,
+            fields: 'Serial,Name,Category', // Only fetch needed fields
+            sortBy: 'Serial',
+            sortOrder: 'asc'
+          }
+        });
         
-        // Ensure we're working with an array
-        if (Array.isArray(data)) {
-          setEquipmentList(data);
+        // Ensure data.equipment is an array before setting state
+        const equipmentArray = Array.isArray(data.equipment) ? data.equipment : [];
+        
+        if (page === 1) {
+          setEquipmentList(equipmentArray);
         } else {
-          console.error('Expected array but got:', typeof data);
-          setEquipmentList([]);
+          setEquipmentList(prev => [...prev, ...equipmentArray]);
         }
+        
+        setHasMore(data.pagination.currentPage < data.pagination.totalPages);
       } catch (err) {
         console.error('Failed to fetch equipment:', err);
-        setEquipmentList([]);
+        setEquipmentList([]); // Set empty array on error
       }
     };
+
     fetchEquipment();
-  }, []);
+  }, [page]);
 
   // Handle textarea changes and cursor position
   const handleSerialsChange = (e) => {
@@ -225,16 +93,6 @@ function CheckInOutForm() {
     updateCurrentLineState(e.target);
   };
 
-   // Add this handler for textarea changes
-  //  const handleSerialsChange = (e) => {
-  //   const value = e.target.value;
-  //   setSerials(value);
-    
-  //   const lines = value.split('\n');
-  //   const lastLine = lines[lines.length - 1].trim();
-  //   setCurrentInput(lastLine);
-  //   setShowSuggestions(lastLine.length > 0);
-  // };
 
   const updateCurrentLineState = (textarea) => {
     const cursorPosition = textarea.selectionStart;
@@ -249,69 +107,9 @@ function CheckInOutForm() {
     setShowSuggestions(currentLineText.trim().length > 0);
   };
 
-  // Add this handler for suggestion selection
-  // const handleSuggestionClick = (serial) => {
-  //   const lines = serials.split('\n');
-  //   lines[lines.length - 1] = serial;
-  //   const newSerials = lines.join('\n') + '\n'; // Add newline for next entry
-  //   setSerials(newSerials);
-  //   setShowSuggestions(false);
-  //   setCurrentInput('');
-  // };
-
-  // // Add this filtering logic for suggestions
-  // const filteredSuggestions = equipmentList.filter(equipment => {
-  //   const searchTerm = currentInput.toLowerCase();
-  //   return (
-  //     equipment.Serial.toLowerCase().includes(searchTerm) ||
-  //     equipment.Name.toLowerCase().includes(searchTerm) ||
-  //     equipment.Category.toLowerCase().includes(searchTerm)
-  //   );
-  // });
-
-  /*
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
-
-    try {
-      const serialList = serials.split('\n').map(s => s.trim()).filter(s => s);
-      
-      const { data } = await api.post('/checkinout/bulk', {
-        action,
-        selectedUser,
-        serials: serialList,
-        damageDescription: action === 'checkin' ? damage : undefined,
-        notes
-      });
-      if(data.status === "Equipment not found"){
-        alert("Equipment not found");
-      }else{
-        setIsSuccessPopupOpen(true);
-      setSuccess('Operation completed successfully!');
-      setSerials('');
-      setDamage('');
-      setNotes('');
-      setSelectedUser('');
-      setTimeout(() => setSuccess(''), 3000);
-      }
-
-      
-
-    } catch (err) {
-      setIsErrorPopupOpen(true);
-      setError(err.response?.data?.message || 'Something went wrong');
-      setTimeout(() => setError(''), 5000);
-    } finally {
-      setLoading(false);
-    }
-  };*/
   
   const handleSuggestionClick = (serial) => {
     const lines = serials.split('\n');
-    // Make sure to use the correct field name (Serial) based on your backend model
     lines[currentLineIndex] = serial;
     
     // Add new line if we're at the last line
@@ -330,24 +128,42 @@ function CheckInOutForm() {
   };
 
   // Filter suggestions based on current line input
-  const filteredSuggestions = Array.isArray(equipmentList) 
-  ? equipmentList.filter(equipment => {
-      if (!equipment) return false;
+  const filteredSuggestions = currentInput && Array.isArray(equipmentList)
+    ? equipmentList.filter(equipment => {
+        const searchTerm = currentInput.toLowerCase();
+        return (
+          equipment?.Serial?.toLowerCase().includes(searchTerm) || 
+          equipment?.Name?.toLowerCase().includes(searchTerm) || 
+          equipment?.Category?.toLowerCase().includes(searchTerm)
+        );
+      })
+    : [];
 
-      console.log('Current input:', currentInput);
-      console.log('Show suggestions:', showSuggestions);
-      console.log('Filtered suggestions:', filteredSuggestions);
-      
-      const searchTerm = currentInput.toLowerCase();
-      return (
-        (equipment.Serial?.toLowerCase() || '').includes(searchTerm) || 
-        (equipment.Name?.toLowerCase() || '').includes(searchTerm) ||
-        (equipment.Category?.toLowerCase() || '').includes(searchTerm)
-      );
-    })
-  : [];
+  const renderSuggestions = () => {
+    if (!showSuggestions || !filteredSuggestions.length) return null;
 
+    return (
+      <div className="suggestions-dropdown" onScroll={handleScroll}>
+        {filteredSuggestions.map(equipment => (
+          <div
+            key={equipment._id || equipment.Serial}
+            className="suggestion-item"
+            onClick={() => handleSuggestionClick(equipment.Serial)}
+          >
+            <strong>{equipment.Serial}</strong>
+            <span> - {equipment.Name} ({equipment.Category})</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
+  const handleScroll = (e) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.target;
+    if (scrollHeight - scrollTop === clientHeight && hasMore && !loading) {
+      setPage(prev => prev + 1);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -356,71 +172,72 @@ function CheckInOutForm() {
     setSuccess('');
 
     try {
-        const serialList = serials.split('\n').map(s => s.trim()).filter(s => s);
+      const serialList = serials
+        .split('\n')
+        .map(s => s.trim())
+        .filter(s => s);
 
-        if (serialList.length === 0) {
-          throw new Error('Please enter at least one serial number');
-        }
+      if (serialList.length === 0) {
+        throw new Error('Please enter at least one serial number');
+      }
+
+      const { data } = await api.post('/checkinout/bulk', {
+        action,
+        selectedUser,
+        serials: serialList,
+        damageDescription: action === 'checkin' ? damage : undefined,
+        notes
+      });
+
+      // Handle the response
+      if (data.summary.successful > 0) {
+        const successMessage = `Successfully ${action}ed ${data.summary.successful} items:\n${
+          data.results.map(result => result.serial).join('\n')
+        }`;
         
-        if (!selectedUser) {
-          throw new Error('Please select a user');
-        }
-        
-        const { data } = await api.post('/checkinout/bulk', {
-            action,
-            selectedUser,
-            serials: serialList,
-            damageDescription: action === 'checkin' ? damage : undefined,
-            notes
-        });
+        setSuccess(successMessage);
+        setIsSuccessPopupOpen(true);
 
-        // Categorizing errors
-        const notFoundItems = data.filter(item => item.status === "Equipment not found");
-        const alreadyCheckedOutItems = data.filter(item => item.status === "Already checked out");
-        const alreadyCheckedInItems = data.filter(item => item.status === "Already checked in");
-        const successItems = data.filter(item => item.status === "Success");
-
-        let errorMessage = "";
-
-        if (notFoundItems.length > 0) {
-            errorMessage += `🔴 Equipment not found:\n${notFoundItems.map(i => i.serial).join(", ")}\n\n`;
-        }
-        if (alreadyCheckedOutItems.length > 0) {
-            errorMessage += `⚠️ Already checked out:\n${alreadyCheckedOutItems.map(i => i.serial).join(", ")}\n\n`;
-        }
-        if (alreadyCheckedInItems.length > 0) {
-            errorMessage += `⚠️ Already checked in:\n${alreadyCheckedInItems.map(i => i.serial).join(", ")}\n\n`;
-        }
-
-        if (errorMessage) {
-            setIsErrorPopupOpen(true);
-            setError(errorMessage.trim());
-        }
-
-        if (successItems.length > 0) {
-            setIsSuccessPopupOpen(true);
-            setSuccess('Operation completed successfully!');
-        }
-
+        // Clear form on success
         setSerials('');
         setDamage('');
         setNotes('');
         setSelectedUser('');
+      }
 
-        setTimeout(() => {
-            setError('');
-            setSuccess('');
-        }, 3000);
+      // Handle errors if any
+      if (data.summary.failed > 0) {
+        let errorMessage = '';
+        const errorsByType = data.errors.reduce((acc, err) => {
+          if (!acc[err.error]) {
+            acc[err.error] = [];
+          }
+          acc[err.error].push(err.serial);
+          return acc;
+        }, {});
+
+        Object.entries(errorsByType).forEach(([type, serials]) => {
+          errorMessage += `🔴 ${type}:\n${serials.join(", ")}\n\n`;
+        });
+
+        setError(errorMessage.trim());
+        setIsErrorPopupOpen(true);
+      }
+
+      // Log summary
+      console.log('Operation Summary:', {
+        total: data.summary.total,
+        successful: data.summary.successful,
+        failed: data.summary.failed
+      });
 
     } catch (err) {
-        setIsErrorPopupOpen(true);
-        setError(err.response?.data?.message || 'Something went wrong');
-        setTimeout(() => setError(''), 5000);
+      setIsErrorPopupOpen(true);
+      setError(err.response?.data?.message || err.message || 'Something went wrong');
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
-
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -454,16 +271,8 @@ function CheckInOutForm() {
         ))}
       </select>
 
-      {/*<textarea
-        className="listViewModalInput2"
-        value={serials}
-        onChange={(e) => setSerials(e.target.value)}
-        placeholder="Enter serial numbers, one per line"
-        required
-        disabled={loading}
-      />*/}
       <div className="serials-input-container">
-      <textarea
+        <textarea
           ref={textareaRef}
           className="listViewModalInput2"
           value={serials}
@@ -475,20 +284,7 @@ function CheckInOutForm() {
           disabled={loading}
           rows={5}
         />
-        {showSuggestions && filteredSuggestions.length > 0 && (
-          <div className="suggestions-dropdown">
-            {filteredSuggestions.map(equipment => (
-              <div
-                key={equipment.Serial}
-                className="suggestion-item"
-                onClick={() => handleSuggestionClick(equipment.Serial)}
-              >
-                <strong>{equipment.Serial}</strong>
-                <span>{equipment.Name} ({equipment.Category})</span>
-              </div>
-            ))}
-          </div>
-        )}
+        {renderSuggestions()}
       </div>
 
 
@@ -518,20 +314,20 @@ function CheckInOutForm() {
 
       <SidePopup
         type="success"
-        title="Successful"
-        message="Checked in / out successfully"
+        title="Operation Complete"
+        message={success}
         isOpen={isSuccessPopupOpen}
         onClose={() => setIsSuccessPopupOpen(false)}
-        duration={3000} // Optional: customize duration in milliseconds
+        duration={5000}
       />
 
       <SidePopup
         type="error"
-        title="Error"
-        message="Couldn't check in/out"
+        title="Operation Failed"
+        message={error}
         isOpen={isErrorPopupOpen}
         onClose={() => setIsErrorPopupOpen(false)}
-        duration={3000} // Optional: customize duration in milliseconds
+        duration={10000}
       />
     </form>
   );

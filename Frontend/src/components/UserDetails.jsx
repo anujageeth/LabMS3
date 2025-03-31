@@ -126,6 +126,7 @@ import axios from "axios";
 import "./UserDetails.css";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import Broadcast from "./Broadcast";
 
 import { 
     Avatar
@@ -142,6 +143,7 @@ function UserDetails({ onUserDataFetched }) {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [showBroadcast, setShowBroadcast] = useState(false);
 
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
@@ -414,6 +416,18 @@ function UserDetails({ onUserDataFetched }) {
                         >
                             Profile
                         </div>
+
+                        {/*}
+                        <div
+                            onClick={() => {
+                                setShowBroadcast(true);
+                                setDropdownVisible(false); // Close dropdown after selection
+                            }}
+                            className="userClickDropdown"
+                        >
+                            Broadcast
+                        </div>
+                        */}
                         
                         <div
                             onClick={() => handleLogoutClick("Logout")}
@@ -425,6 +439,13 @@ function UserDetails({ onUserDataFetched }) {
                     </div>
                 )}
             </div>
+
+            {/*showBroadcast && (
+                <Broadcast
+                    show={showBroadcast} 
+                    onHide={() => setShowBroadcast(false)}
+                />
+            )*/}
         </div>
     );
 }

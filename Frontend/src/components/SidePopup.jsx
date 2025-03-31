@@ -23,12 +23,12 @@ const NotificationPopup = ({ type = 'success', title, message, isOpen, onClose, 
     <div className={`popup-notification ${type} ${isVisible ? 'show' : ''}`}>
       <div className="popup-header">
         <span>{title}</span>
-        <button className="close-button" onClick={() => {
+        <button className="side-close-button" onClick={() => {
           setIsVisible(false);
           onClose();
         }}>×</button>
       </div>
-      <div className="popup-content">
+      <div className="side-popup-content">
         {message}
       </div>
     </div>

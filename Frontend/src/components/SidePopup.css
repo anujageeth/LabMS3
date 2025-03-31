@@ -1,7 +1,7 @@
 /* NotificationPopup.css */
 .popup-notification {
     position: fixed;
-    background-color: #ffffff;
+    background: linear-gradient(to bottom, #e0f7fa, #ffffff, #ffffff, #ffffff, #e0f7fa);
     bottom: 20px;
     right: -500px; /* Start off-screen */
     width: 300px;
@@ -36,16 +36,17 @@
     
   }
   
-  .popup-content {
+  .side-popup-content {
     text-align: left;
     color: #00788d;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
   }
   
-  .close-button {
-    background: none;
+  .side-close-button {
+    background: #dadada;
     border: none;
+    border-radius: 15px;
     cursor: pointer;
     font-size: 18px;
     color: #999;
