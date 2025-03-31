@@ -45,6 +45,7 @@ app.use("/api/update", updatePassword);
 app.use("/api/update", updatePassword);
 app.use("/api", notificationRoutes);
 app.use("/api", consumableRoutes);
+app.use('/api/academic-details', require('./routes/academicDetailsRoutes'));
 
 // Connect to MongoDB
 mongoose
