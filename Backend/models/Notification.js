@@ -9,7 +9,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: { 
       type: String, 
-      enum: ["lab_reminder", "equipment_checkout", "equipment_checkin", "damage_report", "broadcast"],
+      enum: ["lab_reminder", "equipment_checkout", "equipment_checkin", "damage_report", "broadcast","student_booking_request"],
       required: true 
     },
     title: { 
