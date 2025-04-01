@@ -1365,6 +1365,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SideNavigation from "./components/SideNavigation";
 import UserDetails from "./components/UserDetails";
 import BookingForm from "./components/BookingForm";
+import StudentBookingForm from "./components/StudentBookingForm";
 import "./BookingReservation.css";
 import "react-calendar/dist/Calendar.css";
 
@@ -1443,6 +1444,12 @@ const BookingReservation = () => {
   };
 
   // Effects
+// Add this near your other useEffect hooks
+useEffect(() => {
+    console.log("User updated:", user);
+    console.log("User role:", user?.Role);
+  }, [user]);
+
   useEffect(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -1797,15 +1804,18 @@ const BookingReservation = () => {
                   </div>
                 </div>
 
-                <div className="addItem">
-                  <button 
-                    className="addItemBtn" 
-                    onClick={toggleDetailsDialog}
-                  >
-                    <FaEdit size={20} />
-                    <span style={{ marginLeft: '5px' }}>Edit Details</span>
-                  </button>
-                </div>
+                {/* Only show Edit Details button if user is not a student */}
+  {user?.Role !== "student" && (
+    <div className="addItem">
+      <button 
+        className="addItemBtn" 
+        onClick={toggleDetailsDialog}
+      >
+        <FaEdit size={20} />
+        <span style={{ marginLeft: '5px' }}>Edit Details</span>
+      </button>
+    </div>
+  )}
               </div>
             </div>
 
@@ -1961,14 +1971,23 @@ const BookingReservation = () => {
 
       {/* Booking Form */}
       {isFormVisible && (
-        <BookingForm
-          closeForm={toggleFormVisibility}
-          selectedDate={date}
-          onBookingAdded={fetchBookings}
-          user={user}
-          academicDetails={{ ...academicDetails, semesters }}
-        />
-      )}
+  user?.Role === "student" ? (
+    <StudentBookingForm
+      closeForm={toggleFormVisibility}
+      selectedDate={date}
+      onBookingAdded={fetchBookings}
+      user={user}
+    />
+  ) : (
+    <BookingForm
+      closeForm={toggleFormVisibility}
+      selectedDate={date}
+      onBookingAdded={fetchBookings}
+      user={user}
+      academicDetails={{ ...academicDetails, semesters }}
+    />
+  )
+)}
 
       {/* Academic Details Dialog */}
       <Dialog

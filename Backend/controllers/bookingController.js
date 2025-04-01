@@ -214,6 +214,111 @@ exports.createBooking = async (req, res) => {
     }
 };
 
+// Add this new route handler for student bookings
+exports.createStudentBooking = async (req, res) => {
+    try {
+        const { labPlace, date, bookedBy, timeSlot, description } = req.body;
+
+        // Define time slot ranges
+        const timeSlots = {
+            "8:30-11:30": { start: "08:30", end: "11:30" },
+            "1:30-4:30": { start: "13:30", end: "16:30" },
+            custom: { start: null, end: null }, // Custom time will be handled separately
+        };
+
+        // Get the selected time slot
+        const selectedSlot = timeSlots[timeSlot];
+
+        // If custom time, validate the start and end times
+        if (timeSlot === "custom") {
+            const startTime = req.body.startTime;
+            const endTime = req.body.endTime;
+            if (startTime >= endTime) {
+                return res.status(400).json({ error: "End time must be after start time." });
+            }
+            selectedSlot.start = startTime;
+            selectedSlot.end = endTime;
+        }
+
+        // Convert time strings to Date objects for comparison
+        const newStartTime = new Date(`${date}T${selectedSlot.start}`);
+        const newEndTime = new Date(`${date}T${selectedSlot.end}`);
+
+        // Check for conflicting bookings
+        const conflictingBookings = await Booking.find({
+            labPlace, // Same lab
+            date, // Same date
+        });
+
+        const isConflict = conflictingBookings.some((booking) => {
+            const existingStartTime = new Date(`${date}T${booking.timeSlot.split("-")[0]}`);
+            const existingEndTime = new Date(`${date}T${booking.timeSlot.split("-")[1]}`);
+
+            // Check for overlapping time slots
+            return (
+                (newStartTime >= existingStartTime && newStartTime < existingEndTime) || // New booking starts during an existing booking
+                (newEndTime > existingStartTime && newEndTime <= existingEndTime) || // New booking ends during an existing booking
+                (newStartTime <= existingStartTime && newEndTime >= existingEndTime) // New booking completely overlaps an existing booking
+            );
+        });
+
+        if (isConflict) {
+            return res.status(400).json({ error: "Lab is already booked at that time." });
+        }
+
+        // Create new booking with status "pending" for student requests
+        const newBooking = new Booking({
+            labName: "Student Request - " + labPlace,
+            labPlace,
+            date,
+            bookedBy,
+            timeSlot: `${selectedSlot.start}-${selectedSlot.end}`,
+            description,
+            status: "pending", // Add status field for student requests
+            requestType: "student" // To distinguish student requests
+        });
+
+        await newBooking.save();
+
+        // Notify admins about the new booking request
+        const admins = await User.find({ Role: { $in: ["hod", "technical officer"] } });
+        
+        if (admins.length > 0) {
+            for (const admin of admins) {
+                await NotificationService.createNotification({
+                    recipient: admin._id,
+                    type: "student_booking_request",
+                    title: "New Student Lab Booking Request",
+                    message: `${bookedBy} has requested to book ${labPlace} on ${date} at ${selectedSlot.start}-${selectedSlot.end}`,
+                    relatedItem: newBooking._id,
+                    itemModel: "Booking",
+                    adminOnly: true,
+                    isRead: false 
+                });
+            }
+            
+            // Send email notifications to admins (non-blocking)
+            try {
+                for (const admin of admins) {
+                    await emailService.sendStudentBookingNotification(
+                        newBooking,
+                        admin.Email,
+                        `${admin.FirstName} ${admin.LastName}`,
+                        bookedBy
+                    );
+                }
+            } catch (emailError) {
+                console.error("Error sending admin emails:", emailError);
+            }
+        }
+
+        res.status(201).json(newBooking);
+    } catch (error) {
+        console.error("Error creating student booking:", error.message);
+        res.status(500).json({ error: "Error creating student booking request." });
+    }
+};
+
 // Delete a booking by ID
 exports.deleteBooking = async (req, res) => {
     try {
