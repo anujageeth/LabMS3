@@ -1,0 +1,197 @@
+.student-booking-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(4, 65, 79, 0.8);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.student-booking-form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    overflow-y: auto;
+    max-height: 90vh;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.student-booking-form h2 {
+    font-size: 24px;
+    color: #04414f;
+    margin-bottom: 25px;
+    font-weight: bold;
+    border-bottom: 2px solid #04414f;
+    padding-bottom: 10px;
+}
+
+.student-booking-form label {
+    display: block;
+    text-align: left;
+    margin: 15px 0 5px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.required {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.form-select,
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+.form-select:focus,
+.form-input:focus,
+.form-textarea:focus {
+    border-color: #04414f;
+    box-shadow: 0 0 0 3px rgba(4, 65, 79, 0.2);
+    outline: none;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.date-input,
+.user-input {
+    background-color: #f5f5f5;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.custom-time-inputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.time-input-group {
+    width: 48%;
+}
+
+.time-input {
+    width: 100%;
+    padding: 10px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    gap: 15px;
+}
+
+.submit-button,
+.cancel-button {
+    flex: 1;
+    padding: 12px 0;
+    font-size: 15px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.submit-button {
+    background-color: #04414f;
+    color: white;
+}
+
+.submit-button:hover {
+    background-color: #032f39;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.cancel-button {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.cancel-button:hover {
+    background-color: #d0d0d0;
+    transform: translateY(-2px);
+}
+
+.past-date-message {
+    text-align: center;
+    padding: 25px;
+    color: #d32f2f;
+    background-color: #ffebee;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #ffcdd2;
+}
+
+.past-date-message p {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.close-button {
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: #b71c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .student-booking-form {
+        padding: 20px;
+        width: 95%;
+    }
+
+    .student-booking-form h2 {
+        font-size: 20px;
+    }
+
+    .custom-time-inputs {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .time-input-group {
+        width: 100%;
+    }
+}
