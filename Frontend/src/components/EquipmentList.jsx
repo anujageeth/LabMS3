@@ -33,6 +33,8 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     Category: "",
     Brand: "",
     SerialCode: "",
+    Availability: true,
+    condition: "",
   });
 
   const navigate = useNavigate();
@@ -95,7 +97,15 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const handleSelect = (item) => {
     setSelectedEquipment(item);
     setIsModalOpen(true);
-    setEditEquipment(item);
+    setEditEquipment({
+      Name: item.Name,
+      Lab: item.Lab,
+      Category: item.Category,
+      Brand: item.Brand,
+      Serial: item.Serial,
+      condition: item.condition || 'good', // Set default if undefined
+      Availability: item.Availability
+    });
     
   };
 
@@ -403,13 +413,13 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
               onChange={handleInputChange}
             >
               
-              <option value="Good">Good</option>
-              <option value="Damaged">Damaged</option>
+              <option value="good">Good</option>
+              <option value="damaged">Damaged</option>
             </select>
 
 
             {/* Add condition select */}
-            <select
+            {/* <select
               className="listViewModalInput2"
               name="condition"
               value={editEquipment.condition || 'good'}
@@ -417,7 +427,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
             >
               <option value="good">Good</option>
               <option value="damaged">Damaged</option>
-            </select>
+            </select> */}
 
             <button className="listViewBtn3" onClick={handleUpdate}>Update</button>
             <button className="listViewBtn3" id="deleteListBtn" onClick={() => setDeleteModalOpen(true)}>Delete</button>
