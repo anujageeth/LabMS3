@@ -340,6 +340,7 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
+import SidePopup from "./SidePopup";
 
 const Profile = () => {
   const [profilePic, setProfilePic] = useState(
@@ -358,6 +359,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState(null); // State to store user data
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [passwords, setPasswords] = useState({
     oldPassword: "",
     newPassword: "",
@@ -546,6 +548,7 @@ const Profile = () => {
         }
       );
       
+      setIsSuccessPopupOpen(true);
       setSnackbar({
         open: true,
         message: "Broadcast notification sent successfully!",
@@ -880,16 +883,14 @@ const Profile = () => {
       </Dialog>
       
       {/* Notification Snackbar */}
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={6000} 
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Broadcast notification sent!"
+        isOpen={isSuccessPopupOpen}
+        onClose={() => setIsSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
     </div>
   );
 };

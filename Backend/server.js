@@ -49,6 +49,7 @@ app.use("/api", notificationRoutes);
 app.use("/api", consumableRoutes);
 app.use("/api/academic-details", academicDetailsRoutes);
 
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)

@@ -180,7 +180,7 @@ function CheckInOutTable() {
                             <TableCell>{record.action}</TableCell>
                             <TableCell>{`${record.user?.FirstName} ${record.user?.LastName}`}</TableCell>
                             <TableCell>{`${record.selectedUser?.FirstName} ${record.selectedUser?.LastName}`}</TableCell>
-                            <TableCell>{formatDateTime(record.timestamp)}</TableCell>
+                            <TableCell>{formatDateTime(record.date)}</TableCell>
                             <TableCell>{record.equipment?.condition || '-'}</TableCell>
                             <TableCell>{record.notes || '-'}</TableCell>
                           </TableRow>

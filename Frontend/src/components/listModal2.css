@@ -240,7 +240,6 @@
     padding: 20px;
     border-radius: 25px;
     max-width: 400px;
-    width: 90%;
     /* Responsive width */
     text-align: center;
     box-shadow: 0 0px 150px rgba(0, 0, 0, 0.3);
@@ -250,6 +249,11 @@
 
 .listViewModal-content2 h2 {
     color: #005766;
+}
+
+#deleteBox {
+  width: 350px;
+  max-width: 95vw;
 }
 
 /* Styles for Modal Inputs */

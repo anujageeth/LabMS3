@@ -29,6 +29,7 @@ import CategoryFilter from "./components/CategoryFilter"; // Import the Category
 import CategorySelect from "./components/CategorySelect";
 
 import SideNavigation from "./components/SideNavigation";
+import SidePopup from "./components/SidePopup";
 import UserDetails from "./components/UserDetails";
 
 const UserManagePage2 = ({ onRefresh, refresh }) => {
@@ -48,6 +49,9 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     const [selectedRole, setSelectedRole] = useState("");
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
     const [selectedCategory, setSelectedCategory] = useState([]);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+    const [isDeleteSuccessPopupOpen, setIsDeleteSuccessPopupOpen] = useState(false);
 
     const [records, setRecords] = useState([]);
     const [selectedRecords, setSelectedRecords] = useState([]);
@@ -64,7 +68,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
 
     useEffect(() => {
         fetchUsersList();
-      }, []);
+      }, [userData]);
 
     const fetchUsersList = async () => {
         try {
@@ -99,6 +103,8 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     
         setFilteredUser(filtered);
       }, [selectedUser, searchTerm, userData]);
+
+      
     
     const handleUserFilter = (categoryId) => {
     setSelectedUser(categoryId);
@@ -114,12 +120,12 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     };
 
     // Handle selection of rows
-    const handleClick = (event, row) => {
-      const selectedIndex = selected.indexOf(row._id);
+    const handleClick = (event, record) => {
+      const selectedIndex = selected.indexOf(record._id);
       let newSelected = [];
   
       if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, row._id);
+        newSelected = newSelected.concat(selected, record._id);
       } else if (selectedIndex === 0) {
         newSelected = newSelected.concat(selected.slice(1));
       } else if (selectedIndex === selected.length - 1) {
@@ -133,10 +139,10 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
       setSelected(newSelected);
     };
 
-    const isSelectedRow = (id) => selected === id;
+    // const isSelectedRow = (id) => selected === id;
 
 
-    const isSelected = (id) => selected.indexOf(id) !== -1;
+    const isSelected = (id) => id && selected.indexOf(id) !== -1;
 
     const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -190,6 +196,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
           },
         }
       );
+      setIsSuccessPopupOpen(true);
       // Refresh after update
       setUserData((prev) =>
         prev.map((item) =>
@@ -232,11 +239,14 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
           })
         )
       );
-      setSelected([]); // Clear selection after delete
-      // Refresh equipment data
-      setUserData((prev) =>
-        prev.filter((item) => !selected.includes(item._id))
-      );
+      const updatedUserData = userData.filter((item) => !selected.includes(item._id));
+      setUserData([...updatedUserData]); 
+      setFilteredUser([...updatedUserData]); // Force update filtered list
+      setSelected([]);
+      setIsDeleteSuccessPopupOpen(true);
+      closeDeleteModal();
+      closeEditModal();
+
     } catch (error) {
       if (error.response?.status === 403) {
         console.log("Token expired. Redirecting to login.");
@@ -254,6 +264,19 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
       }
     }
   };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  }
+
+  const roleMapping = {
+    hod: "Head of The Department",
+    technical_officer: "T.O.",
+    lecturer: "Lecturer",
+    instructor: "Instructor",
+    student: "Student"
+  };
+  
 
 
   return (
@@ -342,9 +365,22 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                             <EditIcon className="iconButtonLogo" />
                           </IconButton>
                         </Tooltip>*/}
+                        <Tooltip title="Edit">
+                          <IconButton
+                            onClick={handleEdit}
+                            disabled={selected.length !== 1}
+                            className={
+                              selected.length === 1
+                                ? "icon-button-enabled"
+                                : "icon-button-disabled"
+                            }
+                          >
+                            <EditIcon className="iconButtonLogo" />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="Delete">
                           <IconButton
-                            onClick={handleDelete}
+                            onClick={() => setDeleteModalOpen(true)}
                             disabled={selected.length === 0}
                             className={
                               selected.length > 0
@@ -388,30 +424,23 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                           </TableHead>
                           <TableBody>
                           {filteredUser
-                              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                               .map((record) => {
                               const isItemSelected = isSelected(record._id);
                               return (
                                   <TableRow
-                                  hover
-                                  onClick={(event) => handleClick(event, record)}
-                                  role="checkbox"
-                                  aria-checked={isItemSelected}
-                                  tabIndex={-1}
-                                  key={record._id}
-                                  selected={isItemSelected}
+                                    hover
+                                    onClick={(event) => handleClick(event, record)}
+                                    role="checkbox"
+                                    aria-checked={isItemSelected}
+                                    tabIndex={-1}
+                                    key={record._id}
+                                    selected={isItemSelected}
                                   >
                                   <TableCell padding="checkbox">
-                                    <Checkbox
-                                        color="primary"
-                                        checked={isItemSelected}
-                                        inputProps={{
-                                        "aria-labelledby": `enhanced-table-checkbox-${record._id}`,
-                                        }}
-                                    />
+                                    <Checkbox checked={isItemSelected} />
                                   </TableCell>
                                   <TableCell>{record.Title} {record.FirstName} {record.LastName}</TableCell>
-                                  <TableCell>{record.Role}</TableCell>
+                                  <TableCell>{roleMapping[record.Role] || record.Role}</TableCell>
                                   <TableCell>{record.Email}</TableCell>
                                   </TableRow>
                               );
@@ -430,60 +459,105 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                       />
                   </Paper>
 
+                  {deleteModalOpen &&
+                    <div className="equipment-popup">
+                      <div className="listViewModal-content2" id="deleteBox">
+                      <h2>Delete User</h2>
+                      <button
+                        className="listViewBtn3"
+                        id="deleteListBtn"
+                        onClick={() => {
+                          handleDelete();
+                          closeDeleteModal();
+                          
+                        }}
+                      >
+                        Confirm
+                      </button>
+
+                      <button className="listViewBtn3" id="closeListBtn" onClick={closeDeleteModal}>Cancel</button>
+                      </div>
+                    </div>
+                  }
+
                   {/* Edit Modal */}
                   {editModalOpen && (
-                    <div className="">
-                      <div className="tableModal2">
-                        <h3 className="tableModalH3">Edit Equipment</h3>
-                        <input
-                          className="tableModalInput"
-                          type="text"
-                          value={editData.Name}
+                    <div className="listViewModal2">
+                      <div className="listViewModal-content2">
+                        <h2>Edit User</h2>
+                        <select
+                          className="listViewModalInput2"
+                          id="listViewModalInput2Select"
+                          name="Title" 
+                          value={editData.Title}
                           onChange={(e) =>
-                            setEditData({ ...editData, Name: e.target.value })
+                            setEditData({ ...editData, Title: e.target.value })
+                          }
+                          placeholder="Title"
+                        >
+                          <option value="Mr">Mr</option>
+                          <option value="Mrs">Mrs</option>
+                          <option value="Dr">Dr</option>
+                        </select>
+                        <input
+                          className="listViewModalInput2"
+                          type="text"
+                          value={editData.FirstName}
+                          onChange={(e) =>
+                            setEditData({ ...editData, FirstName: e.target.value })
                           }
                           placeholder="Name"
                         />
                         <input
-                          className="tableModalInput"
+                          className="listViewModalInput2"
                           type="text"
-                          value={editData.Lab}
+                          value={editData.LastName}
                           onChange={(e) =>
-                            setEditData({ ...editData, Lab: e.target.value })
+                            setEditData({ ...editData, LastName: e.target.value })
                           }
-                          placeholder="Lab"
+                          placeholder="Name"
                         />
-                        {/*<input
-                            className="tableModalInput"
-                            type="text"
-                            value={editData.Category}
-                            onChange={(e) =>
-                                setEditData({ ...editData, Category: e.target.value })
-                            }
-                            placeholder="Category"
-                            />*/}
-
-                        <CategorySelect
-                          formData={editData.Category}
-                          setFormData={setEditData}
-                        />
-
                         <input
-                          className="tableModalInput"
-                          type="number"
-                          value={editData.Quantity}
+                          className="listViewModalInput2"
+                          type="text"
+                          value={editData.Email}
                           onChange={(e) =>
-                            setEditData({ ...editData, Quantity: e.target.value })
+                            setEditData({ ...editData, Email: e.target.value })
                           }
-                          placeholder="Quantity"
+                          placeholder="Email"
                         />
-                        <button className="tableModalBtn" onClick={handleUpdate}>
+                        {/*<select
+                          className="listViewModalInput2"
+                          id="listViewModalInput2Select"
+                          name="Role" 
+                          value={editData.Role}
+                          onChange={(e) =>
+                            setEditData({ ...editData, Role: e.target.value })
+                          }
+                          placeholder="Title"
+                        >
+                          <option value="lecturer">Lecturer</option>
+                          <option value="instructor">Instructor</option>
+                          <option value="hod">Head of Department</option>
+                          <option value="technical officer">Technical Officer</option>
+                          <option value="student">Student</option>
+                        </select>*/}
+                        
+                        <button className="listViewBtn3" onClick={handleUpdate}>
                           Save
+                        </button>
+
+                        <button 
+                          className="listViewBtn3"
+                          id="deleteListBtn"
+                          onClick={() => setDeleteModalOpen(true)}
+                        >
+                          Delete
                         </button>
                         
                         <button
-                          className="tableModalBtn"
-                          id="editCancelBtn"
+                          className="listViewBtn3"
+                          id="closeListBtn"
                           onClick={closeEditModal}
                         >
                           Cancel
@@ -498,6 +572,27 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
           </div>
         </div>
       </div>
+
+      {/*
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Updated existing user"
+        isOpen={isSuccessPopupOpen}
+        onClose={() => setIsSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+
+      <SidePopup
+        type="success"
+        title="Successful"
+        message="Deleted existing user"
+        isOpen={isDeleteSuccessPopupOpen}
+        onClose={() => setIsDeleteSuccessPopupOpen(false)}
+        duration={3000} // Optional: customize duration in milliseconds
+      />
+      */}
+
     </div>
 
     

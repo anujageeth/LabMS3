@@ -629,9 +629,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         className="listViewBtn3"
                         id="deleteListBtn"
                         onClick={() => setDeleteModalOpen(true)}
-                        >
-                          Delete
-                        </button>
+                      >
+                        Delete
+                      </button>
                       <button
                         className="listViewBtn3"
                         id="closeListBtn"
@@ -644,9 +644,10 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 )}
 
                 {deleteModalOpen &&
-                  <div className="listViewModal2">
-                    <div className="listViewModal-content2">
+                  <div className="equipment-popup">
+                    <div className="listViewModal-content2" id="deleteBox">
                     <h2>Delete Equipment</h2>
+                    
                     <button
                       className="listViewBtn3"
                       id="deleteListBtn"
