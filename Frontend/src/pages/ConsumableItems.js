@@ -23,8 +23,8 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
         ? await searchConsumables(query, page)
         : await getAllConsumables(page);
       
-      setItems(response.data);
-      setTotalPages(response.totalPages);
+      setItems(response.data || []);
+      setTotalPages(response.totalPages || 1);
       setCurrentPage(page);
     } catch (err) {
       setError('Failed to fetch consumable items');
@@ -48,11 +48,17 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
   };
 
   const handleAddConsumable = () => {
-    navigate('/add-consumable');
+    // Navigate to the existing AddItem page with a state parameter to show consumable form
+    navigate('/additem', { state: { showConsumableForm: true, fromConsumables: true } });
   };
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
+  };
+
+  const handleRefresh = () => {
+    fetchItems(currentPage, searchQuery);
+    if (onRefresh) onRefresh();
   };
 
   if (loading) return (
@@ -108,12 +114,17 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
             </div>
           </div>
 
-          {viewMode === 'list' ? (
+          {items.length === 0 && !loading ? (
+            <div className="no-items-message">
+              No consumable items found. Click the + button to add your first item.
+            </div>
+          ) : viewMode === 'list' ? (
             <ConsumableListView 
               items={items} 
               onPageChange={handlePageChange}
               currentPage={currentPage}
               totalPages={totalPages}
+              onRefresh={handleRefresh}
             />
           ) : (
             <ConsumableTableView 
@@ -121,6 +132,7 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
               onPageChange={handlePageChange}
               currentPage={currentPage}
               totalPages={totalPages}
+              onRefresh={handleRefresh}
             />
           )}
           
@@ -129,7 +141,7 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
             onClick={handleAddConsumable}
             title="Add new consumable item"
           >
-            +
+            <span className="plus-icon">+</span>
           </button>
         </div>
       </div>

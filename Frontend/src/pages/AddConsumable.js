@@ -3,17 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { createConsumable } from '../services/consumableService';
 import '../styles/AddConsumable.css';
 
-const AddConsumable = () => {
+const AddConsumable = ({ onRefresh }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Name: '',
     Category: '',
     Lab: '',
     Quantity: '',
-    Unit: '',
+    MinimumQuantity: '5', // Default minimum quantity for low stock alerts
+    Unit: 'pcs', // Default unit value from the enum
     StorageLocation: '',
-    Description: '',
-    imageUrl: ''
+    Notes: '', // Changed from Description to Notes to match backend
+    image: null
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,17 +27,38 @@ const AddConsumable = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      image: e.target.files[0]
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      await createConsumable({
-        ...formData,
+      const jsonData = {
+        Name: formData.Name,
+        Category: formData.Category,
+        Lab: formData.Lab,
         Quantity: Number(formData.Quantity),
-        Status: 'in-stock'
-      });
+        MinimumQuantity: Number(formData.MinimumQuantity),
+        Unit: formData.Unit,
+        StorageLocation: formData.StorageLocation || '',
+        Notes: formData.Notes || ''
+      };
+
+      // First create the consumable record
+      const response = await createConsumable(jsonData);
+
+      // If there's an image and we have an ID, we could handle image upload here
+      // This would need a separate endpoint in your backend
+      // Similar to what we did in the AddConsumableItems component
+      
+      if (onRefresh) onRefresh();
       navigate('/consumables');
     } catch (err) {
       setError('Failed to add consumable item. Please try again.');
@@ -79,14 +101,20 @@ const AddConsumable = () => {
 
         <div className="form-group">
           <label htmlFor="Lab">Lab</label>
-          <input
-            type="text"
+          <select
             id="Lab"
             name="Lab"
             value={formData.Lab}
             onChange={handleChange}
             required
-          />
+            className="select-control"
+          >
+            <option value="" disabled>Select Lab</option>
+            <option value="Electrical Machines Lab">Electrical Machines Lab</option>
+            <option value="Communication Lab">Communication Lab</option>
+            <option value="Measurements Lab">Measurements Lab</option>
+            <option value="High Voltage Lab">High Voltage Lab</option>
+          </select>
         </div>
 
         <div className="form-row">
@@ -104,17 +132,39 @@ const AddConsumable = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="Unit">Unit</label>
+            <label htmlFor="MinimumQuantity">Minimum Quantity</label>
             <input
-              type="text"
-              id="Unit"
-              name="Unit"
-              value={formData.Unit}
+              type="number"
+              id="MinimumQuantity"
+              name="MinimumQuantity"
+              value={formData.MinimumQuantity}
               onChange={handleChange}
-              placeholder="e.g., pieces, ml, g"
+              min="0"
               required
+              placeholder="For low stock alerts"
             />
           </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="Unit">Unit</label>
+          <select
+            id="Unit"
+            name="Unit"
+            value={formData.Unit}
+            onChange={handleChange}
+            required
+            className="select-control"
+          >
+            <option value="" disabled>Select Unit</option>
+            <option value="pcs">Pieces</option>
+            <option value="meters">Meters</option>
+            <option value="grams">Grams</option>
+            <option value="liters">Liters</option>
+            <option value="boxes">Boxes</option>
+            <option value="packs">Packs</option>
+            <option value="rolls">Rolls</option>
+          </select>
         </div>
 
         <div className="form-group">
@@ -125,30 +175,29 @@ const AddConsumable = () => {
             name="StorageLocation"
             value={formData.StorageLocation}
             onChange={handleChange}
-            required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="Description">Description</label>
+          <label htmlFor="Notes">Notes</label>
           <textarea
-            id="Description"
-            name="Description"
-            value={formData.Description}
+            id="Notes"
+            name="Notes"
+            value={formData.Notes}
             onChange={handleChange}
             rows="3"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="imageUrl">Image URL</label>
+          <label htmlFor="image">Image</label>
           <input
-            type="url"
-            id="imageUrl"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            placeholder="Optional"
+            type="file"
+            id="image"
+            name="image"
+            onChange={handleFileChange}
+            accept="image/*"
+            className="file-input"
           />
         </div>
 

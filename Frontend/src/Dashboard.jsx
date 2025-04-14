@@ -94,6 +94,13 @@ function Dashboard() {
                   </div>
                   <div className="menuBoxText">Inventory Management</div>
                 </div>
+                
+                <div className="menuBox" onClick={handleConsumablesClick}>
+                  <div className="menuBoxImageDiv">
+                    <FaFlask size={64} />  {/* Consumables Icon */}
+                  </div>
+                  <div className="menuBoxText">Consumables</div>
+                </div>
                 <div className="menuBox" onClick={handleEquipment1Click}>
                   <div className="menuBoxImageDiv">
                     <FaClipboardList size={64} />  {/* Equipment Management Icon */}
@@ -101,12 +108,6 @@ function Dashboard() {
                   <div className="menuBoxText">Equipment Management</div>
                 </div>
 
-                <div className="menuBox" onClick={handleConsumablesClick}>
-                  <div className="menuBoxImageDiv">
-                    <FaFlask size={64} />  {/* Consumables Icon */}
-                  </div>
-                  <div className="menuBoxText">Consumables</div>
-                </div>
               </div>
 
               <div className="menuBoxes">

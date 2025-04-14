@@ -3,6 +3,7 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 table {
@@ -20,6 +21,9 @@ th {
   background: #f8f9fa;
   font-weight: 600;
   color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .clickable-row {
@@ -29,6 +33,14 @@ th {
 
 .clickable-row:hover {
   background-color: #f8f9fa;
+}
+
+.selected-row {
+  background-color: #e8f4f8;
+}
+
+.selected-row:hover {
+  background-color: #d8edf5;
 }
 
 .status {
@@ -78,11 +90,130 @@ th {
 }
 
 .pagination button:not(:disabled):hover {
-  background: #007bff;
+  background: #006064;
   color: white;
-  border-color: #007bff;
+  border-color: #006064;
 }
 
 .pagination span {
   color: #666;
+}
+
+/* Table actions */
+.table-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn, .delete-btn, .row-edit-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+.edit-btn {
+  background-color: #006064;
+  color: white;
+}
+
+.edit-btn:hover:not(:disabled) {
+  background-color: #00796b;
+}
+
+.edit-btn:disabled {
+  background-color: #b2dfdb;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.delete-btn:disabled {
+  background-color: #f8d7da;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.row-edit-btn {
+  background-color: #f8f9fa;
+  color: #006064;
+  border: 1px solid #006064;
+  padding: 4px 8px;
+  font-size: 0.8em;
+}
+
+.row-edit-btn:hover {
+  background-color: #006064;
+  color: white;
+}
+
+.action-cell {
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* Delete Confirmation Modal */
+.delete-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.delete-modal-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  padding: 20px;
+}
+
+.delete-modal-content h3 {
+  margin-top: 0;
+  color: #dc3545;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.selected-count {
+  font-weight: 500;
+  color: #006064;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 15px;
+  font-size: 0.9em;
 } 

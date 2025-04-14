@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./AddItem.css";
 import SidePopup from "./components/SidePopup"
@@ -7,9 +7,13 @@ import AddConsumableItems from "./components/consumables/AddConsumableItems";
 
 function AddItem({ onRefresh }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
-  const [isConsumableView, setIsConsumableView] = useState(false);
+  const [isConsumableView, setIsConsumableView] = useState(
+    // Check if we were navigated here with a request to show the consumable form
+    location.state?.showConsumableForm || false
+  );
   const [successMessage, setSuccessMessage] = useState("Added new equipment");
 
   const [equipment, setEquipment] = useState([]);
@@ -83,9 +87,12 @@ function AddItem({ onRefresh }) {
       );
 
       //handleCancelClick();
-      onRefresh();
+      onRefresh && onRefresh();
       setFormData({
-        
+        Name: "",
+        Lab: "",
+        Category: "",
+        Brand: "",
         Serial: "",
         Availability: true,
         image: null,
@@ -103,13 +110,25 @@ function AddItem({ onRefresh }) {
   };
 
   const handleCancelClick = () => {
-    navigate("/table2");
+    // If we came from the consumables page, go back there
+    if (location.state?.fromConsumables) {
+      navigate("/consumables");
+    } else {
+      navigate("/table2");
+    }
   };
 
   const handleConsumableSuccess = () => {
     setSuccessMessage("Added new consumable item");
     setIsSuccessPopupOpen(true);
     onRefresh && onRefresh();
+    
+    // Reset form after successful addition
+    setTimeout(() => {
+      if (location.state?.fromConsumables) {
+        navigate("/consumables");
+      }
+    }, 1500); // Wait for popup to be seen
   };
 
   return (

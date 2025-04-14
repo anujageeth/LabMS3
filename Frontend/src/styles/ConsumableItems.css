@@ -93,6 +93,17 @@
   border: 1px solid #f5c6cb;
 }
 
+.no-items-message {
+  text-align: center;
+  padding: 50px 20px;
+  color: #666;
+  font-size: 16px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px dashed #ccc;
+}
+
 /* Add button styles */
 .add-consumable-button {
   position: fixed;
@@ -106,17 +117,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: none;
-  font-size: 24px;
   z-index: 100;
+  overflow: hidden;
 }
 
 .add-consumable-button:hover {
   background-color: #00796b;
-  transform: scale(1.05);
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+.add-consumable-button:active {
+  transform: scale(0.95);
+}
+
+.plus-icon {
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  position: relative;
+  top: -2px;
 }
 
 .backButton {
