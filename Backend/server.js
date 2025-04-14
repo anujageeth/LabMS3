@@ -44,7 +44,7 @@ app.use("/api",bookingRoutes);
 app.use("/api/update", updatePassword);
 app.use("/api/update", updatePassword);
 app.use("/api", notificationRoutes);
-app.use("/api", consumableRoutes);
+app.use("/api/consumables", consumableRoutes);
 
 // Connect to MongoDB
 mongoose

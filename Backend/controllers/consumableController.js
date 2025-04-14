@@ -1,152 +1,140 @@
 const ConsumableItem = require("../models/consumableItem");
 
-const addConsumableItem = async (req, res) => {
+// Get all consumable items with pagination
+exports.getConsumables = async (req, res) => {
   try {
-    const {
-      Name,
-      Category,
-      Lab,
-      Specifications,
-      Quantity,
-      MinimumQuantity,
-      Unit,
-      StorageLocation,
-      Notes
-    } = req.body;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    const newItem = new ConsumableItem({
-      Name,
-      Category,
-      Lab,
-      Specifications,
-      Quantity,
-      MinimumQuantity,
-      Unit,
-      StorageLocation,
-      Notes
-    });
+    const items = await ConsumableItem.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
-    await newItem.save();
-    res.status(201).json({ 
-      message: "Consumable item added successfully", 
-      item: newItem 
+    const total = await ConsumableItem.countDocuments();
+
+    res.json({
+      data: items,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit)
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const updateConsumable = async (req, res) => {
+// Search consumable items
+exports.searchConsumables = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const items = await ConsumableItem.find(
+      { $text: { $search: query } },
+      { score: { $meta: "textScore" } }
+    )
+    .sort({ score: { $meta: "textScore" } })
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+    const total = await ConsumableItem.countDocuments(
+      { $text: { $search: query } }
+    );
+
+    res.json({
+      data: items,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit)
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Add new consumable item
+exports.addConsumableItem = async (req, res) => {
+  try {
+    const newItem = new ConsumableItem(req.body);
+    const savedItem = await newItem.save();
+    res.status(201).json(savedItem);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Update consumable item
+exports.updateConsumable = async (req, res) => {
+  try {
+    const updatedItem = await ConsumableItem.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updatedItem) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    res.json(updatedItem);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Delete consumable item
+exports.deleteConsumable = async (req, res) => {
+  try {
+    const deletedItem = await ConsumableItem.findByIdAndDelete(req.params.id);
+    if (!deletedItem) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    res.json({ message: "Item deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update quantity
+exports.updateQuantity = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      Name,
-      Category,
-      Lab,
-      Specifications,
-      Quantity,
-      MinimumQuantity,
-      Unit,
-      StorageLocation,
-      Notes,
-      operation // for quantity adjustments
-    } = req.body;
+    const { quantity, action } = req.body; // action: 'add' or 'subtract'
 
     const item = await ConsumableItem.findById(id);
     if (!item) {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    // Handle quantity operations if specified
-    if (operation && Quantity) {
-      if (operation === 'add') {
-        item.Quantity += Number(Quantity);
-      } else if (operation === 'remove') {
-        if (item.Quantity < Quantity) {
-          return res.status(400).json({ message: "Insufficient quantity" });
-        }
-        item.Quantity -= Number(Quantity);
-      } else if (operation === 'set') {
-        item.Quantity = Number(Quantity);
+    if (action === 'add') {
+      item.Quantity += quantity;
+      item.LastRestocked = new Date();
+    } else if (action === 'subtract') {
+      if (item.Quantity < quantity) {
+        return res.status(400).json({ message: "Insufficient quantity" });
       }
-    }
-
-    // Update other fields if provided
-    if (Name) item.Name = Name;
-    if (Category) item.Category = Category;
-    if (Lab) item.Lab = Lab;
-    if (Specifications) item.Specifications = Specifications;
-    if (MinimumQuantity) item.MinimumQuantity = Number(MinimumQuantity);
-    if (Unit) item.Unit = Unit;
-    if (StorageLocation) item.StorageLocation = StorageLocation;
-    if (Notes) item.Notes = Notes;
-
-    // Validate minimum quantity
-    if (item.Quantity < 0) {
-      return res.status(400).json({ message: "Quantity cannot be negative" });
+      item.Quantity -= quantity;
     }
 
     const updatedItem = await item.save();
-
-    res.status(200).json({ 
-      message: "Item updated successfully", 
-      item: updatedItem,
-      stockStatus: updatedItem.stockStatus
-    });
+    res.json(updatedItem);
   } catch (error) {
-    console.error('Error updating consumable:', error);
-    res.status(500).json({ 
-      message: "Error updating item", 
-      error: error.message 
-    });
+    res.status(400).json({ message: error.message });
   }
 };
 
-const getConsumables = async (req, res) => {
+// Get low stock items
+exports.getLowStockItems = async (req, res) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      Lab,
-      Category,
-      search,
-      stockStatus
-    } = req.query;
-
-    let filter = {};
-    if (Lab) filter.Lab = Lab;
-    if (Category) filter.Category = Category;
-    if (search) {
-      filter.$text = { $search: search };
-    }
-    if (stockStatus === 'low_stock') {
-      filter.$expr = { $lte: ['$Quantity', '$MinimumQuantity'] };
-    }
-
-    const [items, total] = await Promise.all([
-      ConsumableItem.find(filter)
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .lean(),
-      ConsumableItem.countDocuments(filter)
-    ]);
-
-    res.status(200).json({
-      items,
-      pagination: {
-        total,
-        pages: Math.ceil(total / limit),
-        page: Number(page),
-        limit: Number(limit)
-      }
-    });
+    const items = await ConsumableItem.find({
+      Status: { $in: ['low-stock', 'out-of-stock'] }
+    }).sort({ Quantity: 1 });
+    res.json(items);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
-
-module.exports = {
-  addConsumableItem,
-  updateConsumable, // Replace updateQuantity with updateConsumable
-  getConsumables
 };

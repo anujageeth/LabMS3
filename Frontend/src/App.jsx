@@ -23,6 +23,8 @@ import AddBulkUser from "./AddBulkUser";
 import AdminProtected from "./services/AdminProcted";
 import Profile from "./components/Profile";
 import EquipmentStatsPage from "./components/EquipmentStatsPage";
+import ConsumableItems from "./pages/ConsumableItems";
+import AddConsumable from "./pages/AddConsumable";
 
 import DashCheckInOutCard from "./components/DashCheckInOutCard";
 import Dashboard2 from "./Dashboard2";
@@ -155,6 +157,26 @@ function App() {
           path="/dashboard2"
           element={
             <ProtectedRoute><Dashboard2 refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
+          }
+        />
+        
+        {/* Consumable Item Routes */}
+        <Route
+          path="/consumables"
+          element={
+            <ProtectedRoute><ConsumableItems refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-consumable"
+          element={
+            <AdminProtected><AddConsumable onRefresh={handleRefresh} /></AdminProtected>
+          }
+        />
+        <Route
+          path="/consumables/:id"
+          element={
+            <ProtectedRoute><ConsumableItems refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
       
