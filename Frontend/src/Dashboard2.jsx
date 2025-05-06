@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaBoxOpen, FaClipboardList, FaCogs, FaUsers, FaFileAlt, FaRegCommentDots } from 'react-icons/fa';  // Importing icons
+import React, { useState} from "react";
 import "./Dashboard.css";
 import UserDetails from "./components/UserDetails";
 import SideNavigation from "./components/SideNavigation";

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-//import 'bootstrap/dist/css/bootstrap.min.css'
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Inventory from "./Inventory";
@@ -13,7 +12,6 @@ import UserManagePage2 from "./UserManagePage2";
 import CheckinCheckoutPage from "./equipmentManagement";
 import EquipmentTable from "./components/EquipmentTable";
 import EquipmentTable2 from "./components/EquipmentTable2";
-//import EquipmentList from "./components/EquipmentList";
 import EquipmentList2 from "./components/EquipmentList";
 import ProtectedRoute from "./services/ProtectedRoute";
 import CheckInOutHistory from "./CheckInOutHistory";

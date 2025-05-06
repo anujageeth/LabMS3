@@ -13,16 +13,12 @@ import {
   TableRow,
   Checkbox,
   IconButton,
-  Tooltip,
-  FormControlLabel,
-  Switch,
+  Tooltip
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import "./components/tableModal2.css";
-import CategoryFilter from "./components/CategoryFilter"; // Import the CategoryFilter component
 import CategorySelect from "./components/CategorySelect";
-
 import SideNavigation from "./components/SideNavigation";
 import UserDetails from "./components/UserDetails";
 
@@ -104,7 +100,6 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
     setSelected((prevSelected) => (prevSelected === row._id ? "" : row._id));
   };
 
-  const isSelectedRow = (id) => selected === id;
 
   // Open edit modal
   const handleEdit = () => {

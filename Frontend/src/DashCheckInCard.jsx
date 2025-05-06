@@ -12,14 +12,7 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableHead,
-    TablePagination,
     TableRow,
-    Checkbox,
-    IconButton,
-    Tooltip,
-    FormControlLabel,
-    Switch,
   } from "@mui/material";
 
 function DashCheckInCard() {
@@ -60,14 +53,6 @@ function DashCheckInCard() {
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-      
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
 
     const handleOpenCheckIn = () => {
       setIsModalOpen(true);

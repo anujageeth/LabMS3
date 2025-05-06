@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
-    getUserData, createUserData
+    getUserData
 } from "../src/services/userDataService";
-import { getAllEquipment } from "../src/services/equipmentService";
-
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -18,44 +16,31 @@ import {
   TableRow,
   Checkbox,
   IconButton,
-  Tooltip,
-  FormControlLabel,
-  Switch
+  Tooltip
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./components/tableModal2.css";
-import CategoryFilter from "./components/CategoryFilter"; // Import the CategoryFilter component
-import CategorySelect from "./components/CategorySelect";
 
 import SideNavigation from "./components/SideNavigation";
-import SidePopup from "./components/SidePopup";
+
 import UserDetails from "./components/UserDetails";
 
 const UserManagePage2 = ({ onRefresh, refresh }) => {
-    const [user, setUser] = useState([]);
     const [userData, setUserData] = useState([]);
-    const [roles, setRoles] = useState([]);
     const [filteredUser, setFilteredUser] = useState([]); // State for filtered equipment
-    const [filteredRole, setFilteredRole] = useState([]);
     const [selected, setSelected] = useState("");
     const [dense, setDense] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editData, setEditData] = useState(null);
-    const [categories, setCategories] = useState([]); // State for category options
     const [selectedUser, setSelectedUser] = useState(""); // State to track selected category
-    const [selectedRole, setSelectedRole] = useState("");
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
-    const [selectedCategory, setSelectedCategory] = useState([]);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
     const [isDeleteSuccessPopupOpen, setIsDeleteSuccessPopupOpen] = useState(false);
 
-    const [records, setRecords] = useState([]);
-    const [selectedRecords, setSelectedRecords] = useState([]);
-    const [usersList, setUsersList] = useState([]);
     const [users, setUsers] = useState([]); // Store all users
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [form, setForm] = useState({
@@ -79,9 +64,6 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
         }
     };
 
-    const handleInputChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    };
 
     useEffect(() => {
         let filtered = userData;
@@ -153,9 +135,6 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     setPage(0);
     };
 
-    const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-    };
 
     const navigate = useNavigate();
 
