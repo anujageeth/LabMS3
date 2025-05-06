@@ -162,9 +162,6 @@ function UserDetails({ onUserDataFetched }) {
         navigate("/Profile");
     };
 
-    const handleActivityClick = (option) => {
-        console.log(option);
-    };
 
     const handleLogoutClick = () => {
         localStorage.removeItem("token");
@@ -441,12 +438,7 @@ function UserDetails({ onUserDataFetched }) {
                 )}
             </div>
 
-            {/*showBroadcast && (
-                <Broadcast
-                    show={showBroadcast} 
-                    onHide={() => setShowBroadcast(false)}
-                />
-            )*/}
+           
         </div>
     );
 }

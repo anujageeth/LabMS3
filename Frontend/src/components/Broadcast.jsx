@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
-import SideNavigation from "./SideNavigation";
-import UserDetails from "./UserDetails";
+import React, { useState} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 // Material UI imports
 import { 
@@ -22,10 +19,8 @@ import {
   Alert, 
   Typography,
   IconButton,
-  Avatar
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
 
 function Broadcast() {

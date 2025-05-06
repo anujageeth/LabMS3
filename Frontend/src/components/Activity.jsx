@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import "./Activity.css";
 
 const Activity = () => {

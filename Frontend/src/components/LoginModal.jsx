@@ -1,11 +1,10 @@
 import React from 'react'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/authService";
-import axios from "axios";
 import "../Login.css";
 
-function LoginModal({ setUser, showLoginModal, setShowLoginModal }) {
+function LoginModal({ showLoginModal, setShowLoginModal }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,11 +32,6 @@ function LoginModal({ setUser, showLoginModal, setShowLoginModal }) {
     }
   };
 
-  const handleCancel = () => {
-    setEmail("");
-    setPassword("");
-    setShowLoginModal(false);
-  };
 
   // Close the modal
     const closeModal = () => {

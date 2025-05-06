@@ -20,7 +20,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     Quantity: "",
   });
 
-  const [formData, setFormData] = useState({
+  const [] = useState({
     Category: "",
   });
 
@@ -70,16 +70,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     filterEquipment(value, selectedCategory); // Filter with both search and category
   };
 
-  // const filterEquipment = (search, category) => {
-  //   const filtered = equipment.filter((item) => {
-  //     const matchesCategory = category ? item.Category._id === category : true;
-  //     const matchesSearch = item.Name.toLowerCase().includes(
-  //       search.toLowerCase()
-  //     );
-  //     return matchesCategory && matchesSearch;
-  //   });
-  //   setFilteredEquipment(filtered);
-  // };
+ 
   const filterEquipment = (search, categoryId) => {
     console.log("Filtering with category:", categoryId, "and search:", search);
 
@@ -202,12 +193,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     }
   };
 
-  const handleDashClick = () => {
-    navigate("/dashboard");
-  };
-  const handleTableViewClick = () => {
-    navigate("/table2");
-  };
   const handleListViewClick = () => {
     navigate("/table2");
   };
@@ -216,9 +201,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     navigate("/additem");
   };
 
-  const handleLogoutClick = () => {
-    navigate("/login");
-  };
 
   return (
     <div className="dashPage">

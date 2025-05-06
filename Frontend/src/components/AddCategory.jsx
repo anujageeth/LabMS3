@@ -6,9 +6,9 @@ import "./CategorySelect.css";
 
 function AddCategory({ showModal, setShowModal }) {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
+  const [setCategories] = useState([]);
 
-  const [formData, setFormData] = useState({
+  const [setFormData] = useState({
     Name: "",
     Lab: "",
     Category: "",
@@ -18,22 +18,22 @@ function AddCategory({ showModal, setShowModal }) {
     image: null,
   });
 
-  const [newCategory, setNewCategory] = useState(""); // State to handle new category
-  const [newCategoryDescription, setNewCategoryDescription] = useState(""); // State to handle new category description
+  const [newCategory, setNewCategory] = useState(""); 
+  const [newCategoryDescription, setNewCategoryDescription] = useState(""); 
 
-  // Close the modal
+  
   const closeModal = () => {
     setShowModal(false);
   };
 
-  // Fetch categories when the component loads
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3001/api/categories"
         );
-        setCategories(response.data); // Set the fetched categories
+        setCategories(response.data); 
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -46,7 +46,7 @@ function AddCategory({ showModal, setShowModal }) {
     try {
       const response = await axios.post("http://localhost:3001/api/category", {
         name: newCategory,
-        description: newCategoryDescription, // Add this if required
+        description: newCategoryDescription, 
       });
 
       setCategories((prev) => [...prev, response.data.category]);

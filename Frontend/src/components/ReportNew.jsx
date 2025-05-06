@@ -9,13 +9,7 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow,
-  Select,
-  MenuItem,
-  Button,
-  FormControl,
-  InputLabel
-} from "@mui/material";
+  TableRow} from "@mui/material";
 import "./ReportPage.css";
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";

@@ -1420,14 +1420,14 @@ const BookingReservation = () => {
 
   // Fixed list of 8 semesters
   const semesters = [
-    { id: "sem1", number: 1, name: "First Semester" },
-    { id: "sem2", number: 2, name: "Second Semester" },
-    { id: "sem3", number: 3, name: "Third Semester" },
-    { id: "sem4", number: 4, name: "Fourth Semester" },
-    { id: "sem5", number: 5, name: "Fifth Semester" },
-    { id: "sem6", number: 6, name: "Sixth Semester" },
-    { id: "sem7", number: 7, name: "Seventh Semester" },
-    { id: "sem8", number: 8, name: "Eighth Semester" },
+    { id: "sem1", number: 1, name: "Semester 1" },
+    { id: "sem2", number: 2, name: "Semester 2" },
+    { id: "sem3", number: 3, name: "Semester 3" },
+    { id: "sem4", number: 4, name: "Semester 4" },
+    { id: "sem5", number: 5, name: "Semester 5" },
+    { id: "sem6", number: 6, name: "Semester 6" },
+    { id: "sem7", number: 7, name: "Semester 7" },
+    { id: "sem8", number: 8, name: "Semester 8" },
   ];
 
   // Snackbar function
