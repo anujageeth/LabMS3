@@ -136,18 +136,9 @@ function AddItem({ onRefresh }) {
       <div className="fullBox">
         <div className="overlay"></div>
         <div className="loginBox" id="addUserBox">
-          <div className="form-toggle-header">
-            <h2 className="loginTitle">
+          <h2 className="loginTitle">
               {isConsumableView ? "Add Consumable Item" : "Add Equipment"}
-            </h2>
-            <button 
-              type="button" 
-              className="toggle-view-btn"
-              onClick={() => setIsConsumableView(!isConsumableView)}
-            >
-              Switch to {isConsumableView ? "Equipment" : "Consumable"}
-            </button>
-          </div>
+          </h2>
 
           {isConsumableView ? (
             <AddConsumableItems onRefresh={handleConsumableSuccess} />
@@ -250,9 +241,17 @@ function AddItem({ onRefresh }) {
               </div>
 
               {/* Submit Button */}
-              <button type="submit" className="loginBtn"><b>SAVE</b></button>
+              <button type="submit" className="loginBtn" id="saveUserBtn"><b>SAVE</b></button>
             </form>
           )}
+
+          <button
+            type="button" 
+            className="loginBtn"
+            onClick={() => setIsConsumableView(!isConsumableView)}
+          >
+            <b>Switch to {isConsumableView ? "Equipment" : "Consumable"}</b>
+          </button>
 
           {/* Cancel Button - Always shown regardless of form type */}
           <button type="button" className="loginBtn" onClick={handleCancelClick}><b>Cancel</b></button>
