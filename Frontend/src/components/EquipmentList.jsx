@@ -16,10 +16,8 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const [sortBy, setSortBy] = useState('Name');
   const [sortOrder, setSortOrder] = useState('asc');
   const [loading, setLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
 
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedCondition, setSelectedCondition] = useState("");
   const [searchTerm, setSearchTerm] = useState(""); // Name filter
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedLab, setSelectedLab] = useState("");
@@ -33,15 +31,13 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     Category: "",
     Brand: "",
     SerialCode: "",
-    Availability: true,
-    condition: "",
   });
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchEquipment();
-  }, [page, limit, sortBy, sortOrder, selectedCondition, selectedCategory, searchTerm, selectedBrand, selectedLab, refresh]);
+  }, [page, limit, sortBy, sortOrder, selectedCategory, searchTerm, selectedBrand, selectedLab, refresh]);
 
   const fetchEquipment = async () => {
     try {
@@ -59,7 +55,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         sortOrder,
         ...(searchTerm && { search: searchTerm }),
         ...(selectedCategory && { Category: selectedCategory }),
-        ...(selectedCondition && { condition: selectedCondition }),
         ...(selectedLab && { Lab: selectedLab }),
         ...(selectedBrand && { Brand: selectedBrand })
       });
@@ -97,15 +92,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const handleSelect = (item) => {
     setSelectedEquipment(item);
     setIsModalOpen(true);
-    setEditEquipment({
-      Name: item.Name,
-      Lab: item.Lab,
-      Category: item.Category,
-      Brand: item.Brand,
-      Serial: item.Serial,
-      condition: item.condition || 'good', // Set default if undefined
-      Availability: item.Availability
-    });
+    setEditEquipment(item);
     
   };
 
@@ -128,7 +115,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
       });
       onRefresh();
       closeModal();
-      closeEquipmentBox();
     } catch (error) {
       handleAuthError(error);
     }
@@ -180,10 +166,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     setDeleteModalOpen(false);
   }
 
-  const closeEquipmentBox = () => {
-    setSelectedItem(null);
-  }
-
   return (
     <div className="dashPage">
       <div className="gridBox">
@@ -205,9 +187,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                   <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/table2")}>
                     <b>Table View</b>
                   </button>
-                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/equipment-stats")}>
-                    <b>View Statistics</b>
-                  </button>
                 </div>
                 
                 <div className="search">
@@ -224,13 +203,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                 </div>
                 
                 <div className="search">
-
-                  <select id="categoryFilter" value={equipment.condition} onChange={(e) => setSelectedCondition(e.target.value)}>
-                    <option value="">All Conditions</option>
-                    <option value="good">Good</option>
-                    <option value="damaged">Damaged</option>
-                  </select>
-
                   <select id="categoryFilter" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="">All Categories</option>
                     {Array.from(new Set(equipment.map((item) => item.Category))).map((category) => (
@@ -239,6 +211,8 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                       </option>
                     ))}
                   </select>
+
+                  
 
                   <select id="categoryFilter" value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
                     <option value="">All Brands</option>
@@ -263,100 +237,30 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
             </div>
 
             <div className="dataTableBox">
-              {selectedItem && (
-                <div className="equipment-popup">
-                  <div className="popup-content">
-                    <button 
-                      className="popup-close-btn"
-                      onClick={() => setSelectedItem(null)}
-                    >
-                      ×
-                    </button>
-                    <h3>{selectedItem.Brand} {selectedItem.Name}</h3>
-                    <div className="popup-details">
-                      <div className="popup-text">
-                        <p><b>Lab:</b> {selectedItem.Lab}</p>
-                        <p><b>Category:</b> {selectedItem.Category}</p>
-                        <p><b>Brand:</b> {selectedItem.Brand}</p>
-                        <p><b>Serial Code:</b> {selectedItem.Serial}</p>
-                        <p><b>Availability:</b> {selectedItem.Availability ? "Available" : "Not Available"}</p>
-                        <p><b>Condition:</b> {selectedItem.condition}</p>
-                        <p><b>Added on:</b> {new Date(selectedItem.createdAt).toLocaleDateString()}</p>
-                        <p><b>Last updated on:</b> {new Date(selectedItem.updatedAt).toLocaleDateString()}</p>
-                      </div>
-                      <div className="popup-image">
-                        <img
-                          src={selectedItem.imageUrl === "default"
-                            ? "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/noImageAvailable.png?alt=media"
-                            : selectedItem.imageUrl}
-                          alt={selectedItem.Name}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="equipmentBoxBtns">
-                      <button 
-                        className="popup-btn" 
-                        onClick={() => {
-                          handleSelect(selectedItem);
-                        }}
-                      >
-                        Update
-                      </button>
-
-                      <button
-                        className="popup-btn"
-                        id="popup-delete-btn"
-                        onClick={() => setDeleteModalOpen(true)}
-                      >
-                        Delete
-                      </button>
-
-                      <button
-                        className="popup-btn"
-                        id="popup-cancel-btn"
-                        onClick={() => setSelectedItem(null)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              )}
-
-              {/* Original List */}
               <ul className="equipment-list2">
                 {filteredEquipment.map((item) => (
-                  <li 
-                    key={item._id} 
-                    className="equipment-item2"
-                    onClick={() => setSelectedItem(item)}
-                  >
+                  <li key={item._id} className="equipment-item2">
                     {item.condition === 'damaged' && (
                       <span className="damage-badge">Damaged</span>
                     )}
                     <h3>{item.Brand} {item.Name}</h3>
-                    <div><div>
-                      <p><b>Lab:</b> {item.Lab}</p>
-                      <p><b>Category:</b> {item.Category}</p>
-                      <p><b>Brand:</b> {item.Brand}</p>
-                      <p><b>Serial Code:</b> {item.Serial}</p>
-                    </div>
-
+                    <p><b>Lab:</b> {item.Lab}</p>
+                    <p><b>Category:</b> {item.Category}</p>
+                    <p><b>Brand:</b> {item.Brand}</p>
+                    <p><b>Serial Code:</b> {item.Serial}</p>
+                    <p><b>Availability:</b> {item.Availability ? "Available" : "Not Available"}</p>
+                    <p><b>Condition:</b> {item.condition}</p>
+                    <p><b>Added on:</b> {new Date(item.createdAt).toLocaleDateString()}</p>
+                    <p><b>Last updated on:</b> {new Date(item.updatedAt).toLocaleDateString()}</p>
                     <img
                       src={item.imageUrl === "default"
                         ? "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/noImageAvailable.png?alt=media"
                         : item.imageUrl}
                       alt={item.Name}
                     />
-                      </div>
-
-                    <button className="listViewBtn2" onClick={() => setSelectedItem(item)}>
-                      Details
-                    </button>
+                    <br />
                     <button className="listViewBtn2" onClick={() => {handleSelect(item)}}>
-                      Update
+                      Select
                     </button>
                   </li>
                 ))}
@@ -413,13 +317,13 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
               onChange={handleInputChange}
             >
               
-              <option value="good">Good</option>
-              <option value="damaged">Damaged</option>
+              <option value="Good">Good</option>
+              <option value="Damaged">Damaged</option>
             </select>
 
 
             {/* Add condition select */}
-            {/* <select
+            <select
               className="listViewModalInput2"
               name="condition"
               value={editEquipment.condition || 'good'}
@@ -427,7 +331,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
             >
               <option value="good">Good</option>
               <option value="damaged">Damaged</option>
-            </select> */}
+            </select>
 
             <button className="listViewBtn3" onClick={handleUpdate}>Update</button>
             <button className="listViewBtn3" id="deleteListBtn" onClick={() => setDeleteModalOpen(true)}>Delete</button>
@@ -437,7 +341,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
       )}
 
       {deleteModalOpen &&
-        <div className="equipment-popup">
+        <div className="listViewModal2">
           <div className="listViewModal-content2">
           <h2>Delete Equipment</h2>
           <button

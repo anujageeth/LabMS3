@@ -1,26 +1,22 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./AddItem.css";
 import SidePopup from "./components/SidePopup"
+import AddConsumableItems from "./components/consumables/AddConsumableItems";
 
 function AddItem({ onRefresh }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+  const [isConsumableView, setIsConsumableView] = useState(
+    // Check if we were navigated here with a request to show the consumable form
+    location.state?.showConsumableForm || false
+  );
+  const [successMessage, setSuccessMessage] = useState("Added new equipment");
 
   const [equipment, setEquipment] = useState([]);
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    limit: 1000, // High limit to get all items for dropdowns
-    total: 0,
-    totalPages: 0
-  });
-  const [uniqueValues, setUniqueValues] = useState({
-    names: [],
-    categories: [],
-    brands: []
-  });
   const [formData, setFormData] = useState({
     Name: "",
     Lab: "",
@@ -35,60 +31,14 @@ function AddItem({ onRefresh }) {
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const params = new URLSearchParams({
-          page: pagination.currentPage,
-          limit: pagination.limit,
-          sortBy: 'Name',
-          sortOrder: 'asc'
-        });
-
-        const response = await axios.get(
-          `http://localhost:3001/api/equipmentImage?${params}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-        const { equipment: fetchedEquipment } = response.data;
-
-        // Extract and sort unique values
-        const names = [...new Set(fetchedEquipment
-          .map(item => item.Name)
-          .filter(Boolean))]
-          .sort();
-        
-        const categories = [...new Set(fetchedEquipment
-          .map(item => item.Category)
-          .filter(Boolean))]
-          .sort();
-        
-        const brands = [...new Set(fetchedEquipment
-          .map(item => item.Brand)
-          .filter(Boolean))]
-          .sort();
-
-        setEquipment(fetchedEquipment);
-        setUniqueValues({ names, categories, brands });
-        setPagination(response.data.pagination);
-        
+        const response = await axios.get("http://localhost:3001/api/equipmentImage");
+        setEquipment(response.data);
       } catch (error) {
         console.error("Error fetching equipment:", error);
-        if (error.response?.status === 403) {
-          navigate("/login");
-        }
       }
     };
-
     fetchEquipment();
-  }, [navigate, pagination.currentPage, pagination.limit]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,6 +65,7 @@ function AddItem({ onRefresh }) {
       formDataToSend.append(key, value);
     });
 
+    setSuccessMessage("Added new equipment");
     setIsSuccessPopupOpen(true);
 
     try {
@@ -136,9 +87,12 @@ function AddItem({ onRefresh }) {
       );
 
       //handleCancelClick();
-      onRefresh();
+      onRefresh && onRefresh();
       setFormData({
-        
+        Name: "",
+        Lab: "",
+        Category: "",
+        Brand: "",
         Serial: "",
         Availability: true,
         image: null,
@@ -146,7 +100,7 @@ function AddItem({ onRefresh }) {
     } catch (error) {
       if (error.response?.status === 403) {
         alert("Session expired. Please log in again.");
-       // localStorage removeItem("token");
+       // localStorage.removeItem("token");
         navigate("/login");
       } else {
         setIsErrorPopupOpen(true);
@@ -155,131 +109,160 @@ function AddItem({ onRefresh }) {
     }
   };
 
+  const handleCancelClick = () => {
+    // If we came from the consumables page, go back there
+    if (location.state?.fromConsumables) {
+      navigate("/consumables");
+    } else {
+      navigate("/table2");
+    }
+  };
+
+  const handleConsumableSuccess = () => {
+    setSuccessMessage("Added new consumable item");
+    setIsSuccessPopupOpen(true);
+    onRefresh && onRefresh();
+    
+    // Reset form after successful addition
+    setTimeout(() => {
+      if (location.state?.fromConsumables) {
+        navigate("/consumables");
+      }
+    }, 1500); // Wait for popup to be seen
+  };
 
   return (
     <div className="loginPage">
       <div className="fullBox">
         <div className="overlay"></div>
         <div className="loginBox" id="addUserBox">
-          <h2 className="loginTitle">Add Equipment</h2>
-          <form onSubmit={handleSubmit}>
-            
-            {/* Name Selection */}
-            <select 
-              name="Name" 
-              value={formData.Name} 
-              onChange={handleChange} 
-              className="typeBoxControl"
+          <div className="form-toggle-header">
+            <h2 className="loginTitle">
+              {isConsumableView ? "Add Consumable Item" : "Add Equipment"}
+            </h2>
+            <button 
+              type="button" 
+              className="toggle-view-btn"
+              onClick={() => setIsConsumableView(!isConsumableView)}
             >
-              <option value="">Select Existing Name</option>
-              {uniqueValues.names.map((name) => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder="Or Enter New Name"
-              name="Name"
-              value={formData.Name}
-              onChange={handleChange}
-              className="typeBoxControl"
-            />
+              Switch to {isConsumableView ? "Equipment" : "Consumable"}
+            </button>
+          </div>
 
-            {/* Category Selection */}
-            <select 
-              name="Category" 
-              value={formData.Category} 
-              onChange={handleChange} 
-              className="typeBoxControl"
-            >
-              <option value="">Select Existing Category</option>
-              {uniqueValues.categories.map((category) => (
-                <option key={category} value={category}>{category}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder="Or Enter New Category"
-              name="Category"
-              value={formData.Category}
-              onChange={handleChange}
-              className="typeBoxControl"
-            />
-
-            {/* Brand Selection */}
-            <select 
-              name="Brand" 
-              value={formData.Brand} 
-              onChange={handleChange} 
-              className="typeBoxControl"
-            >
-              <option value="">Select Existing Brand</option>
-              {uniqueValues.brands.map((brand) => (
-                <option key={brand} value={brand}>{brand}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder="Or Enter New Brand"
-              name="Brand"
-              value={formData.Brand}
-              onChange={handleChange}
-              className="typeBoxControl"
-            />
-
-            {/* Serial Number */}
-            <input
-              type="text"
-              placeholder="Serial Code"
-              name="Serial"
-              value={formData.Serial}
-              onChange={handleChange}
-              className="typeBoxControl"
-            />
-
-            {/* Lab Selection */}
-            <select className="typeBoxControl" id="addAvailabilityBtn" name="Lab" value={formData.Lab} onChange={handleChange}>
-              <option value="" disabled>Select Lab</option>
-              <option value="Electrical Machines Lab">Electrical Machines Lab</option>
-              <option value="Measurements Lab">Measurements Lab</option>
-              <option value="High Voltage Lab">High Voltage Lab</option>
-            </select>
-
-            {/* Image Upload */}
-            <div className="addItemImageBox">
+          {isConsumableView ? (
+            <AddConsumableItems onRefresh={handleConsumableSuccess} />
+          ) : (
+            <form onSubmit={handleSubmit}>
+              
+              {/* Name Selection */}
+              <select name="Name" value={formData.Name} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
+                <option value="">Select Existing Name or Enter New</option>
+                {[...new Set(equipment.map((item) => item.Name))].map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
               <input
-                className="addImageBtn"
-                type="file"
-                name="image"
-                onChange={handleFileChange}
-                accept="image/*"
+                type="text"
+                placeholder="Or Enter New Name"
+                name="Name"
+                value={formData.Name}
+                onChange={handleChange}
+                className="typeBoxControl"
               />
-            </div>
 
-            {/* Availability Checkbox */}
-            <label>
+              {/* Category Selection */}
+              <select name="Category" value={formData.Category} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
+                <option value="">Select Existing Category or Enter New</option>
+                {[...new Set(equipment.map((item) => item.Category))].map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
               <input
-                type="checkbox"
-                name="Availability"
-                checked={formData.Availability}
-                onChange={() => setFormData((prev) => ({ ...prev, Availability: !prev.Availability }))}
+                type="text"
+                placeholder="Or Enter New Category"
+                name="Category"
+                value={formData.Category}
+                onChange={handleChange}
+                className="typeBoxControl"
               />
-              Available
-            </label>
 
-            {/* Submit Button */}
-            <button type="submit" className="loginBtn"><b>SAVE</b></button>
-          </form>
+              {/* Brand Selection */}
+              <select name="Brand" value={formData.Brand} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
+                <option value="">Select Existing Brand or Enter New</option>
+                {[...new Set(equipment.map((item) => item.Brand))].map((b) => (
+                  <option key={b} value={b}>{b}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                placeholder="Or Enter New Brand"
+                name="Brand"
+                value={formData.Brand}
+                onChange={handleChange}
+                className="typeBoxControl"
+              />
 
-          {/* Cancel Button */}
-          <button type="button" className="loginBtn" onClick={() => navigate(-1)}><b>Cancel</b></button>
+              {/* Serial Number */}
+              <div className="typeBox">
+                <input
+                  type="text"
+                  placeholder="Serial Code"
+                  name="Serial"
+                  value={formData.Serial}
+                  onChange={handleChange}
+                  required
+                  className="typeBoxControl"
+                />
+              </div>
+
+              {/* Lab Selection */}
+              <label>
+                <select className="typeBoxControl" id="addAvailabilityBtn" name="Lab" value={formData.Lab} onChange={handleChange}>
+                  <option value="" disabled>Select Lab</option>
+                  <option value="Electrical Machines Lab">Electrical Machines Lab</option>
+                  <option value="Communication Lab">Communication Lab</option>
+                  <option value="Measurements Lab">Measurements Lab</option>
+                  <option value="High Voltage Lab">High Voltage Lab</option>
+                </select>
+              </label>
+
+              <br/>
+
+              {/* Availability Checkbox */}
+              <label>
+                <input
+                  type="checkbox"
+                  name="Availability"
+                  checked={formData.Availability}
+                  onChange={() => setFormData((prev) => ({ ...prev, Availability: !prev.Availability }))}
+                /> Available
+              </label>
+
+              {/* Image Upload */}
+              <div className="addItemImageBox">
+                <input
+                  className="addImageBtn"
+                  type="file"
+                  name="image"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button type="submit" className="loginBtn"><b>SAVE</b></button>
+            </form>
+          )}
+
+          {/* Cancel Button - Always shown regardless of form type */}
+          <button type="button" className="loginBtn" onClick={handleCancelClick}><b>Cancel</b></button>
         </div>
       </div>
 
       <SidePopup
         type="success"
         title="Successful"
-        message="Added new equipment"
+        message={successMessage}
         isOpen={isSuccessPopupOpen}
         onClose={() => setIsSuccessPopupOpen(false)}
         duration={3000} // Optional: customize duration in milliseconds
@@ -288,7 +271,7 @@ function AddItem({ onRefresh }) {
       <SidePopup
         type="error"
         title="Error"
-        message="Couldn't add new equipment"
+        message="Couldn't add new item"
         isOpen={isErrorPopupOpen}
         onClose={() => setIsErrorPopupOpen(false)}
         duration={3000} // Optional: customize duration in milliseconds

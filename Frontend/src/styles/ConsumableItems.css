@@ -1,0 +1,159 @@
+.consumable-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  min-height: 400px;
+}
+
+.consumable-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.view-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.view-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.view-btn.active {
+  background: #006064;
+  color: white;
+  border-color: #006064;
+}
+
+.view-btn:not(.active):hover {
+  background: #f1f1f1;
+  border-color: #ccc;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 400px;
+  margin-left: 20px;
+}
+
+.search-bar form {
+  display: flex;
+  gap: 10px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-bar button {
+  padding: 10px 20px;
+  background: #006064;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+  background: #00796b;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #dc3545;
+  background: #f8d7da;
+  border-radius: 4px;
+  margin: 20px 0;
+  border: 1px solid #f5c6cb;
+}
+
+.no-items-message {
+  text-align: center;
+  padding: 50px 20px;
+  color: #666;
+  font-size: 16px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px dashed #ccc;
+}
+
+/* Add button styles */
+.add-consumable-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-color: #006064;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.add-consumable-button:hover {
+  background-color: #00796b;
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+.add-consumable-button:active {
+  transform: scale(0.95);
+}
+
+.plus-icon {
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  position: relative;
+  top: -2px;
+}
+
+.backButton {
+  padding: 8px 16px;
+  background-color: #006064;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.backButton:hover {
+  background-color: #00796b;
+} 

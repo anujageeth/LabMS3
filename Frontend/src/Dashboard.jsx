@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaBoxOpen, FaClipboardList, FaCogs, FaUsers, FaFileAlt, FaRegCommentDots } from 'react-icons/fa';  // Importing icons
+import { FaBoxOpen, FaClipboardList, FaCogs, FaUsers, FaFileAlt, FaRegCommentDots, FaFlask } from 'react-icons/fa';  // Added FaFlask
 import "./Dashboard.css";
 import UserDetails from "./components/UserDetails";
 
@@ -33,6 +33,14 @@ function Dashboard() {
 
   const handleAddUsrClick = () => {
     navigate("/adduser");
+  };
+  
+  const handleConsumablesClick = () => {
+    navigate("/consumables");
+  };
+
+  const handleNavigate = (path) => {
+    navigate(path);
   };
 
   return (
@@ -86,6 +94,13 @@ function Dashboard() {
                   </div>
                   <div className="menuBoxText">Inventory Management</div>
                 </div>
+                
+                <div className="menuBox" onClick={handleConsumablesClick}>
+                  <div className="menuBoxImageDiv">
+                    <FaFlask size={64} />  {/* Consumables Icon */}
+                  </div>
+                  <div className="menuBoxText">Consumables</div>
+                </div>
                 <div className="menuBox" onClick={handleEquipment1Click}>
                   <div className="menuBoxImageDiv">
                     <FaClipboardList size={64} />  {/* Equipment Management Icon */}
@@ -93,16 +108,15 @@ function Dashboard() {
                   <div className="menuBoxText">Equipment Management</div>
                 </div>
 
-                <div className="menuBox" onClick={handleBooking1Click}>
+              </div>
 
+              <div className="menuBoxes">
+                <div className="menuBox" onClick={handleBooking1Click}>
                   <div className="menuBoxImageDiv">
                     <FaCogs size={64} />  {/* Bookings & Reservations Icon */}
                   </div>
                   <div className="menuBoxText">Bookings & Reservations</div>
                 </div>
-              </div>
-
-              <div className="menuBoxes">
                 <div className="menuBox" onClick={handleReport1Click}>
                   <div className="menuBoxImageDiv">
                     <FaFileAlt size={64} />  {/* Reports Icon */}
@@ -115,16 +129,7 @@ function Dashboard() {
                   </div>
                   <div className="menuBoxText">User Management</div>
                 </div>
-                <div className="menuBox">
-                  <div className="menuBoxImageDiv">
-                    <FaRegCommentDots size={64} />  {/* Feedback Icon */}
-                  </div>
-                  <div className="menuBoxText">Feedback</div>
-                </div>
               </div>
-
-            
-
             </div>
           </div>
         </div>

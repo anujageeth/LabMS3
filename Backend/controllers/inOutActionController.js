@@ -111,14 +111,9 @@ router.get("/checkinout", authenticateToken, async (req, res) => {
     if (user) filter.user = user;
     if (equipment) filter.equipment = equipment;
     if (startDate || endDate) {
-      filter.date = {};
-      if (startDate) filter.date.$gte = new Date(startDate);
-      if (endDate) {
-        // Set the end date to the end of the day
-        const endDateTime = new Date(endDate);
-        endDateTime.setHours(23, 59, 59, 999);
-        filter.date.$lte = endDateTime;
-      }
+      filter.timestamp = {};
+      if (startDate) filter.timestamp.$gte = new Date(startDate);
+      if (endDate) filter.timestamp.$lte = new Date(endDate);
     }
 
     // Calculate pagination

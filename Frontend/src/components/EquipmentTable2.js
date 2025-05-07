@@ -39,7 +39,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
   const [sortBy, setSortBy] = useState('Name');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -321,7 +321,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/list2")}>
                     <b>List View</b>
                   </button>
-                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/equipment-stats")}>
+                  <button className="addItemBtn" onClick={() => navigate("/equipment-stats")}>
                     <b>View Statistics</b>
                   </button>
                 </div>
@@ -341,7 +341,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 
                 <div className="search">
                   <select 
-                    id="categoryFilter" 
+                    id="conditionFilter" 
                     value={filters.condition} 
                     onChange={(e) => handleFilterChange('condition', e.target.value)}
                   >
@@ -518,7 +518,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                       setRowsPerPage(parseInt(e.target.value, 10));
                       setPage(0);
                     }}
-                    rowsPerPageOptions={[4]}
+                    rowsPerPageOptions={[5, 10, 25, 50]}
                   />
                 </Paper>
 
@@ -591,8 +591,8 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         }
                       >
                         
-                        <option value="good">Good</option>
-                        <option value="damaged">Damaged</option>
+                        <option value="Good">Good</option>
+                        <option value="Damaged">Damaged</option>
                       </select>
 
                       {/*<input
@@ -621,7 +621,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         <option value="good">Good</option>
                         <option value="damaged">Damaged</option>
                       </select>*/}
-                      <button className="listViewBtn3" onClick={handleUpdate}>
+                      <button className="tableModalBtn" onClick={handleUpdate}>
                         Save
                       </button>
 
@@ -629,9 +629,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         className="listViewBtn3"
                         id="deleteListBtn"
                         onClick={() => setDeleteModalOpen(true)}
-                      >
-                        Delete
-                      </button>
+                        >
+                          Delete
+                        </button>
                       <button
                         className="listViewBtn3"
                         id="closeListBtn"
@@ -644,10 +644,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 )}
 
                 {deleteModalOpen &&
-                  <div className="equipment-popup">
-                    <div className="listViewModal-content2" id="deleteBox">
+                  <div className="listViewModal2">
+                    <div className="listViewModal-content2">
                     <h2>Delete Equipment</h2>
-                    
                     <button
                       className="listViewBtn3"
                       id="deleteListBtn"
