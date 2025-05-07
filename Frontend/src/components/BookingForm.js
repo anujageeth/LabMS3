@@ -121,8 +121,8 @@ const BookingForm = ({
 
   return (
     <div className="booking-form-container">
-      <div className="booking-form">
-        <h2>📅 Book Laboratory</h2>
+      <div className="loginBox" id="addUserBox">
+        <h2 className="loginTitle">Book Laboratory</h2>
         {isPastDate ? (
           <div className="past-date-message">
             <p>You cannot book labs for past dates.</p>
@@ -133,12 +133,14 @@ const BookingForm = ({
         ) : (
           <form onSubmit={handleSubmit}>
             {/* Semester Selection */}
-            <label>Semester</label>
+            {/* <label>Semester</label> */}
             <select
               name="semesterId"
               value={formData.semesterId}
               onChange={handleChange}
               required
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             >
               <option value="" disabled>Select Semester</option>
               {academicDetails.semesters.map((semester) => (
@@ -149,13 +151,15 @@ const BookingForm = ({
             </select>
 
             {/* Module Selection */}
-            <label>Module</label>
+            {/* <label>Module</label> */}
             <select
               name="moduleId"
               value={formData.moduleId}
               onChange={handleChange}
               required
               disabled={!formData.semesterId}
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             >
               <option value="" disabled>Select Module</option>
               {availableModules.map((module) => (
@@ -166,15 +170,17 @@ const BookingForm = ({
             </select>
 
             {/* Lab Selection */}
-            <label>Lab Name</label>
+            {/* <label>Lab Name</label> */}
             <select
               name="labId"
               value={formData.labId}
               onChange={handleChange}
               required
               disabled={!formData.moduleId}
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             >
-              <option value="" disabled>Select Lab</option>
+              <option value="" disabled>Select Laboratory Name</option>
               {availableLabs.map((lab) => (
                 <option key={lab.id} value={lab.id}>
                   {lab.name} ({lab.location})
@@ -183,14 +189,16 @@ const BookingForm = ({
             </select>
 
             {/* Lab Place Selection */}
-            <label>Lab Place</label>
+            {/* <label>Lab Venue</label> */}
             <select
               name="labPlace"
               value={formData.labPlace}
               onChange={handleChange}
               required
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             >
-              <option value="" disabled>Select Lab Place</option>
+              <option value="" disabled>Select Lab Venue</option>
               <option value="Electrical Machines Lab">Electrical Machines Lab</option>
               <option value="Communication Lab">Communication Lab</option>
               <option value="Measurements Lab">Measurements Lab</option>
@@ -198,20 +206,24 @@ const BookingForm = ({
             </select>
 
             {/* Date */}
-            <label>Date</label>
+            {/* <label>Date</label> */}
             <input 
               type="text" 
-              value={selectedDate.toDateString()} 
+              value={`Date: ${selectedDate.toDateString()}` } 
               disabled 
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             />
 
             {/* Time Slot Selection */}
-            <label>Time Slot</label>
+            {/* <label>Time Slot</label> */}
             <select
               name="timeSlot"
               value={formData.timeSlot}
               onChange={handleChange}
               required
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             >
               <option value="8:30-11:30">8:30 AM - 11:30 AM</option>
               <option value="1:30-4:30">1:30 PM - 4:30 PM</option>
@@ -220,50 +232,63 @@ const BookingForm = ({
 
             {/* Custom Time Inputs */}
             {formData.timeSlot === "custom" && (
-              <>
-                <label>Start Time</label>
-                <input
-                  type="time"
-                  name="customStartTime"
-                  value={formData.customStartTime}
-                  onChange={handleChange}
-                  required
-                />
-                <label>End Time</label>
-                <input
-                  type="time"
-                  name="customEndTime"
-                  value={formData.customEndTime}
-                  onChange={handleChange}
-                  required
-                />
-              </>
+              <div>
+                <div className="custom-time-inputs">
+                  <label>From </label>
+                  <input
+                    type="time"
+                    name="customStartTime"
+                    value={formData.customStartTime}
+                    onChange={handleChange}
+                    required
+                    className="typeBoxControl"
+                    id="customTimeBtn"
+                  />
+                </div>
+                <div className="custom-time-inputs">
+                  <label>To </label>
+                  <input
+                    type="time"
+                    name="customEndTime"
+                    value={formData.customEndTime}
+                    onChange={handleChange}
+                    required
+                    className="typeBoxControl"
+                    id="customTimeBtn"
+                  />
+                </div>
+              </div>
             )}
 
+            <br />
             {/* Lab Practical Information - New Fields */}
             <h3>Lab Practical Information</h3>
             
-            <label>Experiment Title</label>
+            {/* <label>Experiment Title</label> */}
             <input
               type="text"
               name="experimentTitle"
               value={formData.experimentTitle}
               onChange={handleChange}
               required
-              placeholder="Enter the title of the experiment"
+              placeholder="Title of the experiment"
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             />
 
-            <label>Experiment Description</label>
+            {/* <label>Experiment Description</label> */}
             <textarea
               name="experimentDescription"
               value={formData.experimentDescription}
               onChange={handleChange}
               required
-              placeholder="Provide details about the experiment"
+              placeholder="Details about the experiment"
               rows="3"
+              className="typeBoxControl"
+              id="consumableNotes"
             ></textarea>
 
-            <label>Equipment/Materials Needed</label>
+            {/* <label>Equipment/Materials Needed</label> */}
             <textarea
               name="equipmentNeeded"
               value={formData.equipmentNeeded}
@@ -271,14 +296,18 @@ const BookingForm = ({
               required
               placeholder="List all equipment and materials required"
               rows="3"
+              className="typeBoxControl"
+              id="consumableNotes"
             ></textarea>
 
             {/* Booked By */}
-            <label>Booked By</label>
+            {/* <label>Booked By</label> */}
             <input
               type="text"
-              value={user ? `${user.FirstName} ${user.LastName}` : ""}
+              value={user ? `Booked by: ${user.FirstName} ${user.LastName}` : ""}
               disabled
+              className="typeBoxControl"
+              id="addAvailabilityBtn"
             />
 
             {/* Form Actions */}

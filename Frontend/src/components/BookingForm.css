@@ -155,3 +155,12 @@
 .close-button:hover {
     background-color: #b71c1c;
 }
+
+#customTimeBtn {
+    width: 250px;
+}
+
+.custom-time-inputs {
+    width: 300px;
+    margin-left: 50px;
+}

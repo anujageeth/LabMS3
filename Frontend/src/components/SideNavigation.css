@@ -40,7 +40,8 @@
 
 .navBtn {
     width: 20vw;
-    height: 30px;
+    height: 40px;
+    font-size: large;
     border: none;
     color: #ffffff;
     background-color: #00788d;
@@ -73,7 +74,7 @@
 
 .logOutBtn {
     width: 20vw;
-    height: 30px;
+    height: 40px;
     border: none;
     border-radius: 20px;
     color: #00788d;

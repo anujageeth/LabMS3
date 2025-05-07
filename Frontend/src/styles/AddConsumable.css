@@ -118,7 +118,8 @@
   width: 300px;
   min-width: 300px;
   max-width: 300px;
-  min-height: 30px;
+  min-height: 40px;
   max-height: 80px;
   border-radius: 15px;
+  scrollbar-width: none;
 }
