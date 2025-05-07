@@ -44,8 +44,7 @@
 
 .search-bar {
   flex: 1;
-  max-width: 400px;
-  margin-left: 20px;
+  max-width: 30vw;
 }
 
 .search-bar form {
@@ -55,6 +54,7 @@
 
 .search-bar input {
   flex: 1;
+  width: 25vw;
   padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -63,7 +63,7 @@
 
 .search-bar button {
   padding: 10px 20px;
-  background: #006064;
+  background: #5a5a5a;
   color: white;
   border: none;
   border-radius: 4px;

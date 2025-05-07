@@ -28,6 +28,7 @@ import AddConsumable from "./pages/AddConsumable";
 
 import DashCheckInOutCard from "./components/DashCheckInOutCard";
 import Dashboard2 from "./Dashboard2";
+import Home2 from "./Home2";
 
 
 
@@ -42,7 +43,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={<Home2 />}></Route>
         <Route
           path="/login"
           element={<Login user={user} setUser={setUser} />}
@@ -179,6 +180,8 @@ function App() {
             <ProtectedRoute><ConsumableItems refresh={refresh} onRefresh={handleRefresh} /></ProtectedRoute>
           }
         />
+
+        <Route path="/home2" element={<Home />}></Route>
       
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,26 @@
+.pageBtnDiv {
+    display: grid;
+    gap: 10px; /* space between buttons */
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    width: 30vw;
+    padding-bottom: 7px;
+  }
+  
+.pageBtn {
+    width: 100%; /* take full width of the grid cell */
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #007d99;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+  
+.searchBarContainer {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* 2:1 ratio */
+    gap: 10px;
+    width: 30vw;
+}

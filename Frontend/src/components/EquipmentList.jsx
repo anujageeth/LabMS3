@@ -180,16 +180,14 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
               </div>
 
               <div className="addNsearch">
-                <div className="addItem">
-                  <button className="addItemBtn" id="addBtn" onClick={() => navigate("/additem")}>
-                    <b>Add Item</b>
-                  </button>
-                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/table2")}>
-                    <b>Table View</b>
-                  </button>
+
+                <div className="pageBtnDiv">
+                  <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
+                  <button className="pageBtn" onClick={() => navigate("/table2")}>Table View</button>
+                  <button className="pageBtn" onClick={() => navigate("/equipment-stats")}>Statistics</button>
                 </div>
                 
-                <div className="search">
+                <div className="pageBtnDiv">
                   <div className="searchContainer">
                   <input
                     type="search"
@@ -202,7 +200,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                   </div>
                 </div>
                 
-                <div className="search">
+                <div className="pageBtnDiv">
                   <select id="categoryFilter" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="">All Categories</option>
                     {Array.from(new Set(equipment.map((item) => item.Category))).map((category) => (
@@ -241,7 +239,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                 {filteredEquipment.map((item) => (
                   <li key={item._id} className="equipment-item2">
                     {item.condition === 'damaged' && (
-                      <span className="damage-badge">Damaged</span>
+                      <div className="listViewDamageLabel"><span className="damage-badge">Damaged</span></div>
                     )}
                     <h3>{item.Brand} {item.Name}</h3>
                     <p><b>Lab:</b> {item.Lab}</p>
@@ -249,7 +247,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                     <p><b>Brand:</b> {item.Brand}</p>
                     <p><b>Serial Code:</b> {item.Serial}</p>
                     <p><b>Availability:</b> {item.Availability ? "Available" : "Not Available"}</p>
-                    <p><b>Condition:</b> {item.condition}</p>
+                    {/*<p><b>Condition:</b> {item.condition}</p>*/}
                     <p><b>Added on:</b> {new Date(item.createdAt).toLocaleDateString()}</p>
                     <p><b>Last updated on:</b> {new Date(item.updatedAt).toLocaleDateString()}</p>
                     <img
@@ -309,17 +307,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
               <option value="High Voltage Lab">High Voltage Lab</option>
             </select>
             
-            <select 
-              className="listViewModalInput2" 
-              id="listViewModalInput2Select"
-              name="condition" 
-              value={editEquipment.condition} 
-              onChange={handleInputChange}
-            >
-              
-              <option value="Good">Good</option>
-              <option value="Damaged">Damaged</option>
-            </select>
+            
 
 
             {/* Add condition select */}
