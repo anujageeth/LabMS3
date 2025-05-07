@@ -114,7 +114,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         <div className="typeBox">
           <input
             type="text"
-            placeholder="Name"
+            placeholder=" Name"
             name="Name"
             value={formData.Name}
             onChange={handleChange}
@@ -128,7 +128,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         <div className="typeBox">
           <input
             type="text"
-            placeholder="Category"
+            placeholder=" Category"
             name="Category"
             value={formData.Category}
             onChange={handleChange}
@@ -152,7 +152,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         <div className="typeBox">
           <input
             type="number"
-            placeholder="Quantity"
+            placeholder=" Quantity"
             name="Quantity"
             value={formData.Quantity}
             onChange={handleChange}
@@ -194,7 +194,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         <div className="typeBox">
           <input
             type="text"
-            placeholder="Storage Location"
+            placeholder=" Storage Location"
             name="StorageLocation"
             value={formData.StorageLocation}
             onChange={handleChange}
@@ -205,7 +205,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         {/* Description */}
         <div className="typeBox">
           <textarea
-            placeholder="Notes"
+            placeholder=" Notes"
             name="Description"
             value={formData.Description}
             onChange={handleChange}

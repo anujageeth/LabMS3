@@ -4,6 +4,7 @@ import { getAllConsumables, searchConsumables } from '../services/consumableServ
 import ConsumableListView from '../components/consumables/ConsumableListView';
 import ConsumableTableView from '../components/consumables/ConsumableTableView';
 import UserDetails from '../components/UserDetails';
+import SideNavigation from '../components/SideNavigation';
 import '../styles/ConsumableItems.css';
 
 const ConsumableItems = ({ refresh, onRefresh }) => {
@@ -76,73 +77,78 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
   );
 
   return (
-    <div className="rightPanel">
-      <UserDetails />
-      <div className="dashBoxer">
-        <div className="dashName">
-          <h1 className="pageTitle">Consumable Items</h1>
-          <button className="backButton" onClick={handleBackToDashboard}>Back to Dashboard</button>
-        </div>
-        
-        <div className="consumable-container">
-          <div className="consumable-controls">
-            <div className="view-controls">
-              <button 
-                className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                onClick={() => setViewMode('list')}
-              >
-                List View
-              </button>
-              <button 
-                className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
-                onClick={() => setViewMode('table')}
-              >
-                Table View
-              </button>
+    <div className="dashPage">
+      <div className="gridBox">
+        <SideNavigation />
+        <div className="rightPanel">
+          <UserDetails />
+          <div className="dashBoxer">
+            <div className="dashName">
+              <h1 className="pageTitle">Consumable Items</h1>
+              {/*<button className="backButton" onClick={handleBackToDashboard}>Back to Dashboard</button>*/}
             </div>
+            
+            <div className="consumable-container">
+              <div className="consumable-controls">
+                <div className="view-controls">
+                  <button 
+                    className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+                    onClick={() => setViewMode('list')}
+                  >
+                    List View
+                  </button>
+                  <button 
+                    className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
+                    onClick={() => setViewMode('table')}
+                  >
+                    Table View
+                  </button>
+                </div>
 
-            <div className="search-bar">
-              <form onSubmit={handleSearch}>
-                <input
-                  type="text"
-                  placeholder="Search consumable items..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                <div className="search-bar">
+                  <form onSubmit={handleSearch}>
+                    <input
+                      type="text"
+                      placeholder="Search consumable items..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <button type="submit">Search</button>
+                  </form>
+                </div>
+              </div>
+
+              {items.length === 0 && !loading ? (
+                <div className="no-items-message">
+                  No consumable items found. Click the + button to add your first item.
+                </div>
+              ) : viewMode === 'list' ? (
+                <ConsumableListView 
+                  items={items} 
+                  onPageChange={handlePageChange}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onRefresh={handleRefresh}
                 />
-                <button type="submit">Search</button>
-              </form>
+              ) : (
+                <ConsumableTableView 
+                  items={items} 
+                  onPageChange={handlePageChange}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onRefresh={handleRefresh}
+                />
+              )}
+              
+              <button 
+                className="add-consumable-button"
+                onClick={handleAddConsumable}
+                title="Add new consumable item"
+              >
+                <span className="plus-icon">+</span>
+              </button>
             </div>
           </div>
-
-          {items.length === 0 && !loading ? (
-            <div className="no-items-message">
-              No consumable items found. Click the + button to add your first item.
-            </div>
-          ) : viewMode === 'list' ? (
-            <ConsumableListView 
-              items={items} 
-              onPageChange={handlePageChange}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onRefresh={handleRefresh}
-            />
-          ) : (
-            <ConsumableTableView 
-              items={items} 
-              onPageChange={handlePageChange}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onRefresh={handleRefresh}
-            />
-          )}
-          
-          <button 
-            className="add-consumable-button"
-            onClick={handleAddConsumable}
-            title="Add new consumable item"
-          >
-            <span className="plus-icon">+</span>
-          </button>
         </div>
       </div>
     </div>
