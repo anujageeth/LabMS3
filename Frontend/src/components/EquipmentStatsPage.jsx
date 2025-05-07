@@ -4,13 +4,11 @@ import EquipmentStats from './EquipmentStats';
 import SideNavigation from './SideNavigation';
 import UserDetails from './UserDetails';
 import axios from 'axios';
-import './equipmentStatsPage.css';
-import { TextField } from '@mui/material';
+import './equipmentStatsPage.css'
 
 const EquipmentStatsPage = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchStats = async () => {
     try {
@@ -21,6 +19,7 @@ const EquipmentStatsPage = () => {
       }
 
       const response = await axios.get(
+        // Make sure this path matches exactly with your backend route
         `http://localhost:3001/api/equipmentImage-stats`,
         {
           headers: { 
@@ -58,36 +57,14 @@ const EquipmentStatsPage = () => {
               <div className="dashName">
                 <h1 className="pageTitle">Equipment Statistics</h1>
               </div>
-
-              <div className="addNsearch">
-                <div className="addItem">
-                  <button className="addItemBtn" id="addBtn" onClick={() => navigate("/additem")}>
-                    <b>Add Item</b>
-                  </button>
-                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate(-1)}>
-                    <b>Go back</b>
-                  </button>
-                </div>
-
-                <div className="search">
-                  <div className="searchContainer">
-                    <input
-                      type="search"
-                      placeholder="  Search Equipment..."
-                      className="searchInput"
-                      id="searchList"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-              </div>
+              <button 
+                className="addItemBtn" 
+                onClick={() => navigate(-1)}
+              >
+                <b>Back to Inventory</b>
+              </button>
             </div>
-
-            <div className="dataTableBox">
-              <EquipmentStats stats={stats} searchTerm={searchTerm} />
-            </div>
+            <EquipmentStats stats={stats} />
           </div>
         </div>
       </div>

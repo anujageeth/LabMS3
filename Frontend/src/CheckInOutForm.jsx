@@ -17,6 +17,7 @@ function CheckInOutForm() {
   const [currentLineIndex, setCurrentLineIndex] = useState(-1);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const textareaRef = useRef(null);
+  const navigate = useNavigate();
 
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
@@ -93,6 +94,7 @@ function CheckInOutForm() {
   };
 
 
+
   const updateCurrentLineState = (textarea) => {
     const cursorPosition = textarea.selectionStart;
     const text = textarea.value;
@@ -106,7 +108,7 @@ function CheckInOutForm() {
     setShowSuggestions(currentLineText.trim().length > 0);
   };
 
-  
+
   const handleSuggestionClick = (serial) => {
     const lines = serials.split('\n');
     lines[currentLineIndex] = serial;
@@ -194,7 +196,7 @@ function CheckInOutForm() {
           data.results.map(result => result.serial).join('\n')
         }`;
         
-        //setSuccess(successMessage);
+        setSuccess(successMessage);
         setIsSuccessPopupOpen(true);
 
         // Clear form on success
@@ -271,7 +273,7 @@ function CheckInOutForm() {
       </select>
 
       <div className="serials-input-container">
-        <textarea
+      <textarea
           ref={textareaRef}
           className="listViewModalInput2"
           value={serials}

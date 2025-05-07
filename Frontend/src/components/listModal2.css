@@ -1,123 +1,6 @@
-/* Popup Card Styles */
-.equipment-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-  }
-  
-  .popup-content {
-    position: relative;
-    background-color: white;
-    border-radius: 30px;
-    padding: 25px;
-    max-width: 800px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    animation: popupFadeIn 0.3s ease-out;
-  }
-  
-  .popup-close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #666;
-    padding: 5px 10px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-  }
-  
-  .popup-close-btn:hover {
-    color: #333;
-    background-color: #f0f0f0;
-  }
-  
-  .popup-details {
-    display: flex;
-    gap: 30px;
-    margin: 20px 0;
-  }
-  
-  .popup-text {
-    flex: 1;
-    color: #000000;
-  }
-  
-  .popup-image {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .popup-image img {
-    max-width: 100%;
-    max-height: 300px;
-    border-radius: 8px;
-    object-fit: contain;
-  }
-  
-  .popup-btn {
-    padding: 10px 20px;
-    width: 100px;
-    border: none;
-    border-radius: 25px;
-    color: #ffffff;
-    font-size: 14px;
-    background: linear-gradient(#00d9ff, #009eb9);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 15px;
-  }
+/* Styles for the Equipment List */
 
-  #popup-delete-btn {
-    margin-left: 10px;
-    margin-right: 10px;
-    background: linear-gradient(#ff0000, #750000);
-  }
-
-  #popup-cancel-btn {
-    background: linear-gradient(#bbbbbb, #a0a0a0);
-  }
-  
-  .popup-btn:hover {
-    background: linear-gradient(#00cad8, #00a5c2, #007185);
-    box-shadow: 0px 0px 10px rgba(0, 255, 242, 0.5);
-    transform: translateY(-1px);
-  }
-
-  .equipmentBoxBtns {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  @keyframes popupFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Original List Styles */
-  .equipment-list2 {
+.equipment-list2 {
     list-style-type: none;
     max-height: 44vh;
     padding: 5px;
@@ -125,45 +8,60 @@
     margin: 20px 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* Responsive grid layout */
     gap: 20px;
-  }
-  
-  .equipment-item2 {
-    position: relative;
+    /* Space between items */
+}
+
+.equipment-item2 {
+    max-height: auto;
     font-size: 12px;
     background-color: #f9f9f9;
+    /* Light background color */
     border: 1px solid #ddd;
+    /* Border around items */
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    cursor: pointer;
-  }
+    /* Subtle shadow for depth */
+    transition: transform 0.2s;
+    /* Animation effect */
+    /* animation: dropdownAnimation 0.3s ease-out; */
+}
 
-  .equipment-item2 img {
+.equipment-item2:hover {
+    transform: scale(1.02);
+    /* Slight scale effect on hover */
+}
+
+.equipment-item2 h3 {
+    color: #005766;
+}
+
+.equipment-item2 p {
+    height: 6px;
+}
+
+/* Styles for Equipment Item Image */
+
+.equipment-item2 img {
     max-width: 100%;
     max-height: 100px;
+    /* Responsive image */
     border-radius: 5px;
-    transition: all 0.3s ease;
-    }
-  
-  .equipment-item2:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    background-color: white;
-    z-index: 100;
-  }
+    /* Rounded corners for the image */
+}
 
-  .listViewBtn2 {
+/* Styles for Buttons */
+
+.listViewBtn2 {
     height: 20px;
-    margin-right: 5px;
     border: none;
     border-radius: 20px;
     color: #ffffff;
     font-size: 12px;
     background: linear-gradient(#00d9ff, #009eb9);
-    transition: linear-gradient 0.5s ease, box-shadow 0.3s ease;
-    background-color: #007bff;
+    transition: linear-gradient 0.5s ease, box-shadow 0.3s ease;background-color: #007bff;
     /* Primary button color */
     color: white;
     cursor: pointer;
@@ -177,40 +75,7 @@
         box-shadow: 0px 0px 5px rgb(0, 255, 242);
 }
 
-.equipment-item2:hover .listViewBtn2 {
-    opacity: 1;
-    transform: translateY(5px);
-}
-
-.listViewBtn2:hover {
-    background: linear-gradient(#00cad8, #00a5c2, #007185);
-    box-shadow: 0px 0px 5px rgb(0, 255, 242);
-}
-
-/* Damage badge */
-.damage-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #ff4444;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 1;
-}
-
-.equipment-item2 h3 {
-    color: #005766;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-}
-
-.equipment-item2:hover h3 {
-    color: #003d4a;
-    transform: translateY(-3px);
-}
+/* Styles for the Modal */
 
 .listViewModal2 {
     position: fixed;
@@ -240,6 +105,7 @@
     padding: 20px;
     border-radius: 25px;
     max-width: 400px;
+    width: 90%;
     /* Responsive width */
     text-align: center;
     box-shadow: 0 0px 150px rgba(0, 0, 0, 0.3);
@@ -249,11 +115,6 @@
 
 .listViewModal-content2 h2 {
     color: #005766;
-}
-
-#deleteBox {
-  width: 350px;
-  max-width: 95vw;
 }
 
 /* Styles for Modal Inputs */

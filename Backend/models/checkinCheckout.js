@@ -1,23 +1,3 @@
-// const mongoose = require("mongoose");
-
-// const checkinCheckoutSchema = new mongoose.Schema(
-//   {
-//     equipment: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Equipment",
-//       required: true,
-//     },
-//     username: { type: String, required: true },
-//     quantity: { type: Number, required: true },
-//     action: { type: String, enum: ["checkin", "checkout"], required: true },
-//     date: { type: Date, default: Date.now },
-//   },
-//   { timestamps: true }
-// );
-
-// module.exports = mongoose.model("CheckinCheckout", checkinCheckoutSchema);
-//const mongoose = require("mongoose");
-
 const mongoose = require("mongoose");
 
 const checkInOutSchema = new mongoose.Schema({
@@ -41,12 +21,18 @@ const checkInOutSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  date: {
+  timestamp: {
     type: Date,
     default: Date.now
   },
   damageDescription: String,
   notes: String
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model("CheckInOut", checkInOutSchema);
+// Simple date formatter
+checkInOutSchema.methods.getFormattedDate = function() {
+  return this.timestamp.toLocaleString();
+};
+
+const CheckInOut = mongoose.model("CheckInOut", checkInOutSchema);
+module.exports = CheckInOut;

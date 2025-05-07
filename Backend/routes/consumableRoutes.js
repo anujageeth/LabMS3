@@ -3,34 +3,67 @@ const router = express.Router();
 const { 
     addConsumableItem, 
     updateConsumable, 
-    getConsumables 
+    getConsumables,
+    searchConsumables,
+    deleteConsumable,
+    updateQuantity,
+    getLowStockItems
 } = require('../controllers/consumableController');
 const { 
     authenticateToken, 
     authorizeRoles 
 } = require('../middleware/authMiddleware');
 
-// Base route for consumables
+// Get all consumable items
 router.get(
-    '/consumables', 
+    '/', 
     authenticateToken, 
     getConsumables
 );
 
-// Add new consumable item - restricted to authorized roles
+// Search consumable items
+router.get(
+    '/search',
+    authenticateToken,
+    searchConsumables
+);
+
+// Add new consumable item
 router.post(
-    '/consumables', 
+    '/', 
     authenticateToken,
     authorizeRoles('hod', 'technical officer'),
     addConsumableItem
 );
 
-// Update consumable item - restricted to authorized roles
-router.patch(
-    '/consumables/:id',
+// Update consumable item
+router.put(
+    '/:id',
     authenticateToken,
     authorizeRoles('hod', 'technical officer'),
     updateConsumable
+);
+
+// Delete consumable item
+router.delete(
+    '/:id',
+    authenticateToken,
+    authorizeRoles('hod', 'technical officer'),
+    deleteConsumable
+);
+
+// Update quantity
+router.patch(
+    '/:id/quantity',
+    authenticateToken,
+    updateQuantity
+);
+
+// Get low stock items
+router.get(
+    '/low-stock',
+    authenticateToken,
+    getLowStockItems
 );
 
 module.exports = router;

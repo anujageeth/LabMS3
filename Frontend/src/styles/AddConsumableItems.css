@@ -1,0 +1,14 @@
+.consumable-form-container {
+  width: 100%;
+}
+
+.consumable-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.consumable-form-container textarea.typeBoxControl {
+  min-height: 80px;
+  resize: vertical;
+} 
