@@ -75,7 +75,7 @@ const AddConsumable = ({ onRefresh }) => {
       {error && <div className="error-message">{error}</div>}
 
       <form onSubmit={handleSubmit} className="consumable-form">
-        <div className="form-group">
+        <div className="typeBoxControl" id="addAvailabilityBtn">
           <label htmlFor="Name">Name</label>
           <input
             type="text"
@@ -87,7 +87,7 @@ const AddConsumable = ({ onRefresh }) => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="typeBoxControl" id="addAvailabilityBtn">
           <label htmlFor="Category">Category</label>
           <input
             type="text"
@@ -99,7 +99,7 @@ const AddConsumable = ({ onRefresh }) => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="typeBoxControl" id="addAvailabilityBtn">
           <label htmlFor="Lab">Lab</label>
           <select
             id="Lab"
@@ -117,7 +117,7 @@ const AddConsumable = ({ onRefresh }) => {
           </select>
         </div>
 
-        <div className="form-row">
+        <div className="typeBoxControl" id="addAvailabilityBtn">
           <div className="form-group">
             <label htmlFor="Quantity">Quantity</label>
             <input
@@ -131,7 +131,7 @@ const AddConsumable = ({ onRefresh }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="typeBoxControl" id="addAvailabilityBtn">
             <label htmlFor="MinimumQuantity">Minimum Quantity</label>
             <input
               type="number"
@@ -146,7 +146,7 @@ const AddConsumable = ({ onRefresh }) => {
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="typeBoxControl" id="addAvailabilityBtn">
           <label htmlFor="Unit">Unit</label>
           <select
             id="Unit"
@@ -167,7 +167,7 @@ const AddConsumable = ({ onRefresh }) => {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="typeBoxControl" id="addAvailabilityBtn">
           <label htmlFor="StorageLocation">Storage Location</label>
           <input
             type="text"
@@ -192,12 +192,12 @@ const AddConsumable = ({ onRefresh }) => {
         <div className="form-group">
           <label htmlFor="image">Image</label>
           <input
+          className="addImageBtn"
             type="file"
             id="image"
             name="image"
             onChange={handleFileChange}
             accept="image/*"
-            className="file-input"
           />
         </div>
 

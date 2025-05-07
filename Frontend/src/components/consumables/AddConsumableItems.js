@@ -108,7 +108,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
   };
 
   return (
-    <div className="consumable-form-container">
+    <div>
       <form onSubmit={handleSubmit}>
         {/* Name Field */}
         <div className="typeBox">
@@ -120,6 +120,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
             onChange={handleChange}
             required
             className="typeBoxControl"
+            
           />
         </div>
 
@@ -209,6 +210,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
             value={formData.Description}
             onChange={handleChange}
             className="typeBoxControl"
+            id="consumableNotes"
             rows="3"
           />
         </div>
@@ -225,7 +227,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         </div>
 
         {/* Submit Button */}
-        <button type="submit" className="loginBtn" disabled={isLoading}>
+        <button type="submit" className="loginBtn" id="saveUserBtn" disabled={isLoading}>
           <b>{isLoading ? 'SAVING...' : 'SAVE'}</b>
         </button>
       </form>

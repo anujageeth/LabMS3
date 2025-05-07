@@ -10,11 +10,11 @@
 }
 
 #addUserBox {
-  height: 620px;
+  height: 90vh;
 }
 
 .typeBoxControl {
-  width: 250px;
+  width: 290px;
   height: 20px;
   padding: 5px;
   margin: 5px;
@@ -46,7 +46,7 @@
 }
 
 .addItemImageBox {
-  width: 250px;
+  width: 270px;
   height: 20px;
   padding: 5px;
   margin: 5px;
@@ -63,7 +63,7 @@
   border-radius: 30px;
   z-index: 4;
   height: 30px;
-  width: 260px;
+  width: 300px;
   color: #5a5a5a;
 }
 
