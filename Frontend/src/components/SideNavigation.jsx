@@ -19,6 +19,10 @@ function SideNavigation() {
     navigate("/table2");
   };
 
+  const handleConsumableClick = () => {
+    navigate("/consumables");
+  };
+
   const handleReportClick = () => {
     navigate("/report1");
   };
@@ -76,7 +80,15 @@ function SideNavigation() {
         className={`navBtn ${getActiveClass(["/table2", "/list2"])}`}
         onClick={handleInventoryClick}
       >
-        <b>Inventory Management</b>
+        <b>Main Inventory</b>
+      </button>
+      <br />
+
+      <button
+        className={`navBtn ${getActiveClass(["/consumables"])}`}
+        onClick={handleConsumableClick}
+      >
+        <b>Consumable Items</b>
       </button>
       <br />
 

@@ -32,6 +32,7 @@ import CategoryFilter from "./CategoryFilter"; // Import the CategoryFilter comp
 import CategorySelect from "./CategorySelect";
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";
+import "./PageButtons.css"
 
 const EquipmentTable = ({ onRefresh, refresh }) => {
   const navigate = useNavigate();
@@ -314,19 +315,13 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
               </div>
 
               <div className="addNsearch">
-                <div className="addItem">
-                  <button className="addItemBtn" id="addBtn" onClick={() => navigate("/additem")}>
-                    <b>Add Item</b>
-                  </button>
-                  <button className="addItemBtn" id="listBtn1" onClick={() => navigate("/list2")}>
-                    <b>List View</b>
-                  </button>
-                  <button className="addItemBtn" onClick={() => navigate("/equipment-stats")}>
-                    <b>View Statistics</b>
-                  </button>
+                <div className="pageBtnDiv">
+                  <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
+                  <button className="pageBtn" onClick={() => navigate("/list2")}>List View</button>
+                  <button className="pageBtn" onClick={() => navigate("/equipment-stats")}>Statistics</button>
                 </div>
                 
-                <div className="search">
+                <div className="pageBtnDiv">
                   <div className="searchContainer">
                   <input
                     type="search"
@@ -339,9 +334,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   </div>
                 </div>
                 
-                <div className="search">
+                <div className="pageBtnDiv">
                   <select 
-                    id="conditionFilter" 
+                    id="categoryFilter"
                     value={filters.condition} 
                     onChange={(e) => handleFilterChange('condition', e.target.value)}
                   >
@@ -664,6 +659,14 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   </div>
                 }
               </Box>
+
+              <button 
+                className="add-consumable-button"
+                onClick={() => navigate("/additem")}
+                title="Add new consumable item"
+              >
+                <span className="plus-icon">+</span>
+              </button>
             </div>
           </div>
         </div>

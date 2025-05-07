@@ -83,40 +83,58 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
         <div className="rightPanel">
           <UserDetails />
           <div className="dashBoxer">
-            <div className="dashName">
-              <h1 className="pageTitle">Consumable Items</h1>
-              {/*<button className="backButton" onClick={handleBackToDashboard}>Back to Dashboard</button>*/}
+            <div className="dashBox">
+              <div className="dashName">
+                <h1 className="pageTitle">Consumable Items</h1>
+                {/*<button className="backButton" onClick={handleBackToDashboard}>Back to Dashboard</button>*/}
+              </div>
+
+              <div className="addNsearch">
+
+                <div className="pageBtnDiv">
+                  <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
+                  
+                  {viewMode === 'table' && (
+                    <button
+                      className={`pageBtn ${viewMode === 'list' ? 'active' : ''}`}
+                      onClick={() => setViewMode('list')}
+                    >
+                      List View
+                    </button>
+                  )}
+
+                  {viewMode === 'list' && (
+                    <button
+                      className={`pageBtn ${viewMode === 'table' ? 'active' : ''}`}
+                      onClick={() => setViewMode('table')}
+                    >
+                      Table View
+                    </button>
+                  )}
+                  
+                  <button className="pageBtn" onClick={() => navigate("/equipment-stats")}>Statistics</button>
+                </div>
+
+                
+
+                <div className="searchBarContainer">
+                  <div className="search-bar">
+                    <form onSubmit={handleSearch}>
+                      <input
+                        type="text"
+                        placeholder="Search consumable items..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                      />
+                      <button type="submit">Search</button>
+                    </form>
+                  </div>
+                </div>
+                  
+              </div>
             </div>
             
             <div className="consumable-container">
-              <div className="consumable-controls">
-                <div className="view-controls">
-                  <button 
-                    className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                    onClick={() => setViewMode('list')}
-                  >
-                    List View
-                  </button>
-                  <button 
-                    className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
-                    onClick={() => setViewMode('table')}
-                  >
-                    Table View
-                  </button>
-                </div>
-
-                <div className="search-bar">
-                  <form onSubmit={handleSearch}>
-                    <input
-                      type="text"
-                      placeholder="Search consumable items..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <button type="submit">Search</button>
-                  </form>
-                </div>
-              </div>
 
               {items.length === 0 && !loading ? (
                 <div className="no-items-message">

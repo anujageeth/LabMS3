@@ -553,7 +553,7 @@ table button:hover {
     flex-direction: column; /* Stack items vertically */
     /* Space between buttons */
     align-items: flex-start; /* Align buttons to the left */
-    width: fit-content; /* Only take up needed width */
+    width: 30vw; /* Only take up needed width */
 }
   
   .addItem {
