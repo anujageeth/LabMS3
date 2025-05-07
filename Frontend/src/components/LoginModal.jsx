@@ -50,7 +50,7 @@ function LoginModal({ setUser, showLoginModal, setShowLoginModal }) {
             <div>
                 <div className="overlay"></div>
                 <div className="loginBox" id="loginPageBox">
-                    <h2 className="loginTitle">Welcome!</h2>
+                    <h2 className="loginTitle"> </h2>
                     <form onSubmit={handleSubmit}>
                         <div className="typeBox">
                             <input
@@ -83,9 +83,9 @@ function LoginModal({ setUser, showLoginModal, setShowLoginModal }) {
                         <b>Cancel</b>
                     </button>
                     <br />
-                    <Link to="/register" className="forgetPw">
+                    {/*<Link to="/register" className="forgetPw">
                         Forget password?
-                    </Link>
+                    </Link>*/}
                 </div>
             </div>
         )}
