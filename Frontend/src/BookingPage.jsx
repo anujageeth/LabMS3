@@ -382,13 +382,21 @@ useEffect(() => {
 
       if (response.ok) {
         fetchBookings();
-        showSnackbar("Booking deleted successfully", "success");
+        showSnackbar("Booking successfully deleted");
       } else {
-        showSnackbar("Failed to delete booking", "error");
+        const error = await response.json();
+        throw new Error(error.error || "Error deleting booking");
       }
     } catch (error) {
-      showSnackbar("Error deleting booking", "error");
+      showSnackbar(error.message, "error");
     }
+  };
+
+  // Add this function to handle successful booking submission
+  const handleSuccessfulBooking = () => {
+    fetchBookings();
+    setIsFormVisible(false);
+    showSnackbar("Booking successful! Technical Officers have been notified and will prepare the lab for your session.", "success");
   };
 
   // Calendar styling functions
@@ -435,6 +443,33 @@ useEffect(() => {
   const getLabsForSelectedModule = () => {
     if (!selectedModule) return [];
     return academicDetails.labsByModule[selectedModule] || [];
+  };
+
+  // Handle form renderer with our new function
+  const renderBookingForm = () => {
+    if (!isFormVisible) return null;
+
+    // Determine appropriate form type based on user role
+    if (user?.Role === "student") {
+      return (
+        <StudentBookingForm
+          closeForm={() => setIsFormVisible(false)}
+          selectedDate={date}
+          onBookingAdded={handleSuccessfulBooking} // Updated to use new function
+          user={user}
+        />
+      );
+    } else {
+      return (
+        <BookingForm
+          closeForm={() => setIsFormVisible(false)}
+          selectedDate={date}
+          onBookingAdded={handleSuccessfulBooking} // Updated to use new function
+          user={user}
+          academicDetails={{ ...academicDetails, semesters }} // Include semesters
+        />
+      );
+    }
   };
 
   // Render function
@@ -641,24 +676,7 @@ useEffect(() => {
       </div>
 
       {/* Booking Form */}
-      {isFormVisible && (
-  user?.Role === "student" ? (
-    <StudentBookingForm
-      closeForm={toggleFormVisibility}
-      selectedDate={date}
-      onBookingAdded={fetchBookings}
-      user={user}
-    />
-  ) : (
-    <BookingForm
-      closeForm={toggleFormVisibility}
-      selectedDate={date}
-      onBookingAdded={fetchBookings}
-      user={user}
-      academicDetails={{ ...academicDetails, semesters }}
-    />
-  )
-)}
+      {renderBookingForm()}
 
       {/* Academic Details Dialog */}
       <Dialog

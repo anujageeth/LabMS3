@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 
 // Add a new user (HOD and Technical Officer)
 const addUser = async (req, res) => {
@@ -169,4 +170,60 @@ router.post("/bulk-import",
   }
 );
 
-module.exports = { addUser, getAllUsers, updateUser, deleteUser, getOneUser };
+// Get user statistics for dashboard
+const getUserStats = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    
+    // Get total number of users
+    const totalUsers = await User.countDocuments();
+    
+    // Get newly added users within date range
+    const dateFilter = {};
+    if (startDate && endDate) {
+      dateFilter._id = {
+        $gte: mongoose.Types.ObjectId.createFromTime(new Date(startDate).getTime() / 1000),
+        $lte: mongoose.Types.ObjectId.createFromTime(new Date(endDate).getTime() / 1000)
+      };
+    } else if (startDate) {
+      dateFilter._id = {
+        $gte: mongoose.Types.ObjectId.createFromTime(new Date(startDate).getTime() / 1000)
+      };
+    } else if (endDate) {
+      dateFilter._id = {
+        $lte: mongoose.Types.ObjectId.createFromTime(new Date(endDate).getTime() / 1000)
+      };
+    }
+    
+    const newUsers = await User.countDocuments(dateFilter);
+    
+    // Get active users in the last 30 minutes
+    // This requires a lastActive field in the user model, typically updated on each login
+    // For demo purposes, we'll use lastPasswordChange as a proxy
+    const thirtyMinutesAgo = new Date();
+    thirtyMinutesAgo.setMinutes(thirtyMinutesAgo.getMinutes() - 30);
+    
+    const activeUsers = await User.countDocuments({
+      lastPasswordChange: { $gte: thirtyMinutesAgo }
+    });
+    
+    // Get user distribution by role
+    const roleDistribution = await User.aggregate([
+      { $group: { _id: "$Role", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+    
+    res.status(200).json({
+      totalUsers,
+      newUsers,
+      activeUsers,
+      roleDistribution
+    });
+    
+  } catch (error) {
+    console.error("Error fetching user statistics:", error);
+    res.status(500).json({ error: "Failed to fetch user statistics" });
+  }
+};
+
+module.exports = { addUser, getAllUsers, updateUser, deleteUser, getOneUser, getUserStats };

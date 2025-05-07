@@ -185,3 +185,39 @@
 .tableRowEdit:disabled {
     background: linear-gradient(#d6d6d6, #919191);
 }*/
+
+/* Ensure statistics cards are visible */
+.MuiCard-root {
+  position: relative;
+  z-index: 1;
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.MuiGrid-container {
+  position: relative;
+  z-index: 2;
+  min-height: 150px;
+  display: flex !important;
+  visibility: visible !important;
+}
+
+.MuiGrid-item {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.dashBox .MuiBox-root {
+  display: block !important;
+  visibility: visible !important;
+  overflow: visible !important;
+}
+
+/* Fix for potential parent container issues */
+.dashBox {
+  position: relative;
+  overflow: visible !important;
+}
+
+/* End of statistics card fixes */

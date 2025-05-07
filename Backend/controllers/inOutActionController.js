@@ -116,6 +116,19 @@ router.get("/checkinout", authenticateToken, async (req, res) => {
       if (endDate) filter.timestamp.$lte = new Date(endDate);
     }
 
+    // Role-based access control
+    // Get the user's role from the authenticated user information
+    const currentUser = await User.findById(req.user.userId);
+    
+    // If user is not a TO or HOD, limit view to only their records
+    if (currentUser && currentUser.Role !== 'technical officer' && currentUser.Role !== 'hod') {
+      // Regular users can only see their own records (either as user or selectedUser)
+      filter.$or = [
+        { user: req.user.userId },
+        { selectedUser: req.user.userId }
+      ];
+    }
+
     // Calculate pagination
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const sort = { [sortBy]: sortOrder === "desc" ? -1 : 1 };
@@ -132,7 +145,7 @@ router.get("/checkinout", authenticateToken, async (req, res) => {
       CheckInOut.countDocuments(filter)
     ]);
 
-    // Return paginated response
+    // Return paginated response with user role for frontend context
     res.status(200).json({
       records,
       pagination: {
@@ -140,7 +153,8 @@ router.get("/checkinout", authenticateToken, async (req, res) => {
         pages: Math.ceil(total / parseInt(limit)),
         currentPage: parseInt(page),
         limit: parseInt(limit)
-      }
+      },
+      userRole: currentUser ? currentUser.Role : null // Include user role for frontend rendering
     });
   } catch (error) {
     console.error("Error fetching check-in/out records:", error.message);

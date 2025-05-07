@@ -9,6 +9,7 @@ const {
   updateUser,
   deleteUser,
   getOneUser,
+  getUserStats
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -329,5 +330,8 @@ router.post("/change-password",
 );
 
 router.get("/users/me", authenticateToken, getOneUser);
+
+// User statistics endpoint - accessible to admins
+router.get("/stats", authenticateToken, getUserStats);
 
 module.exports = router;

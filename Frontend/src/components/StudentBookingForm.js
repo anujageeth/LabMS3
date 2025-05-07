@@ -8,7 +8,10 @@ const StudentBookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) =
         timeSlot: "8:30-11:30",
         description: "",
         customStartTime: "",
-        customEndTime: ""
+        customEndTime: "",
+        experimentTitle: "",
+        experimentDescription: "",
+        equipmentNeeded: ""
     });
     const [isPastDate, setIsPastDate] = useState(false);
     const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
@@ -49,10 +52,13 @@ const StudentBookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) =
             labName: "Student Lab Request",
             labPlace: formData.labPlace,
             date: selectedDate.toISOString().split("T")[0], // Format: YYYY-MM-DD
-            bookedBy: user ? `${user.FirstName} ${user.LastName}` : "",
+            bookedBy: user?.Email,
             timeSlot: finalTimeSlot,
             description: formData.description,
-            module: "Student Request" // Add a default module
+            module: "Student Request",
+            experimentTitle: formData.experimentTitle,
+            experimentDescription: formData.experimentDescription,
+            equipmentNeeded: formData.equipmentNeeded
         };
     
         // For custom time, include separate start/end times
@@ -64,9 +70,9 @@ const StudentBookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) =
     
         try {
             const token = localStorage.getItem("token");
-        if (!token) {
-            throw new Error("No authentication token found");
-        }
+            if (!token) {
+                throw new Error("No authentication token found");
+            }
     
             const response = await fetch("http://localhost:3001/api/bookings/student", {
                 method: "POST",
@@ -78,32 +84,29 @@ const StudentBookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) =
             });
     
             // Check if the response is ok first
-        if (!response.ok) {
-            // Now try to parse the error message from the JSON response
-            try {
-                const errorData = await response.json();
-                throw new Error(errorData.error || "Booking failed");
-            } catch (jsonError) {
-                // If we can't parse JSON, use the status text
-                throw new Error(`Booking failed: ${response.statusText}`);
+            if (!response.ok) {
+                // Now try to parse the error message from the JSON response
+                try {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Booking failed");
+                } catch (jsonError) {
+                    // If we can't parse JSON, use the status text
+                    throw new Error(`Booking failed: ${response.statusText}`);
+                }
             }
-        }
-        
-        // If we get here, the response was successful
-        // Try to parse the response JSON if needed
-        try {
-            const result = await response.json();
-            console.log("Booking successful:", result);
-        } catch (jsonError) {
-            // If response has no JSON body or invalid JSON, that's ok as long as status was success
-            console.log("Booking successful (no JSON response)");
-        }
+            
+            // If we get here, the response was successful
+            // Try to parse the response JSON if needed
+            try {
+                const result = await response.json();
+                console.log("Booking successful:", result);
+            } catch (jsonError) {
+                // If response has no JSON body or invalid JSON, that's ok as long as status was success
+                console.log("Booking successful (no JSON response)");
+            }
     
             setIsSuccessPopupOpen(true);
             onBookingAdded();
-            setTimeout(() => {
-                closeForm();
-            }, 2000);
         } catch (error) {
             console.error("Booking error:", error.message);
             if (error.message.includes("already booked")) {
@@ -194,6 +197,42 @@ const StudentBookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) =
                             </div>
                         )}
 
+                        {/* Lab Practical Information - New Fields */}
+                        <h3 className="form-section-title">Lab Practical Information</h3>
+                        
+                        <label>Experiment Title <span className="required">*</span></label>
+                        <input
+                            type="text"
+                            name="experimentTitle"
+                            value={formData.experimentTitle}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter the title of the experiment"
+                            className="form-input"
+                        />
+
+                        <label>Experiment Description <span className="required">*</span></label>
+                        <textarea
+                            name="experimentDescription"
+                            value={formData.experimentDescription}
+                            onChange={handleChange}
+                            required
+                            placeholder="Provide details about the experiment"
+                            className="form-textarea"
+                            rows="3"
+                        ></textarea>
+
+                        <label>Equipment/Materials Needed <span className="required">*</span></label>
+                        <textarea
+                            name="equipmentNeeded"
+                            value={formData.equipmentNeeded}
+                            onChange={handleChange}
+                            required
+                            placeholder="List all equipment and materials required"
+                            className="form-textarea"
+                            rows="3"
+                        ></textarea>
+
                         {/* Description */}
                         <label>Description <span className="required">*</span></label>
                         <textarea
@@ -230,7 +269,7 @@ const StudentBookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) =
             <SidePopup
                 type="success"
                 title="Request Submitted"
-                message="Your lab booking request has been submitted successfully!"
+                message="Your lab booking request has been submitted successfully! Technical Officers have been notified and will prepare the lab for your session."
                 isOpen={isSuccessPopupOpen}
                 onClose={() => setIsSuccessPopupOpen(false)}
                 duration={3000}
