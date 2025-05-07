@@ -5,7 +5,6 @@ const cors = require("cors");
 const equipmentRoutes = require("./routes/equipmentRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
-//const fireImageRoutes = require("./controllers/fireImageController");
 const categoryRoutes = require("./controllers/categoryController");
 const reportRoutes = require("./controllers/reportGenerateController");
 const checkinCheckoutRoutes = require("./controllers/inOutActionController");
@@ -18,31 +17,28 @@ const consumableRoutes = require('./routes/consumableRoutes');
 const academicDetailsRoutes = require('./routes/academicDetailsRoutes');
 const cron = require("node-cron");
 const NotificationService = require("./services/NotificationService");
+
 const app = express();
-app.use(cors());
- app.use(
-   cors({
-     origin: [
-       "http://localhost:3000",
-       "https://drive.google.com",
-       "https://firebasestorage.googleapis.com",
-       "https://ssl.gstatic.com",
-     ], // Allow only these domains
-     methods: ["GET", "POST", "PUT", "DELETE"],
-     allowedHeaders: ["Content-Type", "Authorization"],
-   })
- );
+
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://drive.google.com",
+    "https://firebasestorage.googleapis.com",
+    "https://ssl.gstatic.com",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
 app.use(express.json());
 app.use("/api", equipmentRoutes);
 app.use("/api", userRoutes);
-app.use("/api", authRoutes); // Include user routes
-//app.use("/api", fireImageRoutes);
+app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", reportRoutes);
 app.use("/api", checkinCheckoutRoutes);
-app.use("/api",bookingRoutes);
-app.use("/api/update", updatePassword);
+app.use("/api", bookingRoutes);
 app.use("/api/update", updatePassword);
 app.use("/api", notificationRoutes);
 app.use("/api/consumables", consumableRoutes);
@@ -80,7 +76,7 @@ mongoose
   })
   .catch((error) => console.log(error));
 
-  // Schedule jobs to run at specific times
+// Schedule jobs to run at specific times
 // This runs at 6:00 PM every day to notify about tomorrow's labs
 cron.schedule("0 18 * * *", async () => {
   try {
@@ -102,7 +98,7 @@ cron.schedule("0 9 * * 1", async () => {
 });
 
 // Start the server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

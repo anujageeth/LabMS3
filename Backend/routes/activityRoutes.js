@@ -1,7 +1,7 @@
 // routes/activityRoutes.js
 const express = require("express");
 const router = express.Router();
-const Activity = require("./models/Activity");
+const Activity = require("../models/Activity");
 
 router.post("/add", async (req, res) => {
   const { user, action } = req.body;

@@ -42,10 +42,6 @@ const consumableItemSchema = new mongoose.Schema(
       required: false,
       trim: true
     },
-    imageUrl: { 
-      type: String,
-      default: "default"
-    },
     Notes: String,
     Status: {
       type: String,

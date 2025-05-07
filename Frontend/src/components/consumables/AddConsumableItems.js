@@ -11,8 +11,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
     MinimumQuantity: '5', // Default value for minimum quantity
     Unit: 'pcs', // Default unit from the enum
     StorageLocation: '',
-    Description: '',
-    image: null
+    Description: ''
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,13 +20,6 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      image: e.target.files[0]
     }));
   };
 
@@ -42,7 +34,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         return;
       }
 
-      // First, handle the JSON data submission without the image
+      // Handle the JSON data submission
       const jsonData = {
         Name: formData.Name,
         Category: formData.Category,
@@ -67,23 +59,6 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         }
       );
 
-      // If image exists and the first request was successful, upload the image in a separate request
-      if (formData.image && response.data._id) {
-        const imageFormData = new FormData();
-        imageFormData.append('image', formData.image);
-        
-        await axios.post(
-          `http://localhost:3001/api/consumables/${response.data._id}/image`,
-          imageFormData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data'
-            }
-          }
-        );
-      }
-
       onRefresh && onRefresh();
       
       // Reset form
@@ -95,8 +70,7 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
         MinimumQuantity: '5',
         Unit: 'pcs',
         StorageLocation: '',
-        Description: '',
-        image: null
+        Description: ''
       });
       
     } catch (error) {
@@ -212,17 +186,6 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
             className="typeBoxControl"
             id="consumableNotes"
             rows="3"
-          />
-        </div>
-
-        {/* Image Upload */}
-        <div className="addItemImageBox">
-          <input
-            className="addImageBtn"
-            type="file"
-            name="image"
-            onChange={handleFileChange}
-            accept="image/*"
           />
         </div>
 

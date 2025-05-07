@@ -27,12 +27,6 @@ const ConsumableListView = ({ items, onPageChange, currentPage, totalPages }) =>
             className="consumable-list-item"
             onClick={() => navigate(`/consumables/${item._id}`)}
           >
-            <div className="item-image">
-              <img 
-                src={item.imageUrl || '/default-consumable.png'} 
-                alt={item.Name}
-              />
-            </div>
             <div className="item-details">
               <h3>{item.Name}</h3>
               <p className="category">{item.Category}</p>
