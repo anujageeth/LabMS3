@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import './Home.css';
 
 import LoginModal from "./components/LoginModal";
@@ -60,10 +59,7 @@ const HomePage = () => {
     };
   }, []);
 
-  const handleLogoutClick = () => {
-    navigate("/login");
-  };
-
+  
   return (
     <div className="homePageFullBox">
       <div className="homeBackImage">

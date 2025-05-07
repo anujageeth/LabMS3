@@ -49,30 +49,6 @@ function Inventory() {
     },
   ]);
 
-  const handleRowClick = (row) => {
-    setSelectedRow(row); // Set the clicked row as selected
-  };
-
-  const handleUpdateItemClick = () => {
-    if (selectedRow) {
-      navigate("/updateitem", { state: selectedRow });
-    } else {
-      alert("Please select a row to update");
-    }
-  };
-
-  const handleDeleteItemClick = () => {
-    if (selectedRow) {
-      // Remove the selected row from tableData
-      const updatedData = tableData.filter(
-        (item) => item.id !== selectedRow.id
-      );
-      setTableData(updatedData);
-      setSelectedRow(null); // Deselect the row after deletion
-    } else {
-      alert("Please select a row to delete");
-    }
-  };
 
   return (
     <div className="dashPage">

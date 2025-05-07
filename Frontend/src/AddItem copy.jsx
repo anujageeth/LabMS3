@@ -155,9 +155,6 @@ function AddItem({ onRefresh }) {
     }
   };
 
-  const handleCancelClick = () => {
-    navigate("/table2");
-  };
 
   return (
     <div className="loginPage">

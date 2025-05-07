@@ -29,32 +29,7 @@ export const register = async (
   }
 };
 
-// export const login = async (Email, Password) => {
-//   // const response = await axios.post(`${API_URL}/auth/login`, {
-//   //   email,
-//   //   password,
-//   // });
-//   try {
-//     const response = await axios.post(`${API_URL}/login`, {
-//       Email,
-//       Password,
-//     });
-//     //return response.data;
-//     if (response.data.token) {
-//       //localStorage.setItem("user", JSON.stringify(response.data));
-//       localStorage.setItem("token", response.data.token);
-//       localStorage.setItem("user", JSON.stringify(response.data.user));
-//       console.log("Storing token:", response.data.token);
-//       console.log("Username:", response.data.user.FirstName);
-//     }
-//     return response.data;
-//   } catch (error) {
-//     console.error("Login API error:", error); // Log API errors for debugging
-//     throw error;
-//   }
-// };
 
-// authService.js, login function
 export const login = async (email, password) => {
   try {
     const response = await axios.post("http://localhost:3001/api/login", {

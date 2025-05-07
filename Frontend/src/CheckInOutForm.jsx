@@ -17,7 +17,6 @@ function CheckInOutForm() {
   const [currentLineIndex, setCurrentLineIndex] = useState(-1);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const textareaRef = useRef(null);
-  const navigate = useNavigate();
 
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);

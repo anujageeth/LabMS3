@@ -13,14 +13,11 @@ import {
   TableRow,
   Checkbox,
   IconButton,
-  Tooltip,
-  FormControlLabel,
-  Switch
+  Tooltip
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./components/tableModal2.css";
-import CategoryFilter from "./components/CategoryFilter"; // Import the CategoryFilter component
 import CategorySelect from "./components/CategorySelect";
 
 import SideNavigation from "./components/SideNavigation";
@@ -175,16 +172,10 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
 
   const navigate = useNavigate();
 
-  const handleListViewClick = () => {
-    navigate("/list2");
-  };
-
+  
   const handleAddUserClick = () => {
     navigate("/adduser");
   };

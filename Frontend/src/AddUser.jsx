@@ -15,14 +15,10 @@ function AddItem() {
   const [role, setRole] = useState("");
   const [studentId, setStudentId] = useState("");
   const [title, setTitle] = useState("");
-  const [studentStatus, setStudentStatus] = useState('student');
 
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
 
-  const handleCanclClick = () => {
-    navigate("/usermanage2");
-  };
 
   const handleBulkUploadClick = () => {
     navigate("/addbulkuser");
