@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import { FaCalendarAlt, FaEdit } from "react-icons/fa";
 import {
@@ -100,6 +101,8 @@ const BookingReservation = () => {
     { id: "sem7", number: 7, name: "Seventh Semester" },
     { id: "sem8", number: 8, name: "Eighth Semester" },
   ];
+
+  const navigate = useNavigate();
 
   // Snackbar function
   const showSnackbar = (message, severity = "success") => {
@@ -486,42 +489,36 @@ useEffect(() => {
               </div>
 
               <div className="addNsearch">
-                {!isPastDate && (
-                  <div className="addItem" id="fullReportGap">
-                    <button className="addItemBtn" onClick={toggleFormVisibility}>
-                      <b>Book your lab</b>
-                    </button>
-                  </div>
-                )}
 
-                <div className="addItem">
-                  <button className="addItemBtn" onClick={toggleCalendar}>
+                <div className="pageBtnDiv">
+
+                  <button className="pageBtn" onClick={toggleCalendar}>
                     <FaCalendarAlt size={20} />
+                    <span style={{ marginLeft: '5px' }}>Date</span>
                   </button>
-                  <div className="calenderDiv">
-                    {isCalendarVisible && (
-                      <Calendar 
-                        onChange={onDateChange} 
-                        value={date}
-                        tileClassName={tileClassName}
-                        tileContent={tileContent}
-                      />
-                    )}
-                  </div>
+                  
+                  <button className="pageBtn" onClick={toggleFormVisibility} disabled={isPastDate}>Book your lab</button>
+                  {user?.Role !== "student" && (
+                    <button 
+                      className="pageBtn" 
+                      onClick={toggleDetailsDialog}
+                    >
+                      Edit Details
+                    </button>
+                  )}
+                </div>
+                
+                <div className="calenderDiv">
+                  {isCalendarVisible && (
+                    <Calendar 
+                      onChange={onDateChange} 
+                      value={date}
+                      tileClassName={tileClassName}
+                      tileContent={tileContent}
+                    />
+                  )}
                 </div>
 
-                {/* Only show Edit Details button if user is not a student */}
-  {user?.Role !== "student" && (
-    <div className="addItem">
-      <button 
-        className="addItemBtn" 
-        onClick={toggleDetailsDialog}
-      >
-        <FaEdit size={20} />
-        <span style={{ marginLeft: '5px' }}>Edit Details</span>
-      </button>
-    </div>
-  )}
               </div>
             </div>
 

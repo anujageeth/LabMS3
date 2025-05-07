@@ -119,14 +119,14 @@ function CheckInOutTable() {
                     <option value="checkin">Check In</option>
                     <option value="checkout">Check Out</option>
                   </select>
-                  <div className='checkInOutCalenderNavText'>From:</div>
+                  {/*<div className='checkInOutCalenderNavText'>From:</div>*/}
                   <input
                     id="categoryFilter"
                     type="date"
                     value={filters.startDate}
                     onChange={(e) => handleFilterChange({ startDate: e.target.value })}
                   />
-                  <div className='checkInOutCalenderNavText'>To:</div>
+                  {/*<div className='checkInOutCalenderNavText'>To:</div>*/}
                   <input
                     id="categoryFilter"
                     type="date"

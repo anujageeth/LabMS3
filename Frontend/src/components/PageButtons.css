@@ -16,6 +16,7 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    height: 40px;
 }
   
 .searchBarContainer {
