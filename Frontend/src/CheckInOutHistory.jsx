@@ -101,15 +101,15 @@ function CheckInOutTable() {
                 <h1 className="pageTitle">Equipment Management</h1>
               </div>
               <div className="addNsearch">
-                <div className="addItem">
-                  <button className="addItemBtn" onClick={() => setIsModalOpen(true)}>
+                <div className="pageBtnDiv">
+                  <button className="pageBtn" onClick={() => setIsModalOpen(true)}>
                     <b>Check in / out</b>
                   </button>
-                  <button className="addItemBtn" onClick={() => navigate("/table2")}>
+                  <button className="pageBtn" onClick={() => navigate("/table2")}>
                     <b>Equipment list</b>
                   </button>
                 </div>
-                <div className="search">
+                <div className="pageBtnDiv">
                   <select
                     id="categoryFilter"
                     value={filters.action}

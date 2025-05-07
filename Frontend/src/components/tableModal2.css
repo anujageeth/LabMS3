@@ -121,11 +121,10 @@
 }
 
 .searchInput {
-    flex: 2;
+    flex: 4;
     height: 30px;
-    width: 20vw;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: #e7e7e7;
     font-size: 20px;
     color: #777777;

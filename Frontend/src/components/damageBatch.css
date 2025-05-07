@@ -1,5 +1,5 @@
 .damage-badge {
-    position: absolute;
+    position: relative;
     top: 10px;          /* Change from -8px */
     right: 10px;        /* Change from -8px */
     background: linear-gradient(#ff0000, #750000);
@@ -12,4 +12,9 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transform: translateZ(0);  /* Add this for better rendering */
     pointer-events: none;     /* Add this to prevent interference */
+}
+
+.listViewDamageLabel {
+    display: flex;
+    justify-content: flex-end;
 }

@@ -272,24 +272,14 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
               </div>
 
               <div className="addNsearch">
-                <div className="addItem">
-                  <button
-                    className="addItemBtn"
-                    id="addBtn"
-                    onClick={handleAddUserClick}
-                  >
-                    <b>Add user</b>
-                  </button>
-                  <button
-                    className="addItemBtn"
-                    id="listBtn1"
-                    onClick={handleBulkUploadClick}
-                  >
-                    <b>Upload a bulk</b>
-                  </button>
+
+                <div className="pageBtnDiv">
+                  <button className="pageBtn" onClick={handleAddUserClick}>Add user +</button>
+                  <button className="pageBtn" onClick={handleBulkUploadClick}>Upload a bulk</button>
+                  
                 </div>
 
-                <div className="search">
+                <div className="searchBarContainer">
                   <div className="searchContainer">
                     <input
                       type="search"
