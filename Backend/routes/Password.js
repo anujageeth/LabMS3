@@ -1,5 +1,5 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { authenticateToken } = require("../middleware/authMiddleware");
 
@@ -25,6 +25,7 @@ router.put("/change", authenticateToken, async (req, res) => {
             return res.status(404).json({ message: "User not found." });
         }
 
+        
         // Check if old password is correct
         const isMatch = await bcrypt.compare(oldPassword, user.Password);
         if (!isMatch) {
