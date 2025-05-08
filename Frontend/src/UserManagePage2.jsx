@@ -167,7 +167,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
         return;
       }
       await axios.put(
-        `http://localhost:3001/api/users/${editData._id}`,
+        `http://10.50.227.93:3001/api/users/${editData._id}`,
         editData,
         {
           headers: {
@@ -211,7 +211,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
       }
       await Promise.all(
         selected.map((id) =>
-          axios.delete(`http://localhost:3001/api/users/${id}`, {
+          axios.delete(`http://10.50.227.93:3001/api/users/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

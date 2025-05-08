@@ -10,11 +10,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Select,
-  MenuItem,
-  Button,
-  FormControl,
-  InputLabel
 } from "@mui/material";
 import "./ReportPage.css";
 import SideNavigation from "./SideNavigation";
@@ -29,15 +24,13 @@ const ReportPage = () => {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [categories, setCategories] = useState([]);
   const [names, setNames] = useState([]);
-  const [user, setUser] = useState(null);
-
-  const [dense, setDense] = useState(true);
+  const [dense] = useState(true); // Removed setDense since it's not used
 
   // Fetch categories and names on component mount
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/report-options");
+        const response = await axios.get("http://10.50.227.93:3001/api/report-options");
         setCategories(response.data.categories);
         setNames(response.data.names);
       } catch (error) {
@@ -51,7 +44,7 @@ const ReportPage = () => {
     const fetchReportHistory = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3001/api/report-history", {
+        const response = await axios.get("http://10.50.227.93:3001/api/report-history", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setReportHistory(response.data);
@@ -71,12 +64,11 @@ const ReportPage = () => {
           navigate("/login"); // Redirect if no token is found
           return;
         }
-        const response = await axios.get("http://localhost:3001/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(response.data);
+        // const response = await axios.get("http://10.50.227.93:3001/api/users/me", {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // });
         //console.log(user);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -93,7 +85,7 @@ const ReportPage = () => {
   // Function to handle report generation
   const handleReport = async (type, action) => {
     try {
-      let endpoint = "http://localhost:3001/api/reports/";
+      let endpoint = "http://10.50.227.93:3001/api/reports/";
       let queryParams = "";
       const token = localStorage.getItem("token");
       
@@ -143,7 +135,7 @@ const ReportPage = () => {
       // setReportHistory([newHistory, ...reportHistory]);
       
       // Refresh history after successful report
-      const historyResponse = await axios.get("http://localhost:3001/api/report-history", {
+      const historyResponse = await axios.get("http://10.50.227.93:3001/api/report-history", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setReportHistory(historyResponse.data);

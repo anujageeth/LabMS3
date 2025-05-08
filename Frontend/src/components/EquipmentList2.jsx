@@ -31,7 +31,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/equipmentImage");
+        const response = await axios.get("http://10.50.227.93:3001/api/equipmentImage");
         setEquipment(response.data);
         setFilteredEquipment(response.data);
       } catch (error) {
@@ -98,7 +98,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         navigate("/login");
         return;
       }
-      await axios.delete(`http://localhost:3001/api/equipmentImage/${id}`, {
+      await axios.delete(`http://10.50.227.93:3001/api/equipmentImage/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       onRefresh();
@@ -132,7 +132,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         return;
       }
       await axios.put(
-        `http://localhost:3001/api/equipmentImage/${selectedEquipment._id}`,
+        `http://10.50.227.93:3001/api/equipmentImage/${selectedEquipment._id}`,
         editEquipment,
         { headers: { Authorization: `Bearer ${token}` } }
       );

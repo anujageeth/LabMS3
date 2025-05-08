@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EquipmentStats from './EquipmentStats';
 import SideNavigation from './SideNavigation';
@@ -10,7 +10,7 @@ const EquipmentStatsPage = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -19,8 +19,7 @@ const EquipmentStatsPage = () => {
       }
 
       const response = await axios.get(
-        // Make sure this path matches exactly with your backend route
-        `http://localhost:3001/api/equipmentImage-stats`,
+        `http://10.50.227.93:3001/api/equipmentImage-stats`,
         {
           headers: { 
             Authorization: `Bearer ${token}`,
@@ -40,11 +39,11 @@ const EquipmentStatsPage = () => {
         navigate("/login");
       }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchStats();
-  }, []);
+  }, [fetchStats]);
 
   return (
     <div className="dashPage">

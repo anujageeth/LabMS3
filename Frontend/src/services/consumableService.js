@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3001/api/consumables";
+const API_BASE_URL = "http://10.50.227.93:3001/api/consumables";
 
 // Helper function to get auth token
 const getAuthConfig = () => {

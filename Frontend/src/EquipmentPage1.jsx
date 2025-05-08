@@ -40,7 +40,7 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
     const fetchEquipment = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/equipmentImage"
+          "http://10.50.227.93:3001/api/equipmentImage"
         );
         setEquipment(response.data);
         setFilteredEquipment(response.data); // Initially set filtered data to all equipment
@@ -52,7 +52,7 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/categories"
+          "http://10.50.227.93:3001/api/categories"
         );
         setCategories(response.data);
       } catch (error) {
@@ -118,7 +118,7 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `http://localhost:3001/api/equipmentImage/${editData._id}`,
+        `http://10.50.227.93:3001/api/equipmentImage/${editData._id}`,
         editData
       );
       // Refresh after update
@@ -138,7 +138,7 @@ const EquipmentPage1 = ({ onRefresh, refresh }) => {
     try {
       await Promise.all(
         selected.map((id) =>
-          axios.delete(`http://localhost:3001/api/equipmentImage/${id}`)
+          axios.delete(`http://10.50.227.93:3001/api/equipmentImage/${id}`)
         )
       );
       setSelected([]); // Clear selection after delete
