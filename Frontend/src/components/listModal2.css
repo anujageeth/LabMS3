@@ -60,6 +60,7 @@
 .listViewBtn2 {
     height: 25px;
     width: 50px;
+    margin-right: 5px;
     border: none;
     border-radius: 20px;
     color: #ffffff;
@@ -119,6 +120,11 @@
 
 .listViewModal-content2 h2 {
     color: #005766;
+    margin-bottom: 30px;
+}
+
+#deleteConfirmBox {
+    width: 20vw;
 }
 
 /* Styles for Modal Inputs */
@@ -127,12 +133,14 @@
     width: 90%;
     min-width: 90%;
     max-width: 90%;
+    min-height: 40px;
+    max-height: 80px;
     /* Full width input fields */
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     /* Input border color */
-    border-radius: 25px;
+    border-radius: 20px;
     /* Rounded corners */
 }
 
@@ -152,7 +160,7 @@
     height: 30px;
     width: 100px;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     color: #ffffff;
     font-size: 12px;
     background: linear-gradient(#00d9ff, #009eb9);

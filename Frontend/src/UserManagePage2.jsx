@@ -429,8 +429,8 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                   </Paper>
 
                   {deleteModalOpen &&
-                    <div className="equipment-popup">
-                      <div className="listViewModal-content2" id="deleteBox">
+                    <div className="listViewModal2">
+                      <div className="listViewModal-content2" id="deleteConfirmBox">
                       <h2>Delete User</h2>
                       <button
                         className="listViewBtn3"

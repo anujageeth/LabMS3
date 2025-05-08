@@ -567,3 +567,9 @@ table button:hover {
   .addItem:last-child {
     margin-right: 0;
   }
+
+  #labBookBtn:disabled {
+    background-color: #ccc !important;
+    color: #666 !important;
+    cursor: not-allowed !important;
+  }

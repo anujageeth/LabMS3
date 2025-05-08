@@ -330,21 +330,21 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
 
       {deleteModalOpen &&
         <div className="listViewModal2">
-          <div className="listViewModal-content2">
-          <h2>Delete Equipment</h2>
-          <button
-            className="listViewBtn3"
-            id="deleteListBtn"
-            onClick={() => {
-              handleDelete(editEquipment._id);
-              closeDeleteModal();
-              closeModal();
-            }}
-          >
-            Confirm
-          </button>
+          <div className="listViewModal-content2" id="deleteConfirmBox">
+            <h2>Delete Equipment</h2>
+            <button
+              className="listViewBtn3"
+              id="deleteListBtn"
+              onClick={() => {
+                handleDelete(editEquipment._id);
+                closeDeleteModal();
+                closeModal();
+              }}
+            >
+              Confirm
+            </button>
 
-          <button className="listViewBtn3" id="closeListBtn" onClick={closeDeleteModal}>Cancel</button>
+            <button className="listViewBtn3" id="closeListBtn" onClick={closeDeleteModal}>Cancel</button>
           </div>
         </div>
       }

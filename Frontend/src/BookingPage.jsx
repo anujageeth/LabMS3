@@ -497,7 +497,7 @@ useEffect(() => {
                     <span style={{ marginLeft: '5px' }}>Date</span>
                   </button>
                   
-                  <button className="pageBtn" onClick={toggleFormVisibility} disabled={isPastDate}>Book your lab</button>
+                  <button className="pageBtn" id="labBookBtn" onClick={toggleFormVisibility} disabled={isPastDate}>Book your lab</button>
                   {user?.Role !== "student" && (
                     <button 
                       className="pageBtn" 
