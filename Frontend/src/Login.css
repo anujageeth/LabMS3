@@ -42,11 +42,13 @@ html {
 }
 
 .loginBox {
+    overflow-y: auto;
+    scrollbar-width: none;
     justify-content: center;
     align-items: center;
     text-align: center;
     width: 400px;
-    height: 500px;
+    height: 95vh;
     border-radius: 40px;
     background-color: #d8d8d8;
     z-index: 3;
