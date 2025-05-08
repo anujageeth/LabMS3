@@ -18,6 +18,10 @@
     cursor: pointer;
     height: 40px;
 }
+
+.pageBtn:hover {
+    background-color: #005f7f; /* darker shade on hover */
+}
   
 .searchBarContainer {
     display: grid;

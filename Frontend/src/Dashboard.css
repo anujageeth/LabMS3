@@ -38,7 +38,7 @@ body {
 
 .dashBoxer {
     background-color: rgb(255, 255, 255);
-    height: 80vh;
+    height: 85vh;
     width: 73vw;
     border-radius: 30px;
     padding-top: 10px;
@@ -49,7 +49,7 @@ body {
 
 .dashBox {
     display: flex;
-    height: 20vh;
+    height: 15vh;
     width: 73vw;
     border-radius: 30px;
     padding-top: 10px;
@@ -129,90 +129,90 @@ body {
     margin-top: 20px;
   }
   
-  .noticeBox {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 20px;
-    width: 30%;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .noticeTitle {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .noticeContent {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.5;
+.noticeBox {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  width: 30%;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  }
+.noticeTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
 
-  @keyframes swing {
-    0% { transform: rotate(0deg); }
-    30% { transform: rotate(5deg); }
-    60% { transform: rotate(-5deg); }
-    100% { transform: rotate(0deg); }
-  }
+.noticeContent {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
 
-  @keyframes dropdownAnimation {
-    0% {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+}
 
-  @keyframes dropleft {
-    0% {
-      opacity: 0;
-      transform: translateX(10px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
+@keyframes swing {
+  0% { transform: rotate(0deg); }
+  30% { transform: rotate(5deg); }
+  60% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
 
-  @keyframes wipeRight {
-    0% {
-      clip-path: inset(0 0 0 100%);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
+@keyframes dropdownAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-
-  /*-------------------*/
-
-  .dashCardRow {
-    display: flex;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .dashCardDiv {
-    flex: 1;
-    margin: 10px 10px;
-    padding: 10px;
-    background: linear-gradient(#009eb9, #009eb9);
-    border-radius: 15px;
-    height: 25vh;
-    box-shadow: 0 0 0px #000000;
+@keyframes dropleft {
+  0% {
+    opacity: 0;
+    transform: translateX(10px);
   }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-  .dashCardDiv:hover {
-    background: linear-gradient(#009eb9, #008fa8);
-    box-shadow: 0 0 10px #00d9ff;
+@keyframes wipeRight {
+  0% {
+    clip-path: inset(0 0 0 100%);
+    opacity: 0;
   }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
 
-  #dash2Title {
-    padding: 0px 20px;
-  }
+/*-------------------*/
+
+.dashCardRow {
+  display: flex;
+}
+
+.dashCardDiv {
+  flex: 1;
+  margin: 10px 10px;
+  padding: 10px;
+  background: linear-gradient(#009eb9, #009eb9);
+  border-radius: 15px;
+  height: 25vh;
+  box-shadow: 0 0 0px #000000;
+}
+
+.dashCardDiv:hover {
+  background: linear-gradient(#009eb9, #008fa8);
+  box-shadow: 0 0 10px #00d9ff;
+}
+
+#dash2Title {
+  padding: 0px 20px;
+}

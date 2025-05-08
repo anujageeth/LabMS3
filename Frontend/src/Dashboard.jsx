@@ -3,9 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { FaBoxOpen, FaClipboardList, FaCogs, FaUsers, FaFileAlt, FaRegCommentDots, FaFlask } from 'react-icons/fa';  // Added FaFlask
 import "./Dashboard.css";
 import UserDetails from "./components/UserDetails";
+import { hasFullAccess, hasInventoryViewAccess, hasBookingAccess,hasEquipmentManagementAccess } from './utils/rolePermissions';
+//import getCurrentUser from './services/authService';
+const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
 
 function Dashboard() {
   const navigate = useNavigate();
+  const currentUser = getCurrentUser();
+  const userRole = currentUser?.Role || ""; // Get the user's role from the context
 
   const handleInventoryClick = () => {
     navigate("/table2");
@@ -69,12 +76,15 @@ function Dashboard() {
           <br />
           <br />
 
-          <button className="logOutBtn" onClick={handleAddUsrClick}>
-            <b>Add new user</b>
-          </button>
-
-          <br />
-          <br />
+          {hasFullAccess(userRole) && (
+            <>
+              <button className="logOutBtn" onClick={handleAddUsrClick}>
+                <b>Add new user</b>
+              </button>
+              <br />
+              <br />
+            </>
+          )}
 
           <button className="logOutBtn" onClick={handleLogoutClick}>
             <b>Log out</b>
@@ -88,47 +98,67 @@ function Dashboard() {
             </div>
             <div className="boooo">
               <div className="menuBoxes">
-                <div className="menuBox" onClick={handleInventoryClick}>
-                  <div className="menuBoxImageDiv">
-                    <FaBoxOpen size={64} />  {/* Inventory Management Icon */}
+                {/* Inventory visible to all except students */}
+                {hasInventoryViewAccess(userRole) && (
+                  <div className="menuBox" onClick={handleInventoryClick}>
+                    <div className="menuBoxImageDiv">
+                      <FaBoxOpen size={64} />
+                    </div>
+                    <div className="menuBoxText">Inventory Management</div>
                   </div>
-                  <div className="menuBoxText">Inventory Management</div>
-                </div>
+                )}
                 
-                <div className="menuBox" onClick={handleConsumablesClick}>
-                  <div className="menuBoxImageDiv">
-                    <FaFlask size={64} />  {/* Consumables Icon */}
+                {/* Consumables only visible to HOD and TO */}
+                {hasFullAccess(userRole) && (
+                  <div className="menuBox" onClick={handleConsumablesClick}>
+                    <div className="menuBoxImageDiv">
+                      <FaFlask size={64} />
+                    </div>
+                    <div className="menuBoxText">Consumables</div>
                   </div>
-                  <div className="menuBoxText">Consumables</div>
-                </div>
-                <div className="menuBox" onClick={handleEquipment1Click}>
-                  <div className="menuBoxImageDiv">
-                    <FaClipboardList size={64} />  {/* Equipment Management Icon */}
-                  </div>
-                  <div className="menuBoxText">Equipment Management</div>
-                </div>
+                )}
 
+                {/* Equipment Management only visible to HOD and TO */}
+                {hasEquipmentManagementAccess(userRole) && (
+                  <div className="menuBox" onClick={handleEquipment1Click}>
+                    <div className="menuBoxImageDiv">
+                      <FaClipboardList size={64} />
+                    </div>
+                    <div className="menuBoxText">Equipment Management</div>
+                  </div>
+                )}
               </div>
 
               <div className="menuBoxes">
-                <div className="menuBox" onClick={handleBooking1Click}>
-                  <div className="menuBoxImageDiv">
-                    <FaCogs size={64} />  {/* Bookings & Reservations Icon */}
+                {/* Bookings visible to all users */}
+                {hasBookingAccess(userRole) && (
+                  <div className="menuBox" onClick={handleBooking1Click}>
+                    <div className="menuBoxImageDiv">
+                      <FaCogs size={64} />
+                    </div>
+                    <div className="menuBoxText">Bookings & Reservations</div>
                   </div>
-                  <div className="menuBoxText">Bookings & Reservations</div>
-                </div>
-                <div className="menuBox" onClick={handleReport1Click}>
-                  <div className="menuBoxImageDiv">
-                    <FaFileAlt size={64} />  {/* Reports Icon */}
+                )}
+
+                {/* Reports only visible to HOD and TO */}
+                {hasFullAccess(userRole) && (
+                  <div className="menuBox" onClick={handleReport1Click}>
+                    <div className="menuBoxImageDiv">
+                      <FaFileAlt size={64} />
+                    </div>
+                    <div className="menuBoxText">Reports</div>
                   </div>
-                  <div className="menuBoxText">Reports</div>
-                </div>
-                <div className="menuBox" onClick={handleUserManage1Click}>
-                  <div className="menuBoxImageDiv">
-                    <FaUsers size={64} />  {/* User Management Icon */}
+                )}
+
+                {/* User Management only visible to HOD and TO */}
+                {hasFullAccess(userRole) && (
+                  <div className="menuBox" onClick={handleUserManage1Click}>
+                    <div className="menuBoxImageDiv">
+                      <FaUsers size={64} />
+                    </div>
+                    <div className="menuBoxText">User Management</div>
                   </div>
-                  <div className="menuBoxText">User Management</div>
-                </div>
+                )}
               </div>
             </div>
           </div>
@@ -137,5 +167,6 @@ function Dashboard() {
     </div>
   );
 }
+
 
 export default Dashboard;

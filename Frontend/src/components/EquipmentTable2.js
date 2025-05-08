@@ -40,7 +40,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
   const [sortBy, setSortBy] = useState('Name');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -642,6 +642,10 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   <div className="listViewModal2">
                     <div className="listViewModal-content2" id="deleteConfirmBox">
                     <h2>Delete Equipment</h2>
+                    <p>
+                      Are you sure you want to delete?<br />
+                      This action cannot be undone.
+                    </p>
                     <button
                       className="listViewBtn3"
                       id="deleteListBtn"

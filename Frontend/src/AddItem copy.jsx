@@ -27,17 +27,42 @@ function AddItem({ onRefresh }) {
     image: null,
   });
 
+  const [uniqueValues, setUniqueValues] = useState({
+    names: [],
+    categories: [],
+    brands: []
+  });
+
   // Fetch existing equipment for dropdown selections
+  // useEffect(() => {
+  //   const fetchEquipment = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:3001/api/equipmentImage");
+  //       setEquipment(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching equipment:", error);
+  //     }
+  //   };
+  //   fetchEquipment();
+  // }, []);
+
   useEffect(() => {
-    const fetchEquipment = async () => {
+    const fetchUniqueValues = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/equipmentImage");
-        setEquipment(response.data);
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:3001/api/equipmentImage/unique-values", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUniqueValues(response.data.data);
       } catch (error) {
-        console.error("Error fetching equipment:", error);
+        console.error("Error fetching unique values:", error);
+        if (error.response?.status === 403) {
+        
+        }
       }
     };
-    fetchEquipment();
+
+    fetchUniqueValues();
   }, []);
 
   const handleChange = (e) => {
@@ -146,10 +171,10 @@ function AddItem({ onRefresh }) {
             <form onSubmit={handleSubmit}>
               
               {/* Name Selection */}
-              <select name="Name" value={formData.Name} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
-                <option value="">Select Existing Name or Enter New</option>
-                {[...new Set(equipment.map((item) => item.Name))].map((n) => (
-                  <option key={n} value={n}>{n}</option>
+              <select name="Name" value={formData.Name} onChange={handleChange} className="typeBoxControl">
+                <option value="">Select Existing Name</option>
+                {uniqueValues.names.map(name => (
+                  <option key={name} value={name}>{name}</option>
                 ))}
               </select>
               <input
@@ -162,10 +187,10 @@ function AddItem({ onRefresh }) {
               />
 
               {/* Category Selection */}
-              <select name="Category" value={formData.Category} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
-                <option value="">Select Existing Category or Enter New</option>
-                {[...new Set(equipment.map((item) => item.Category))].map((c) => (
-                  <option key={c} value={c}>{c}</option>
+              <select name="Category" value={formData.Category} onChange={handleChange} className="typeBoxControl">
+                <option value="">Select Existing Category</option>
+                {uniqueValues.categories.map(category => (
+                  <option key={category} value={category}>{category}</option>
                 ))}
               </select>
               <input
@@ -178,10 +203,10 @@ function AddItem({ onRefresh }) {
               />
 
               {/* Brand Selection */}
-              <select name="Brand" value={formData.Brand} onChange={handleChange} className="typeBoxControl" id="addAvailabilityBtn">
-                <option value="">Select Existing Brand or Enter New</option>
-                {[...new Set(equipment.map((item) => item.Brand))].map((b) => (
-                  <option key={b} value={b}>{b}</option>
+              <select name="Brand" value={formData.Brand} onChange={handleChange} className="typeBoxControl">
+                <option value="">Select Existing Brand</option>
+                {uniqueValues.brands.map(brand => (
+                  <option key={brand} value={brand}>{brand}</option>
                 ))}
               </select>
               <input

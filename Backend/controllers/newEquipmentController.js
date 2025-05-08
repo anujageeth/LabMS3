@@ -360,7 +360,39 @@ const getEquipmentStats = async (req, res) => {
   }
 };
 
-// Update the exports to include getEquipmentStats
+// **Get Unique Values**
+const getUniqueValues = async (req, res) => {
+  try {
+    const [names, categories, brands] = await Promise.all([
+      Equipment.distinct('Name'),
+      Equipment.distinct('Category'),
+      Equipment.distinct('Brand')
+    ]);
+
+    // Sort arrays and remove empty/null values
+    const cleanAndSort = (arr) => arr
+      .filter(item => item && item.trim())
+      .sort((a, b) => a.localeCompare(b));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        names: cleanAndSort(names),
+        categories: cleanAndSort(categories),
+        brands: cleanAndSort(brands)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching unique values:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error fetching unique values",
+      error: error.message 
+    });
+  }
+};
+
+// Update the exports to include getEquipmentStats and getUniqueValues
 module.exports = {
   addEquipment,
   getEquipment,
@@ -368,5 +400,6 @@ module.exports = {
   updateEquipment,
   deleteEquipment,
   getEquipmentStats,
+  getUniqueValues,
   upload,
 };
