@@ -37,7 +37,7 @@ function AddItem({ onRefresh }) {
   // useEffect(() => {
   //   const fetchEquipment = async () => {
   //     try {
-  //       const response = await axios.get("http://localhost:3001/api/equipmentImage");
+  //       const response = await axios.get("http://10.50.227.93:3001/api/equipmentImage");
   //       setEquipment(response.data);
   //     } catch (error) {
   //       console.error("Error fetching equipment:", error);
@@ -50,7 +50,7 @@ function AddItem({ onRefresh }) {
     const fetchUniqueValues = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3001/api/equipmentImage/unique-values", {
+        const response = await axios.get("http://10.50.227.93:3001/api/equipmentImage/unique-values", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUniqueValues(response.data.data);
@@ -101,7 +101,7 @@ function AddItem({ onRefresh }) {
       }
 
       await axios.post(
-        "http://localhost:3001/api/equipmentImage",
+        "http://10.50.227.93:3001/api/equipmentImage",
         formDataToSend,
         {
           headers: {

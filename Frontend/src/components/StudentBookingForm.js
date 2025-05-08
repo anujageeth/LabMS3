@@ -74,7 +74,7 @@ const StudentBookingForm = ({ closeForm, selectedDate, onBookingAdded, user }) =
                 throw new Error("No authentication token found");
             }
     
-            const response = await fetch("http://localhost:3001/api/bookings/student", {
+            const response = await fetch("http://10.50.227.93:3001/api/bookings/student", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

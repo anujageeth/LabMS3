@@ -31,7 +31,7 @@ function AddCategory({ showModal, setShowModal }) {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/categories"
+          "http://10.50.227.93:3001/api/categories"
         );
         setCategories(response.data); // Set the fetched categories
       } catch (error) {
@@ -44,7 +44,7 @@ function AddCategory({ showModal, setShowModal }) {
 
   const handleAddNewCategory = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/api/category", {
+      const response = await axios.post("http://10.50.227.93:3001/api/category", {
         name: newCategory,
         description: newCategoryDescription, // Add this if required
       });

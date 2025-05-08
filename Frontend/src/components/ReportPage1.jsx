@@ -51,7 +51,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
           navigate("/login"); // Redirect if no token is found
           return;
         }
-        const response = await axios.get("http://localhost:3001/api/users/me", {
+        const response = await axios.get("http://10.50.227.93:3001/api/users/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -73,7 +73,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
   useEffect(() => {
     const fetchLabReports = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/labReport"); // Adjust endpoint as needed
+        const response = await axios.get("http://10.50.227.93:3001/api/labReport"); // Adjust endpoint as needed
         setEquipment(response.data); // Assuming 'setEquipment' is reused for lab reports
         setFilteredEquipment(response.data);
       } catch (error) {
@@ -88,7 +88,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
     const fetchEquipment = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/equipmentImage"
+          "http://10.50.227.93:3001/api/equipmentImage"
         );
         setEquipment(response.data);
         setFilteredEquipment(response.data); // Initially set filtered data to all equipment
@@ -99,7 +99,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/categories");
+        const response = await axios.get("http://10.50.227.93:3001/api/categories");
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -175,7 +175,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `http://localhost:3001/api/equipmentImage/${editData._id}`,
+        `http://10.50.227.93:3001/api/equipmentImage/${editData._id}`,
         editData
       );
       // Refresh after update
@@ -195,7 +195,7 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
     try {
       await Promise.all(
         selected.map((id) =>
-          axios.delete(`http://localhost:3001/api/equipmentImage/${id}`)
+          axios.delete(`http://10.50.227.93:3001/api/equipmentImage/${id}`)
         )
       );
       setSelected([]); // Clear selection after delete
@@ -237,8 +237,8 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
     try {
       const endpoint =
         type === "full"
-          ? "http://localhost:3001/api/reports/full/pdf"
-          : `http://localhost:3001/api/reports/category/pdf?categoryId=${categoryId}`;
+          ? "http://10.50.227.93:3001/api/reports/full/pdf"
+          : `http://10.50.227.93:3001/api/reports/category/pdf?categoryId=${categoryId}`;
 
       if (type === "category" && !categoryId) {
         alert("Please select a category before previewing the report.");
@@ -266,8 +266,8 @@ const ReportPage1 = ({ onRefresh, refresh }) => {
     try {
       const endpoint =
         type === "full"
-          ? "http://localhost:3001/api/reports/full/pdf"
-          : `http://localhost:3001/api/reports/category/pdf?categoryId=${categoryId}`;
+          ? "http://10.50.227.93:3001/api/reports/full/pdf"
+          : `http://10.50.227.93:3001/api/reports/category/pdf?categoryId=${categoryId}`;
 
       const response = await axios.get(endpoint, { responseType: "blob" });
 

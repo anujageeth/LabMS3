@@ -52,12 +52,12 @@ const AddConsumable = ({ onRefresh }) => {
       };
 
       // First create the consumable record
-      const response = await createConsumable(jsonData);
+      await createConsumable(jsonData); // Removed the unused `response` variable
 
       // If there's an image and we have an ID, we could handle image upload here
       // This would need a separate endpoint in your backend
       // Similar to what we did in the AddConsumableItems component
-      
+
       if (onRefresh) onRefresh();
       navigate('/consumables');
     } catch (err) {
@@ -222,4 +222,4 @@ const AddConsumable = ({ onRefresh }) => {
   );
 };
 
-export default AddConsumable; 
+export default AddConsumable;

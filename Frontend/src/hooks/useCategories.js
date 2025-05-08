@@ -13,7 +13,7 @@ const useCategories = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/categories"
+          "http://10.50.227.93:3001/api/categories"
         );
         setCategories(response.data);
       } catch (error) {
@@ -27,7 +27,7 @@ const useCategories = () => {
   // Add new category
   const handleAddNewCategory = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/api/category", {
+      const response = await axios.post("http://10.50.227.93:3001/api/category", {
         name: newCategory,
         description: newCategoryDescription,
       });

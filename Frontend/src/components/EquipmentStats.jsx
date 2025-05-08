@@ -19,7 +19,7 @@ const EquipmentStats = ({ stats, searchTerm }) => {
 
   if (!stats) return null;
 
-  const { categoryStats, nameStats, overall } = stats;
+  const { nameStats, overall } = stats;
 
   // Filter items based on the search term
   const filteredItems = nameStats.filter(item => 

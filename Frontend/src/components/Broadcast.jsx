@@ -66,7 +66,7 @@ function Broadcast() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:3001/api/notifications/broadcast",
+        "http://10.50.227.93:3001/api/notifications/broadcast",
         broadcastForm,
         {
           headers: { Authorization: `Bearer ${token}` },
