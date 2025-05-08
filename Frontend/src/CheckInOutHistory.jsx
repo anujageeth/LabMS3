@@ -17,7 +17,7 @@ function CheckInOutTable() {
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [filters, setFilters] = useState({
     action: '',
@@ -189,7 +189,7 @@ function CheckInOutTable() {
                     </Table>
                   </TableContainer>
                   <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5]}
                     component="div"
                     count={totalItems}
                     rowsPerPage={rowsPerPage}
