@@ -26,6 +26,7 @@ app.use(cors({
     "https://drive.google.com",
     "https://firebasestorage.googleapis.com",
     "https://ssl.gstatic.com",
+    "http://10.50.227.93:3000"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -49,6 +50,8 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("MongoDB connected");
+
+    
     
     // Check for existing admin users
     const adminExists = await User.exists({ 
@@ -62,7 +65,7 @@ mongoose
       const adminUser = new User({
         FirstName: process.env.DEFAULT_ADMIN_FIRSTNAME || "Admin",
         LastName: process.env.DEFAULT_ADMIN_LASTNAME || "User",
-        Title: process.env.DEFAULT_ADMIN_TITLE || "Dr.",
+        Title: process.env.DEFAULT_ADMIN_TITLE || "Dr.", 
         Email: process.env.DEFAULT_ADMIN_EMAIL || "admin@example.com",
         Role: "hod",
         Password: hashedPassword,
