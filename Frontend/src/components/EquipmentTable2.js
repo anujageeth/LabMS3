@@ -40,7 +40,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(4);
   const [totalItems, setTotalItems] = useState(0);
   const [sortBy, setSortBy] = useState('Name');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -513,7 +513,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                       setRowsPerPage(parseInt(e.target.value, 10));
                       setPage(0);
                     }}
-                    rowsPerPageOptions={[5, 10, 25, 50]}
+                    rowsPerPageOptions={[5]}
                   />
                 </Paper>
 
@@ -616,7 +616,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         <option value="good">Good</option>
                         <option value="damaged">Damaged</option>
                       </select>*/}
-                      <button className="tableModalBtn" onClick={handleUpdate}>
+                      <button className="listViewBtn3" onClick={handleUpdate}>
                         Save
                       </button>
 
@@ -640,7 +640,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
 
                 {deleteModalOpen &&
                   <div className="listViewModal2">
-                    <div className="listViewModal-content2">
+                    <div className="listViewModal-content2" id="deleteConfirmBox">
                     <h2>Delete Equipment</h2>
                     <button
                       className="listViewBtn3"

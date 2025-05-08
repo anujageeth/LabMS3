@@ -134,7 +134,7 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
               </div>
             </div>
             
-            <div className="consumable-container">
+            <div>
 
               {items.length === 0 && !loading ? (
                 <div className="no-items-message">

@@ -77,7 +77,7 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
 
   return (
     <div className="edit-modal-overlay" onClick={handleOutsideClick}>
-      <div className="edit-modal-content">
+      <div className="listViewModal-content2">
         <div className="edit-modal-header">
           <h2>Edit Consumable Item</h2>
           <button className="close-btn" onClick={onClose}>×</button>
@@ -85,13 +85,13 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
         
         {error && <div className="error-message">{error}</div>}
         
-        <form onSubmit={handleSubmit} className="edit-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="Name">Name</label>
+        <form onSubmit={handleSubmit} className="">
+          <div className="">
+            <div className="">
+              {/* <label htmlFor="Name">Name</label> */}
               <input
                 type="text"
-                id="Name"
+                className="listViewModalInput2"
                 name="Name"
                 value={formData.Name}
                 onChange={handleChange}
@@ -99,11 +99,11 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="Category">Category</label>
+            <div className="">
+              {/* <label htmlFor="Category">Category</label> */}
               <input
                 type="text"
-                id="Category"
+                className="listViewModalInput2"
                 name="Category"
                 value={formData.Category}
                 onChange={handleChange}
@@ -112,16 +112,15 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="Lab">Lab</label>
+          <div className="">
+            <div className="">
+              {/* <label htmlFor="Lab">Lab</label> */}
               <select
-                id="Lab"
                 name="Lab"
                 value={formData.Lab}
                 onChange={handleChange}
                 required
-                className="select-control"
+                className="listViewModalInput2"
               >
                 <option value="" disabled>Select Lab</option>
                 <option value="Electrical Machines Lab">Electrical Machines Lab</option>
@@ -131,11 +130,11 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="StorageLocation">Storage Location</label>
+            <div className="">
+              {/* <label htmlFor="StorageLocation">Storage Location</label> */}
               <input
                 type="text"
-                id="StorageLocation"
+                className="listViewModalInput2"
                 name="StorageLocation"
                 value={formData.StorageLocation}
                 onChange={handleChange}
@@ -143,12 +142,12 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="Quantity">Quantity</label>
+          <div className="">
+            <div className="">
+              {/* <label htmlFor="Quantity">Quantity</label> */}
               <input
                 type="number"
-                id="Quantity"
+                className="listViewModalInput2"
                 name="Quantity"
                 value={formData.Quantity}
                 onChange={handleChange}
@@ -157,11 +156,11 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="MinimumQuantity">Minimum Quantity</label>
+            <div className="">
+              {/* <label htmlFor="MinimumQuantity">Minimum Quantity</label> */}
               <input
                 type="number"
-                id="MinimumQuantity"
+                className="listViewModalInput2"
                 name="MinimumQuantity"
                 value={formData.MinimumQuantity}
                 onChange={handleChange}
@@ -171,15 +170,15 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="Unit">Unit</label>
+          <div className="">
+            {/* <label htmlFor="Unit">Unit</label> */}
             <select
-              id="Unit"
+              
               name="Unit"
               value={formData.Unit}
               onChange={handleChange}
               required
-              className="select-control"
+              className="listViewModalInput2"
             >
               <option value="" disabled>Select Unit</option>
               <option value="pcs">Pieces</option>
@@ -192,10 +191,10 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
             </select>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="Notes">Notes</label>
+          <div className="">
+            {/* <label htmlFor="Notes">Notes</label> */}
             <textarea
-              id="Notes"
+              className="listViewModalInput2"
               name="Notes"
               value={formData.Notes}
               onChange={handleChange}
@@ -203,21 +202,23 @@ const ConsumableEditModal = ({ item, onClose, onUpdateSuccess }) => {
             />
           </div>
 
-          <div className="form-actions">
+          <div className="">
+            
+            <button 
+              type="submit" 
+              className="listViewBtn3"
+              disabled={loading}
+            >
+              {loading ? 'Updating...' : 'Update Item'}
+            </button>
+
             <button 
               type="button" 
-              className="cancel-btn"
+              className="listViewBtn3" id="closeListBtn"
               onClick={onClose}
               disabled={loading}
             >
               Cancel
-            </button>
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={loading}
-            >
-              {loading ? 'Updating...' : 'Update Item'}
             </button>
           </div>
         </form>
