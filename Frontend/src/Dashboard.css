@@ -38,7 +38,7 @@ body {
 
 .dashBoxer {
     background-color: rgb(255, 255, 255);
-    height: 80vh;
+    height: 85vh;
     width: 73vw;
     border-radius: 30px;
     padding-top: 10px;
@@ -49,7 +49,7 @@ body {
 
 .dashBox {
     display: flex;
-    height: 20vh;
+    height: 15vh;
     width: 73vw;
     border-radius: 30px;
     padding-top: 10px;

@@ -189,7 +189,7 @@ function CheckInOutTable() {
                     </Table>
                   </TableContainer>
                   <TablePagination
-                    rowsPerPageOptions={[5]}
+                    rowsPerPageOptions={[10]}
                     component="div"
                     count={totalItems}
                     rowsPerPage={rowsPerPage}

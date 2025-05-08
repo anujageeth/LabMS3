@@ -144,7 +144,7 @@ th {
 }
 
 .delete-btn:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: #a81d2b;
 }
 
 .delete-btn:disabled {

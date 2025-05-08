@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 const ReportPage = () => {
   const [reportHistory, setReportHistory] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [nameFilter, setNameFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [categories, setCategories] = useState([]);
@@ -325,7 +325,7 @@ const ReportPage = () => {
                       </Table>
                       </TableContainer>
                       <TablePagination
-                      rowsPerPageOptions={[6]}
+                      rowsPerPageOptions={[10]}
                       component="div"
                       count={reportHistory.length}
                       rowsPerPage={rowsPerPage}
