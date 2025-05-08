@@ -32,7 +32,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
     const [selected, setSelected] = useState("");
     const [dense, setDense] = useState(true);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editData, setEditData] = useState(null);
     const [selectedUser, setSelectedUser] = useState(""); // State to track selected category
@@ -418,7 +418,7 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                       </Table>
                       </TableContainer>
                       <TablePagination
-                        rowsPerPageOptions={[6]}
+                        rowsPerPageOptions={[10]}
                         component="div"
                         count={filteredUser.length}
                         rowsPerPage={rowsPerPage}

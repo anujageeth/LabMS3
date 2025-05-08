@@ -57,16 +57,16 @@
   width: 25vw;
   padding: 10px 12px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 14px;
 }
 
 .search-bar button {
   padding: 10px 20px;
-  background: #5a5a5a;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  background: #f1f1f1;
+  color: #5a5a5a;
+  border: 2px solid #ddd;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s ease;

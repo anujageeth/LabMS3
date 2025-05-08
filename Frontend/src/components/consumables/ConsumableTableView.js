@@ -43,7 +43,7 @@ const ConsumableTableView = ({ items, onPageChange, currentPage, totalPages, onR
   const [selected, setSelected] = useState("");
   const [dense, setDense] = useState(true);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const getStatusColor = (status) => {
     switch (status) {
