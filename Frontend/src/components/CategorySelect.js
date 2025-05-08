@@ -7,13 +7,8 @@ import AddCategory from "./AddCategory";
 const CategorySelect = ({ formData, setFormData }) => {
   const {
     categories,
-    newCategory,
-    setNewCategory,
-    newCategoryDescription,
-    setNewCategoryDescription,
     showModal,
     setShowModal,
-    handleAddNewCategory,
   } = useCategories();
 
   const handleChange = (e) => {

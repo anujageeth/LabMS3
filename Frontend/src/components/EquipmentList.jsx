@@ -35,6 +35,16 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
 
   const navigate = useNavigate();
 
+  const handleAuthError = useCallback((error) => {
+    if (error.response?.status === 403) {
+      alert("Your session has expired. Please log in again.");
+      localStorage.removeItem("token");
+      navigate("/login");
+    } else {
+      console.error("Error:", error.response?.data || error);
+    }
+  }, [navigate]); // Add navigate as dependency
+
   const fetchEquipment = useCallback(async () => {
     try {
       setLoading(true);
@@ -76,7 +86,18 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
       setLoading(false);
       handleAuthError(error);
     }
-  }, [navigate, page, limit, sortBy, sortOrder, searchTerm, selectedCategory, selectedLab, selectedBrand]); // Added dependencies
+  }, [
+    navigate, 
+    page, 
+    limit, 
+    sortBy, 
+    sortOrder, 
+    searchTerm, 
+    selectedCategory, 
+    selectedLab, 
+    selectedBrand,
+    handleAuthError // Add handleAuthError to dependencies
+  ]);
 
   useEffect(() => {
     fetchEquipment();
@@ -123,15 +144,6 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         setEditEquipment((prev) => ({ ...prev, [name]: value }));
       };
     
-  const handleAuthError = (error) => {
-    if (error.response?.status === 403) {
-      alert("Your session has expired. Please log in again.");
-      localStorage.removeItem("token");
-      navigate("/login");
-    } else {
-      console.error("Error:", error.response?.data || error);
-    }
-  };
 
   const handleUpdate = async () => {
     try {
