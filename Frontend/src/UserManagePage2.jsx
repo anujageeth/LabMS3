@@ -432,6 +432,10 @@ const UserManagePage2 = ({ onRefresh, refresh }) => {
                     <div className="listViewModal2">
                       <div className="listViewModal-content2" id="deleteConfirmBox">
                       <h2>Delete User</h2>
+                      <p>
+                        Are you sure you want to delete?<br />
+                        This action cannot be undone.
+                      </p>
                       <button
                         className="listViewBtn3"
                         id="deleteListBtn"
