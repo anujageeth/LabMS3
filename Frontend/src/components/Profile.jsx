@@ -317,6 +317,7 @@ import UserDetails from "./UserDetails";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
+import SidePopup from "./SidePopup";
 // Material UI imports
 import { 
   Button, 
@@ -340,7 +341,6 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
-import SidePopup from "./SidePopup";
 
 const Profile = () => {
   const [profilePic, setProfilePic] = useState(
@@ -365,6 +365,26 @@ const Profile = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  
+
+//   // Add this function to your Profile.jsx
+// const showSnackbar = (message, severity = "success") => {
+//   setSnackbar({
+//     open: true,
+//     message,
+//     severity
+//   });
+// };
+
+// const handleCloseSnackbar = () => {
+//   setSnackbar(prev => ({
+//     ...prev,
+//     open: false
+//   }));
+// };
 
   // Broadcast notification states
   const [openBroadcastDialog, setOpenBroadcastDialog] = useState(false);
@@ -425,18 +445,53 @@ const Profile = () => {
     setPasswords((prev) => ({ ...prev, [name]: value }));
   };
 
+  // const handleChangePassword = async () => {
+  //   if (passwords.newPassword !== passwords.confirmPassword) {
+  //     alert("Passwords do not match!");
+  //     return;
+  //   }
+
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const response = await axios.put(
+  //       `http://localhost:3001/api/update/change`,
+  //       {
+  //         newUsername: user.Email, // Use the current email as the new username
+  //         oldPassword: passwords.oldPassword,
+  //         newPassword: passwords.newPassword,
+  //         confirmPassword: passwords.confirmPassword,
+  //       },
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       },
+  //       {
+  //         timeout: 10000, // Set timeout to 10 seconds
+  //       }
+  //     );
+
+  //     alert(response.data.message);
+  //     setIsChangingPassword(false);
+  //     setPasswords({ oldPassword: "", newPassword: "", confirmPassword: "" });
+  //   } catch (error) {
+  //     console.error("Error in password change:", error); // Log any errors that occur
+  //     alert(error.response?.data?.message || "Error changing password");
+  //   }
+  // };
+
+
   const handleChangePassword = async () => {
     if (passwords.newPassword !== passwords.confirmPassword) {
-      alert("Passwords do not match!");
+      setPopupMessage("Passwords do not match!");
+      setIsErrorPopupOpen(true);
       return;
     }
-
+  
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
         `http://localhost:3001/api/update/change`,
         {
-          newUsername: user.Email, // Use the current email as the new username
+          newUsername: user.Email,
           oldPassword: passwords.oldPassword,
           newPassword: passwords.newPassword,
           confirmPassword: passwords.confirmPassword,
@@ -445,18 +500,21 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
         {
-          timeout: 10000, // Set timeout to 10 seconds
+          timeout: 10000,
         }
       );
-
-      alert(response.data.message);
+  
+      setPopupMessage("Password changed successfully!");
+      setIsSuccessPopupOpen(true);
       setIsChangingPassword(false);
       setPasswords({ oldPassword: "", newPassword: "", confirmPassword: "" });
     } catch (error) {
-      console.error("Error in password change:", error); // Log any errors that occur
-      alert(error.response?.data?.message || "Error changing password");
+      console.error("Error in password change:", error);
+      setPopupMessage(error.response?.data?.message || "Error changing password");
+      setIsErrorPopupOpen(true);
     }
   };
+
 
   const triggerFileInput = () => {
     document.getElementById("profilePicInput").click();
@@ -565,12 +623,12 @@ const Profile = () => {
     }
   };
 
-  const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({
-      ...prev,
-      open: false
-    }));
-  };
+  // const handleCloseSnackbar = () => {
+  //   setSnackbar(prev => ({
+  //     ...prev,
+  //     open: false
+  //   }));
+  // };
 
   return (
     <div className="dashPage">
@@ -891,6 +949,27 @@ const Profile = () => {
         onClose={() => setIsSuccessPopupOpen(false)}
         duration={3000} // Optional: customize duration in milliseconds
       />
+
+{/* Success Popup */}
+<SidePopup
+  type="success"
+  title="Success"
+  message={popupMessage || "Operation completed successfully"}
+  isOpen={isSuccessPopupOpen}
+  onClose={() => setIsSuccessPopupOpen(false)}
+  duration={3000}
+/>
+
+{/* Error Popup */}
+<SidePopup
+  type="error"
+  title="Error"
+  message={popupMessage || "An error occurred"}
+  isOpen={isErrorPopupOpen}
+  onClose={() => setIsErrorPopupOpen(false)}
+  duration={3000}
+/>
+
     </div>
   );
 };
