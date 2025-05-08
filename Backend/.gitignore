@@ -46,3 +46,11 @@ serviceAccountKey.json
 # Production backup files
 *.bak
 *.backup 
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+docker-compose.prod.yml
+docker-compose.dev.yml
+docker-compose.test.yml
+docker-compose.local.yml
+.dockerignore
