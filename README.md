@@ -12,7 +12,7 @@ A comprehensive web-based Laboratory Management System developed for the Electri
 - 📅 **Lab Booking System** with availability checking
 - 📊 **Report Generation & Export**
 - 🔍 **Search and Filter Equipment**
-- 🔔 **Notification System**, including Telegram Bot integration
+- 🔔 **Notification & Broadcast System**
 - 🧭 **Responsive UI with Side Navigation**
 - 📁 **User Authentication & Session Management**
 
