@@ -124,7 +124,12 @@
 }
 
 #deleteConfirmBox {
-    width: 20vw;
+    width: 23vw;
+}
+
+#deleteConfirmBox p {
+    margin-bottom: 20px;
+    font-size: 16px;
 }
 
 /* Styles for Modal Inputs */
@@ -163,9 +168,8 @@
     border-radius: 10px;
     color: #ffffff;
     font-size: 12px;
-    background: linear-gradient(#00d9ff, #009eb9);
+    background-color: #009eb9;
     transition: linear-gradient 0.5s ease, box-shadow 0.3s ease;
-    background-color: #007bff;
     /* Primary button color */
     color: white;
     cursor: pointer;
@@ -173,28 +177,25 @@
 }
 
 .listViewBtn3:hover {
-    background: linear-gradient(#00cad8, #00a5c2, #007185);
+    background-color: #007185;
     border: 5px;
     border-color: rgb(0, 255, 221);
-    box-shadow: 0px 0px 5px rgb(0, 255, 242);
 }
 
 #closeListBtn {
-    background: linear-gradient(#bbbbbb,#bbbbbb);
+    background-color: #999999;
 }
 
 #closeListBtn:hover {
-    background: linear-gradient(#a0a0a0,
-        #a0a0a0);
+    background-color: #6d6d6d;
 }
 
 #deleteListBtn {
-    background: linear-gradient(#ff0000, #750000);
+    background-color: #dc3545;
 }
 
 #deleteListBtn:hover {
-    background: linear-gradient(#cc0000,
-        #470000);
+    background-color: #a81d2b;
 }
 
 #categoryFilter {
