@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import axios from 'axios';
+import axios from 'axios';
 import '../../styles/AddConsumableItems.css';
 
 const AddConsumableItems = ({ onRefresh, onCancel }) => {
@@ -48,16 +48,16 @@ const AddConsumableItems = ({ onRefresh, onCancel }) => {
 
       console.log('Sending data to server:', jsonData);
 
-      // const response = await axios.post(
-      //   'http://10.50.227.93:3001/api/consumables',
-      //   jsonData,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //       'Content-Type': 'application/json'
-      //     }
-      //   }
-      // );
+       const response = await axios.post(
+         'http://10.50.227.93:3001/api/consumables',
+         jsonData,
+         {
+           headers: {
+             Authorization: `Bearer ${token}`,
+             'Content-Type': 'application/json'
+           }
+         }
+       );
 
       onRefresh && onRefresh();
       
