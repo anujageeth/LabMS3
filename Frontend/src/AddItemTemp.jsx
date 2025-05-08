@@ -25,7 +25,7 @@ function AddItemTemp({ onRefresh }) {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/categories"
+          "http://10.50.227.93:3001/api/categories"
         );
         setCategories(response.data); // Set the fetched categories
       } catch (error) {
@@ -60,7 +60,7 @@ function AddItemTemp({ onRefresh }) {
 
     try {
       await axios.post(
-        "http://localhost:3001/api/equipmentImage",
+        "http://10.50.227.93:3001/api/equipmentImage",
         formDataToSend,
         {
           headers: {
@@ -85,7 +85,7 @@ function AddItemTemp({ onRefresh }) {
 
   const handleAddNewCategory = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/api/category", {
+      const response = await axios.post("http://10.50.227.93:3001/api/category", {
         name: newCategory,
         description: newCategoryDescription, // Add this if required
       });

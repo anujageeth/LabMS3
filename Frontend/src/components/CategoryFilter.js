@@ -8,7 +8,7 @@ const CategoryFilter = ({ selectedCategory, setSelectedCategory }) => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/categories"
+          "http://10.50.227.93:3001/api/categories"
         );
         setCategories(response.data);
       } catch (error) {

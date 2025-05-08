@@ -40,7 +40,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     const fetchEquipment = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/equipmentImage"
+          "http://10.50.227.93:3001/api/equipmentImage"
         );
         setEquipment(response.data);
         setFilteredEquipment(response.data); // Initially set filtered data to all equipment
@@ -105,7 +105,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
         return;
       }
       await axios.put(
-        `http://localhost:3001/api/equipmentImage/${editData._id}`,
+        `http://10.50.227.93:3001/api/equipmentImage/${editData._id}`,
         editData,
         {
           headers: {
@@ -148,7 +148,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
       }
       await Promise.all(
         selected.map((id) =>
-          axios.delete(`http://localhost:3001/api/equipmentImage/${id}`, {
+          axios.delete(`http://10.50.227.93:3001/api/equipmentImage/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

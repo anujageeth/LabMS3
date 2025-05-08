@@ -28,7 +28,7 @@ function DashCheckOutCard() {
     const [dense, setDense] = useState(true);
 
     const api = axios.create({
-        baseURL:  'http://localhost:3001/api',
+        baseURL:  'http://10.50.227.93:3001/api',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

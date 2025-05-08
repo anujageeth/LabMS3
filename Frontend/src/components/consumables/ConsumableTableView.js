@@ -11,17 +11,9 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TableSortLabel,
   Checkbox,
   IconButton,
   Tooltip,
-  FormControlLabel,
-  Switch,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Chip,
   CircularProgress,
 } from "@mui/material";
@@ -40,8 +32,6 @@ const ConsumableTableView = ({ items, onPageChange, currentPage, totalPages, onR
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [selected, setSelected] = useState("");
-  const [dense, setDense] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -58,7 +48,7 @@ const ConsumableTableView = ({ items, onPageChange, currentPage, totalPages, onR
     }
   };
 
-  const isSelected = (id) => id && selected.indexOf(id) !== -1;
+  const isSelected = (id) => id && selectedItems.indexOf(id) !== -1;
 
   const handleSelectItem = (id) => {
     setSelectedItems(prev => {
@@ -172,13 +162,6 @@ const ConsumableTableView = ({ items, onPageChange, currentPage, totalPages, onR
       <Box
         sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}
       >
-        {/* Category Filter 
-            <CategoryFilter
-              className="categoryFilter"
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-            />*/}
-
         <Tooltip title="Edit">
           <IconButton
             onClick={() => selectedItems.length === 1 && handleEditClick(items.find(item => item._id === selectedItems[0]))}
@@ -203,7 +186,6 @@ const ConsumableTableView = ({ items, onPageChange, currentPage, totalPages, onR
             }
           >
             <DeleteIcon className="iconButtonLogo" />
-            {/*<button className="tableRowEdit">Delete</button>*/}
           </IconButton>
         </Tooltip>
       </Box>
@@ -313,4 +295,4 @@ const ConsumableTableView = ({ items, onPageChange, currentPage, totalPages, onR
   );
 };
 
-export default ConsumableTableView; 
+export default ConsumableTableView;

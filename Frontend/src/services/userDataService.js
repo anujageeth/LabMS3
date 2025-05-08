@@ -2,7 +2,7 @@
 import axios from "axios";
 
 
-const API_URL = "http://localhost:3001/api/users";
+const API_URL = "http://10.50.227.93:3001/api/users";
 
 
 export const getUserData = async () => {

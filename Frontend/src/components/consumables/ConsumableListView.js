@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import ConsumableEditModal from './ConsumableEditModal';
 import { deleteConsumable } from '../../services/consumableService';
 import '../../styles/ConsumableListView.css';
 
 const ConsumableListView = ({ items, onPageChange, currentPage, totalPages, onRefresh }) => {
-  const navigate = useNavigate();
+  
   const [selectedItems, setSelectedItems] = useState([]);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -27,52 +27,43 @@ const ConsumableListView = ({ items, onPageChange, currentPage, totalPages, onRe
   };
 
   const handleEditClick = (item) => {
-      setItemToEdit(item);
-      setIsEditModalOpen(true);
-    };
-  
-    const handleCloseEditModal = () => {
-      setIsEditModalOpen(false);
-      setItemToEdit(null);
-    };
-  
-    const handleDeleteClick = () => {
-      if (selectedItems.length > 0) {
-        setIsDeleteConfirmOpen(true);
+    setItemToEdit(item);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setItemToEdit(null);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteConfirmOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    setLoading(true);
+
+    try {
+      // Process each deletion sequentially
+      for (const id of selectedItems) {
+        await deleteConsumable(id);
       }
-    };
-  
-    const handleCancelDelete = () => {
+
+      setSelectedItems([]);
       setIsDeleteConfirmOpen(false);
-    };
-  
-    const handleConfirmDelete = async () => {
-      setLoading(true);
-      setError(null);
-      
-      try {
-        // Process each deletion sequentially
-        for (const id of selectedItems) {
-          await deleteConsumable(id);
-        }
-        
-        setSelectedItems([]);
-        setIsDeleteConfirmOpen(false);
-        if (onRefresh) onRefresh();
-        
-      } catch (err) {
-        setError('Failed to delete selected items. Please try again.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    const handleUpdateSuccess = () => {
-      setIsEditModalOpen(false);
-      setItemToEdit(null);
       if (onRefresh) onRefresh();
-    };
+    } catch (err) {
+      console.error('Failed to delete selected items. Please try again.', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateSuccess = () => {
+    setIsEditModalOpen(false);
+    setItemToEdit(null);
+    if (onRefresh) onRefresh();
+  };
 
   return (
     <div className="consumable-container">
@@ -82,7 +73,6 @@ const ConsumableListView = ({ items, onPageChange, currentPage, totalPages, onRe
             <div 
               key={item._id} 
               className="consumable-list-item"
-              //onClick={() => navigate(`/consumables/${item._id}`)}
             >
               <div className="item-details">
                 <h3>{item.Name}</h3>
@@ -138,7 +128,6 @@ const ConsumableListView = ({ items, onPageChange, currentPage, totalPages, onRe
             <p>Are you sure you want to delete {selectedItems.length} item(s)?</p>
             <p>This action cannot be undone.</p>
             <div className="modal-actions">
-              
               <button 
                 className="delete-btn" 
                 onClick={handleConfirmDelete}
@@ -169,4 +158,4 @@ const ConsumableListView = ({ items, onPageChange, currentPage, totalPages, onRe
   );
 };
 
-export default ConsumableListView; 
+export default ConsumableListView;

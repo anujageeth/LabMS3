@@ -17,7 +17,7 @@ function BulkImport() {
     formData.append("csv", file);
     
     try {
-      const response = await axios.post("http://localhost:3001/api/users/bulk-import", formData, {
+      const response = await axios.post("http://10.50.227.93:3001/api/users/bulk-import", formData, {
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data"

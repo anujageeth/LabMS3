@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -15,21 +15,12 @@ import {
   Checkbox,
   IconButton,
   Tooltip,
-  FormControlLabel,
-  Switch,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Chip,
   CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "../components/tableModal2.css";
-import CategoryFilter from "./CategoryFilter"; // Import the CategoryFilter component
-import CategorySelect from "./CategorySelect";
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";
 import "./PageButtons.css"
@@ -47,7 +38,6 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editData, setEditData] = useState(null);
-  const [dense, setDense] = useState(false);
   const [filters, setFilters] = useState({
     search: '',
     category: '',
@@ -57,7 +47,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   });
 
   // Fetch equipment with pagination and filters
-  const fetchEquipment = async () => {
+  const fetchEquipment = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -79,7 +69,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
       });
 
       const response = await axios.get(
-        `http://localhost:3001/api/equipmentImage?${queryParams}`,
+        `http://10.50.227.93:3001/api/equipmentImage?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -101,16 +91,15 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate, page, rowsPerPage, sortBy, sortOrder, filters]);
 
   useEffect(() => {
     fetchEquipment();
     return () => {
-      // Cleanup
       setEquipment([]);
       setSelected([]);
     };
-  }, [page, rowsPerPage, sortBy, sortOrder, filters, refresh]);
+  }, [fetchEquipment, refresh]);
 
   // Handle sort
   const handleSort = (property) => {
@@ -172,26 +161,6 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     setDeleteModalOpen(false);
   }
 
-  // Handle update action
-  // const handleUpdate = async () => {
-  //   try {
-  //     await axios.put(
-  //       `http://localhost:3001/api/equipmentImage/${editData._id}`,
-  //       editData
-  //     );
-  //     // Refresh after update
-  //     setEquipment((prev) =>
-  //       prev.map((item) =>
-  //         item._id === editData._id ? { ...item, ...editData } : item
-  //       )
-  //     );
-  //     onRefresh();
-  //     closeEditModal();
-  //   } catch (error) {
-  //     console.error("Error updating equipment:", error);
-  //   }
-  // };
-
   const handleUpdate = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -207,7 +176,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
       };
 
       await axios.put(
-        `http://localhost:3001/api/equipmentImage/${editData._id}`,
+        `http://10.50.227.93:3001/api/equipmentImage/${editData._id}`,
         updatedData,
         {
           headers: {
@@ -246,7 +215,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
       }
       await Promise.all(
         selected.map((id) =>
-          axios.delete(`http://localhost:3001/api/equipmentImage/${id}`, {
+          axios.delete(`http://10.50.227.93:3001/api/equipmentImage/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -278,27 +247,6 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
   };
 
   const isSelected = (id) => id && selected.indexOf(id) !== -1;
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 5));
-    setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
-  const handleListViewClick = () => {
-    navigate("/list2");
-  };
-
-  const handleAddItemClick = () => {
-    navigate("/additem");
-  };
 
   return (
     <div className="dashPage">
@@ -387,13 +335,6 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                   <Box
                     sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}
                   >
-                    {/* Category Filter 
-                        <CategoryFilter
-                          className="categoryFilter"
-                          selectedCategory={selectedCategory}
-                          setSelectedCategory={setSelectedCategory}
-                        />*/}
-
                     <Tooltip title="Edit">
                       <IconButton
                         onClick={handleEdit}
@@ -418,7 +359,6 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         }
                       >
                         <DeleteIcon className="iconButtonLogo" />
-                        {/*<button className="tableRowEdit">Delete</button>*/}
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -590,32 +530,6 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         <option value="Damaged">Damaged</option>
                       </select>
 
-                      {/*<input
-                          className="tableModalInput"
-                          type="text"
-                          value={editData.Category}
-                          onChange={(e) =>
-                              setEditData({ ...editData, Category: e.target.value })
-                          }
-                          placeholder="Category"
-                          />
-
-                      <CategorySelect
-                        formData={editData.Category}
-                        setFormData={setEditData}
-                      />
-                      <select
-                        className="tableModalInput"
-                        value={editData.condition || 'good'}
-                        onChange={(e) => setEditData({ 
-                          ...editData, 
-                          condition: e.target.value,
-                          Availability: e.target.value === 'damaged' ? false : editData.Availability
-                        })}
-                      >
-                        <option value="good">Good</option>
-                        <option value="damaged">Damaged</option>
-                      </select>*/}
                       <button className="listViewBtn3" onClick={handleUpdate}>
                         Save
                       </button>

@@ -11,7 +11,7 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [viewMode, setViewMode] = useState('list'); // 'list' or 'table'
+  const [viewMode, setViewMode] = useState('table'); // 'list' or 'table'
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -51,10 +51,6 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
   const handleAddConsumable = () => {
     // Navigate to the existing AddItem page with a state parameter to show consumable form
     navigate('/additem', { state: { showConsumableForm: true, fromConsumables: true } });
-  };
-
-  const handleBackToDashboard = () => {
-    navigate('/dashboard');
   };
 
   const handleRefresh = () => {
@@ -173,4 +169,4 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
   );
 };
 
-export default ConsumableItems; 
+export default ConsumableItems;

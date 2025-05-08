@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./listModal2.css";
@@ -12,9 +12,9 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
   const [filteredEquipment, setFilteredEquipment] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(6); // Show 12 items per page in grid
-  const [sortBy, setSortBy] = useState('Name');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [limit] = useState(6); // Removed setLimit since it's not being used
+  const [sortBy] = useState('Name'); // Removed setSortBy since it's not being used
+  const [sortOrder] = useState('asc'); // Removed setSortOrder since it's not being used
   const [loading, setLoading] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -35,11 +35,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchEquipment();
-  }, [page, limit, sortBy, sortOrder, selectedCategory, searchTerm, selectedBrand, selectedLab, refresh]);
-
-  const fetchEquipment = async () => {
+  const fetchEquipment = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -59,15 +55,13 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         ...(selectedBrand && { Brand: selectedBrand })
       });
 
-      // Updated endpoint to match backend route
       const response = await axios.get(
-        `http://localhost:3001/api/equipmentImage?${queryParams}`,
+        `http://10.50.227.93:3001/api/equipmentImage?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
 
-      // If loading more, append to existing items
       if (page > 1) {
         setEquipment(prev => [...prev, ...response.data.equipment]);
         setFilteredEquipment(prev => [...prev, ...response.data.equipment]);
@@ -82,7 +76,11 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
       setLoading(false);
       handleAuthError(error);
     }
-  };
+  }, [navigate, page, limit, sortBy, sortOrder, searchTerm, selectedCategory, selectedLab, selectedBrand]); // Added dependencies
+
+  useEffect(() => {
+    fetchEquipment();
+  }, [fetchEquipment, refresh]); // Updated dependencies
 
   const handleLoadMore = () => {
     setPage(prevPage => prevPage + 1);
@@ -110,7 +108,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         navigate("/login");
         return;
       }
-      await axios.delete(`http://localhost:3001/api/equipmentImage/${id}`, {
+      await axios.delete(`http://10.50.227.93:3001/api/equipmentImage/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       onRefresh();
@@ -147,11 +145,11 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
       const updateData = {
         ...editEquipment,
         condition: editEquipment.condition || 'good',
-        Availability: editEquipment.condition === 'damaged' ? false : editEquipment.Availability
+        Availability: editEquipment.condition === 'damaged' ? false : true
       };
 
       await axios.put(
-        `http://localhost:3001/api/equipmentImage/${selectedEquipment._id}`,
+        `http://10.50.227.93:3001/api/equipmentImage/${selectedEquipment._id}`,
         updateData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -320,6 +318,8 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
               <option value="good">Good</option>
               <option value="damaged">Damaged</option>
             </select>
+
+            
 
             <button className="listViewBtn3" onClick={handleUpdate}>Update</button>
             <button className="listViewBtn3" id="deleteListBtn" onClick={() => setDeleteModalOpen(true)}>Delete</button>

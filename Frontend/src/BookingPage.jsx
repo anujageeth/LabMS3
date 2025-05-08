@@ -41,7 +41,7 @@ import StudentBookingForm from "./components/StudentBookingForm";
 import "./BookingReservation.css";
 import "react-calendar/dist/Calendar.css";
 
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = "http://10.50.227.93:3001/api";
 
 const BookingReservation = () => {
   // State management

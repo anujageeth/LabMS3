@@ -1,7 +1,7 @@
 // src/services/authService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:3001/api";
+const API_URL = "http://10.50.227.93:3001/api";
 
 export const register = async (
   FirstName,
@@ -32,7 +32,7 @@ export const register = async (
 
 export const login = async (email, password) => {
   try {
-    const response = await axios.post("http://localhost:3001/api/login", {
+    const response = await axios.post("http://10.50.227.93:3001/api/login", {
       email, // lowercase
       password, // lowercase
     });
