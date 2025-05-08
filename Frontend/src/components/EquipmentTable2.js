@@ -526,8 +526,8 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                         }
                       >
                         
-                        <option value="Good">Good</option>
-                        <option value="Damaged">Damaged</option>
+                        <option value="good">Good</option>
+                        <option value="damaged">Damaged</option>
                       </select>
 
                       <button className="listViewBtn3" onClick={handleUpdate}>
