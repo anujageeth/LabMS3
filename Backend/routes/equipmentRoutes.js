@@ -6,6 +6,7 @@ const {
   deleteEquipment,
   getEquipmentById,
   getEquipmentStats,
+  getUniqueValues,
   upload,
 } = require("../controllers/newEquipmentController");
 const {
@@ -14,7 +15,7 @@ const {
 } = require("../middleware/authMiddleware");
 
 const router = express.Router();
-
+router.get('/equipmentImage/unique-values', authenticateToken, getUniqueValues);
 // Base equipment routes with pagination and filtering
 router.get("/equipmentImage", authenticateToken, getEquipment);
 router.get("/equipmentImage/:id", authenticateToken, getEquipmentById);
@@ -26,6 +27,9 @@ router.get(
   
   getEquipmentStats
 );
+// ...existing code...
+
+// ...existing code...
 
 // Equipment management routes - restricted to admin roles
 router.post(
