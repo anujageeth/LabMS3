@@ -4,7 +4,7 @@ import './Home2.css';
 import LoginModal from "./components/LoginModal";
 
 const HomePage = () => {
-    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(true);
     //const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,9 +55,10 @@ const HomePage = () => {
           <p className="hero-description">
             Streamlining laboratory operations for the Department of Electrical & Information Engineering
           </p>
-          <button className="get-started-btn" onClick={() => setShowLoginModal(true)}>Get Started</button>
-
-          <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} />
+          {!showLoginModal && (
+            <button className="get-started-btn" onClick={() => setShowLoginModal(true)}>Get Started</button>
+          )}
+          <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} onClose={() => setShowLoginModal(false)} />
 
             
 
