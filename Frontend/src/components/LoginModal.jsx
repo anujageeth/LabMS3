@@ -50,7 +50,7 @@ function LoginModal({ setUser, showLoginModal, setShowLoginModal }) {
             <div>
                 <div className="overlay"></div>
                 <div className="loginBox" id="loginPageBox">
-                    <h2 className="loginTitle"> </h2>
+                    <h2 className="loginTitle"><b>Welcome!</b></h2>
                     <form onSubmit={handleSubmit}>
                         <div className="typeBox">
                             <input
@@ -79,9 +79,9 @@ function LoginModal({ setUser, showLoginModal, setShowLoginModal }) {
                         </button>
                     </form>
 
-                    <button onClick={closeModal} className="loginBtn">
+                    {/* <button onClick={closeModal} className="loginBtn">
                         <b>Cancel</b>
-                    </button>
+                    </button> */}
                     <br />
                     {/*<Link to="/register" className="forgetPw">
                         Forget password?
