@@ -172,7 +172,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
       // Set availability based on condition
       const updatedData = {
         ...editData,
-        Availability: editData.condition === 'damaged' ? false : editData.Availability
+        Availability: editData.condition === 'damaged' ? false : true
       };
 
       await axios.put(
