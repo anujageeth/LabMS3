@@ -253,9 +253,10 @@ function AddItem({ onRefresh }) {
                   onChange={() => setFormData((prev) => ({ ...prev, Availability: !prev.Availability }))}
                 /> Available
               </label>
+              <br />
 
               {/* Image Upload */}
-              <div className="addItemImageBox">
+              {/* <div className="addItemImageBox">
                 <input
                   className="addImageBtn"
                   type="file"
@@ -263,7 +264,7 @@ function AddItem({ onRefresh }) {
                   onChange={handleFileChange}
                   accept="image/*"
                 />
-              </div>
+              </div> */}
 
               {/* Submit Button */}
               <button type="submit" className="loginBtn" id="saveUserBtn"><b>SAVE</b></button>
