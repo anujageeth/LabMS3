@@ -24,6 +24,12 @@ import "../components/tableModal2.css";
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";
 import "./PageButtons.css"
+import { hasFullAccess, hasInventoryViewAccess, hasBookingAccess,hasEquipmentManagementAccess } from '../utils/rolePermissions';
+
+
+const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
 
 const EquipmentTable = ({ onRefresh, refresh }) => {
   const navigate = useNavigate();
@@ -45,6 +51,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
     brand: '',
     condition: ''
   });
+
+  const currentUser = getCurrentUser();
+  const userRole = currentUser?.Role || "";
 
   // Fetch equipment with pagination and filters
   const fetchEquipment = useCallback(async () => {
@@ -264,7 +273,9 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
 
               <div className="addNsearch">
                 <div className="pageBtnDiv">
-                  <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
+                  {hasFullAccess(userRole) && (
+                    <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
+                  )}
                   <button className="pageBtn" onClick={() => navigate("/list2")}>List View</button>
                   <button className="pageBtn" onClick={() => navigate("/equipment-stats")}>Statistics</button>
                 </div>

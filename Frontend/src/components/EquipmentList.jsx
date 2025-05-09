@@ -6,6 +6,12 @@ import "./listModal2.css";
 
 import SideNavigation from "./SideNavigation";
 import UserDetails from "./UserDetails";
+import { hasFullAccess, hasInventoryViewAccess, hasBookingAccess,hasEquipmentManagementAccess } from '../utils/rolePermissions';
+
+
+const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
 
 const EquipmentList2 = ({ refresh, onRefresh }) => {
   const [equipment, setEquipment] = useState([]);
@@ -32,6 +38,9 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
     Brand: "",
     SerialCode: "",
   });
+
+  const currentUser = getCurrentUser();
+  const userRole = currentUser?.Role || "";
 
   const navigate = useNavigate();
 
@@ -192,8 +201,9 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
               <div className="addNsearch">
 
                 <div className="pageBtnDiv">
-                  <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
-                  <button className="pageBtn" onClick={() => navigate("/table2")}>Table View</button>
+                  {hasFullAccess(userRole) && (
+                    <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
+                  )}
                   <button className="pageBtn" onClick={() => navigate("/equipment-stats")}>Statistics</button>
                 </div>
                 
