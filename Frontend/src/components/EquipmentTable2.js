@@ -305,14 +305,14 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
 
                   
 
-                  <select id="categoryFilter" value={filters.brand} onChange={(e) => handleFilterChange('brand', e.target.value)}>
+                  {/*<select id="categoryFilter" value={filters.brand} onChange={(e) => handleFilterChange('brand', e.target.value)}>
                     <option value="">All Brands</option>
                     {Array.from(new Set(equipment.map((item) => item.Brand))).map((brand) => (
                       <option key={brand} value={brand}>
                         {brand}
                       </option>
                     ))}
-                  </select>
+                  </select>*/}
 
                   <select id="categoryFilter" value={filters.lab} onChange={(e) => handleFilterChange('lab', e.target.value)}>
                     <option value="">All Labs</option>
