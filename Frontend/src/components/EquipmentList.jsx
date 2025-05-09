@@ -204,6 +204,7 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                   {hasFullAccess(userRole) && (
                     <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
                   )}
+                  <button className="pageBtn" onClick={() => navigate("/table2")}>Table View</button>
                   <button className="pageBtn" onClick={() => navigate("/equipment-stats")}>Statistics</button>
                 </div>
                 
