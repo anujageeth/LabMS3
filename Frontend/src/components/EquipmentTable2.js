@@ -589,7 +589,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 }
               </Box>
 
-              {hasFullAccess(userRole) && (
+              {/* {hasFullAccess(userRole) && (
                 <button 
                   className="add-consumable-button"
                   onClick={() => navigate("/additem")}
@@ -597,7 +597,7 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 >
                   <span className="plus-icon">+</span>
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         </div>
