@@ -271,12 +271,12 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
                     {/*<p><b>Condition:</b> {item.condition}</p>*/}
                     <p><b>Added on:</b> {new Date(item.createdAt).toLocaleDateString()}</p>
                     <p><b>Last updated on:</b> {new Date(item.updatedAt).toLocaleDateString()}</p>
-                    <img
+                    {/* <img
                       src={item.imageUrl === "default"
                         ? "https://firebasestorage.googleapis.com/v0/b/labms-images.appspot.com/o/noImageAvailable.png?alt=media"
                         : item.imageUrl}
                       alt={item.Name}
-                    />
+                    /> */}
                     <br />
                     <button className="listViewBtn2" onClick={() => {handleSelect(item)}}>
                       Select
