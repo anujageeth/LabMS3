@@ -10,6 +10,12 @@ import {
 } from "@mui/material";
 import AdminProtected from './services/AdminProcted';
 import './checkinForm.css';
+import { hasFullAccess, hasInventoryViewAccess, hasBookingAccess,hasEquipmentManagementAccess } from './utils/rolePermissions';
+
+
+const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
 
 function CheckInOutTable() {
   const [records, setRecords] = useState([]);
@@ -24,6 +30,9 @@ function CheckInOutTable() {
     startDate: '',
     endDate: ''
   });
+
+  const currentUser = getCurrentUser();
+  const userRole = currentUser?.Role || "";
 
   const navigate = useNavigate();
 
@@ -102,12 +111,14 @@ function CheckInOutTable() {
               </div>
               <div className="addNsearch">
                 <div className="pageBtnDiv">
-                  <button className="pageBtn" onClick={() => setIsModalOpen(true)}>
-                    <b>Check in / out</b>
-                  </button>
-                  <button className="pageBtn" onClick={() => navigate("/table2")}>
-                    <b>Equipment list</b>
-                  </button>
+                  {hasFullAccess(userRole) && (
+                    <><button className="pageBtn" onClick={() => setIsModalOpen(true)}>
+                      <b>Check in / out</b>
+                      </button><button className="pageBtn" onClick={() => navigate("/table2")}>
+                        <b>Equipment list</b>
+                      </button></>
+                  )}
+                  
                 </div>
                 <div className="pageBtnDiv">
                   <select
