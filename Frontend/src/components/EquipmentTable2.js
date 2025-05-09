@@ -589,13 +589,15 @@ const EquipmentTable = ({ onRefresh, refresh }) => {
                 }
               </Box>
 
-              <button 
-                className="add-consumable-button"
-                onClick={() => navigate("/additem")}
-                title="Add new consumable item"
-              >
-                <span className="plus-icon">+</span>
-              </button>
+              {hasFullAccess(userRole) && (
+                <button 
+                  className="add-consumable-button"
+                  onClick={() => navigate("/additem")}
+                  title="Add new consumable item"
+                >
+                  <span className="plus-icon">+</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

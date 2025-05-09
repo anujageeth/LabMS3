@@ -376,6 +376,16 @@ const EquipmentList2 = ({ refresh, onRefresh }) => {
         </div>
       }
       
+
+      {hasFullAccess(userRole) && (
+        <button 
+          className="add-consumable-button"
+          onClick={() => navigate("/additem")}
+          title="Add new consumable item"
+        >
+          <span className="plus-icon">+</span>
+        </button>
+      )}
     </div>
   );
 };
