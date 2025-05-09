@@ -88,7 +88,7 @@ const ConsumableItems = ({ refresh, onRefresh }) => {
               <div className="addNsearch">
 
                 <div className="pageBtnDiv">
-                  <button className="pageBtn" onClick={() => navigate("/additem")}>Add new +</button>
+                  <button className="pageBtn" onClick={handleAddConsumable}>Add new +</button>
                   
                   {viewMode === 'table' && (
                     <button

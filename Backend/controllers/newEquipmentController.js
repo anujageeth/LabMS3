@@ -13,43 +13,65 @@ const upload = multer({
 });
 
 // **Add Equipment**
+// Add Equipment - Fixed to prevent multiple responses
 const addEquipment = async (req, res) => {
   try {
     const { Name, Lab, Category, Brand, Serial, Availability } = req.body;
 
+    // Validate required fields
     if (!Serial) {
-      return res.status(400).send({ message: "Serial number is required." });
+      return res.status(400).json({ message: "Serial number is required." });
     }
 
     // Default image URL
     const defaultImageUrl = "default";
-
-    let imageUrl;
+    let imageUrl = defaultImageUrl;
 
     // Check if an image file was uploaded
     if (req.file) {
-      const file = req.file;
-      const blob = bucket.file(Date.now() + "_" + file.originalname);
-      const blobStream = blob.createWriteStream({ metadata: { contentType: file.mimetype } });
-
-      await new Promise((resolve, reject) => {
-        blobStream.on("error", (err) => reject(res.status(500).send({ message: err.message })));
-
-        blobStream.on("finish", async () => {
-          await blob.makePublic();
-          imageUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-          resolve();
+      try {
+        const file = req.file;
+        const fileName = `${Date.now()}_${file.originalname}`;
+        const blob = bucket.file(fileName);
+        
+        // Create a write stream to upload the file
+        const blobStream = blob.createWriteStream({
+          metadata: { contentType: file.mimetype }
         });
 
-        blobStream.end(file.buffer);
-      });
-    } else {
-      imageUrl = defaultImageUrl;
+        // Handle upload as a Promise to avoid multiple responses
+        await new Promise((resolve, reject) => {
+          blobStream.on("error", (err) => {
+            console.error("Firebase storage error:", err);
+            reject(err);
+          });
+
+          blobStream.on("finish", async () => {
+            // Make the file public
+            try {
+              await blob.makePublic();
+              imageUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+              resolve();
+            } catch (err) {
+              console.error("Error making blob public:", err);
+              reject(err);
+            }
+          });
+
+          // End the stream with the file buffer
+          blobStream.end(req.file.buffer);
+        });
+      } catch (uploadError) {
+        console.error("File upload error:", uploadError);
+        // Continue with default image instead of sending response here
+        imageUrl = defaultImageUrl;
+      }
     }
 
     // Generate uniqueId
     const uniqueId = `${Category}/${Name}/${Brand}/${Serial}`;
 
+    // Create the equipment record
     const newEquipment = new Equipment({
       Name,
       Lab,
@@ -57,14 +79,22 @@ const addEquipment = async (req, res) => {
       Brand,
       Serial,
       uniqueId,
-      Availability,
+      Availability: Availability === "true" || Availability === true,
       imageUrl,
     });
 
+    // Save to database
     await newEquipment.save();
-    res.status(201).send({ message: "Equipment added successfully!", newEquipment });
+    
+    // Send successful response
+    return res.status(201).json({ 
+      message: "Equipment added successfully!", 
+      data: newEquipment 
+    });
+
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    console.error("Add equipment error:", error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
